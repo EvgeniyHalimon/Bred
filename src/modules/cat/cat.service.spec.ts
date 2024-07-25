@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { Model } from 'mongoose';
-import { Cat } from 'src/schemas/cat.schema';
+import { Cat } from './interfaces/cat.interfaces';
 import { CatsService } from './cat.service';
 
 const mockCat = {
