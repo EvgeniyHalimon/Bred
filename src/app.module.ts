@@ -1,11 +1,12 @@
 import { Module } from '@nestjs/common';
-import { CatsModule } from './modules/cat/cat.module';
+import { UsersModule } from './modules/user/user.module';
 import { SequelizeModule } from '@nestjs/sequelize';
 import { config } from './config';
+import { User } from './schemas/user.schema';
 
 @Module({
   imports: [
-    CatsModule,
+    UsersModule,
     SequelizeModule.forRoot({
       dialect: 'mysql',
       host: config.HOST,
@@ -13,7 +14,7 @@ import { config } from './config';
       username: config.USERNAME,
       password: config.PASSWORD,
       database: config.DATABASE,
-      models: [],
+      models: [User],
     }),
   ],
 })
