@@ -1,29 +1,32 @@
 import {
   BelongsToMany,
   Column,
+  DataType,
   ForeignKey,
   Model,
   Table,
 } from 'sequelize-typescript';
 import { v4 as uuidv4 } from 'uuid';
 import { User } from './user.schema';
-import { IArticle } from 'src/modules/articles/interfaces/article.interfaces';
+import { IComment } from 'src/modules/comments/interfaces/comments.interfaces';
+import { Likes } from './likes.schema';
+import { Dislikes } from './dislikes.schema';
 
 @Table
-export class Comment extends Model<IArticle> {
-  @Column({ defaultValue: uuidv4(), primaryKey: true })
+export class Comment extends Model<IComment> {
+  @Column({ defaultValue: uuidv4(), primaryKey: true, type: DataType.UUID })
   id: string;
 
   @ForeignKey(() => User)
-  @Column
-  author: User;
+  @Column(DataType.UUID)
+  authorId: string;
 
-  @BelongsToMany(() => User, 'likes')
+  @BelongsToMany(() => User, () => Likes)
   likes: User[];
 
-  @BelongsToMany(() => User, 'dislikes')
+  @BelongsToMany(() => User, () => Dislikes)
   dislikes: User[];
 
-  @Column
+  @Column(DataType.TEXT)
   text: string;
 }

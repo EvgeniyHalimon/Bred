@@ -17,7 +17,7 @@ export class UsersService {
       const result = await this.sequelize.transaction(async t => {
         const transactionHost = { transaction: t };
 
-        const userAttributes: IUser = {
+        const userAttributes = {
           firstName: createUserDto.firstName,
           lastName: createUserDto.lastName,
           email: createUserDto.email,
