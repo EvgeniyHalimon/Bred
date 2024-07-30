@@ -1,5 +1,8 @@
 export interface IUser {
   firstName: string;
   lastName: string;
-  isActive: boolean;
+  email: string;
+  password: string;
+  bio: string;
+  photo?: string;
 }

@@ -3,10 +3,11 @@ import { UsersModule } from './modules/user/user.module';
 import { SequelizeModule } from '@nestjs/sequelize';
 import { config } from './config';
 import { User } from './schemas/user.schema';
+import { CommentsModule } from './modules/comments/comments.module';
+import { ArticlesModule } from './modules/articles/articles.module';
 
 @Module({
   imports: [
-    UsersModule,
     SequelizeModule.forRoot({
       dialect: 'mysql',
       host: config.HOST,
@@ -16,6 +17,9 @@ import { User } from './schemas/user.schema';
       database: config.DATABASE,
       models: [User],
     }),
+    UsersModule,
+    CommentsModule,
+    ArticlesModule,
   ],
 })
 export class AppModule {}

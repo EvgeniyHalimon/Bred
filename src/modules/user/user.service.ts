@@ -20,7 +20,10 @@ export class UsersService {
         const userAttributes: IUser = {
           firstName: createUserDto.firstName,
           lastName: createUserDto.lastName,
-          isActive: createUserDto.isActive,
+          email: createUserDto.email,
+          password: createUserDto.password,
+          bio: createUserDto.bio,
+          photo: createUserDto.photo,
         };
         const createdUser = await this.userModel.create(
           userAttributes,

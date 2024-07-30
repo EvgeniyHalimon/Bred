@@ -2,7 +2,7 @@ import { Controller, Get, Post, Body, UsePipes } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UsersService } from './user.service';
 import { ZodValidationPipe } from 'src/helpers/ZodValidationPipe';
-import { createCatSchema } from './validation/createCatSchema';
+import { createCatSchema } from './validation/createUserSchema';
 import { User } from 'src/schemas/user.schema';
 
 @Controller('users')

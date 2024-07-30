@@ -9,6 +9,15 @@ export class User extends Model<IUser> {
   @Column
   lastName: string;
 
-  @Column({ defaultValue: true })
-  isActive: boolean;
+  @Column
+  email: string;
+
+  @Column
+  password: string;
+
+  @Column({ defaultValue: '' })
+  bio: string;
+
+  @Column({ defaultValue: '' })
+  photo: string;
 }
