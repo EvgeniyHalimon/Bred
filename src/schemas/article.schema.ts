@@ -1,8 +1,16 @@
-import { Column, DataType, Model, Table } from 'sequelize-typescript';
+import {
+  BelongsToMany,
+  Column,
+  ForeignKey,
+  Model,
+  Table,
+} from 'sequelize-typescript';
 import { v4 as uuidv4 } from 'uuid';
+import { User } from './user.schema';
+import { IArticle } from 'src/modules/articles/interfaces/article.interfaces';
 
 @Table
-export class Article extends Model<Article> {
+export class Article extends Model<IArticle> {
   @Column({ defaultValue: uuidv4(), primaryKey: true })
   id: string;
 
@@ -12,15 +20,16 @@ export class Article extends Model<Article> {
   @Column({ defaultValue: 0 })
   rating: number;
 
+  @ForeignKey(() => User)
   @Column
-  author: string;
+  author: User;
 
-  @Column({ type: DataType.ARRAY(DataType.STRING), defaultValue: [] })
-  upvotes: string[];
+  @BelongsToMany(() => User, 'upvotes')
+  upvoters: User[];
 
-  @Column({ type: DataType.ARRAY(DataType.STRING), defaultValue: [] })
-  downvotes: string[];
+  @BelongsToMany(() => User, 'downvotes')
+  downvoters: User[];
 
-  @Column({ defaultValue: '' })
+  @Column
   text: string;
 }
