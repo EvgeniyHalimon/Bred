@@ -1,5 +1,6 @@
-import { Column, Model, Table } from 'sequelize-typescript';
+import { Column, HasMany, Model, Table } from 'sequelize-typescript';
 import { IUser } from 'src/modules/user/interfaces/user.interfaces';
+import { Article } from './article.schema';
 
 @Table
 export class User extends Model<IUser> {
@@ -20,4 +21,7 @@ export class User extends Model<IUser> {
 
   @Column({ defaultValue: '' })
   photo: string;
+
+  @HasMany(() => Article)
+  articles: Article[];
 }

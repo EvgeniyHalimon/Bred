@@ -5,6 +5,7 @@ import { config } from './config';
 import { User } from './schemas/user.schema';
 import { CommentsModule } from './modules/comments/comments.module';
 import { ArticlesModule } from './modules/articles/articles.module';
+import { AuthModule } from './modules/auth/auth.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { ArticlesModule } from './modules/articles/articles.module';
     UsersModule,
     CommentsModule,
     ArticlesModule,
+    AuthModule,
   ],
 })
 export class AppModule {}
