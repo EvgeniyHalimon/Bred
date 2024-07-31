@@ -1,10 +1,9 @@
 import { Column, Model, Table, ForeignKey } from 'sequelize-typescript';
 import { User } from './user.schema';
 import { Comment } from './comment.schema';
-import { IReactions } from 'src/modules/comments/interfaces/comments.interfaces';
 
 @Table
-export class Dislikes extends Model<IReactions> {
+export class Dislikes extends Model {
   @ForeignKey(() => User)
   @Column
   userId: string;

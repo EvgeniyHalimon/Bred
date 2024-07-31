@@ -3,7 +3,7 @@ import { Article } from './article.schema';
 import { User } from './user.schema';
 
 @Table
-export class Downvote extends Model<Downvote> {
+export class Downvote extends Model {
   @ForeignKey(() => User)
   @Column
   userId: string;

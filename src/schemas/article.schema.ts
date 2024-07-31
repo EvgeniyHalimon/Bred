@@ -7,10 +7,9 @@ import {
 } from 'sequelize-typescript';
 import { v4 as uuidv4 } from 'uuid';
 import { User } from './user.schema';
-import { IArticle } from 'src/modules/articles/interfaces/article.interfaces';
 
 @Table
-export class Article extends Model<IArticle> {
+export class Article extends Model {
   @Column({ defaultValue: uuidv4(), primaryKey: true })
   id: string;
 
