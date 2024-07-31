@@ -3,7 +3,6 @@ import { InjectModel } from '@nestjs/sequelize';
 import { Sequelize } from 'sequelize';
 import { Comment } from 'src/schemas/comment.schema';
 import { CreateCommentDto } from './dto/create-comments.dto';
-import { IComment } from './interfaces/comments.interfaces';
 
 @Injectable()
 export class UsersService {
