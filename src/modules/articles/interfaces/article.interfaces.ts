@@ -4,4 +4,6 @@ export interface IArticle {
   rating: number;
   authorId: string;
   text: string;
+  createdAt: Date;
+  updatedAt: Date;
 }

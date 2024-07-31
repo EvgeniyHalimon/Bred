@@ -1,10 +1,11 @@
 import { Column, HasMany, Model, Table } from 'sequelize-typescript';
 import { Article } from './article.schema';
+import { Comment } from './comment.schema';
 import { v4 as uuidv4 } from 'uuid';
 import { IUser } from 'src/modules/user/interfaces/user.interfaces';
 import { PartialExcept } from 'src/utils/types';
 
-@Table
+@Table({ tableName: 'users' })
 export class User extends Model<IUser, PartialExcept<IUser, 'id'>> {
   @Column({ defaultValue: uuidv4(), primaryKey: true })
   id: string;
@@ -29,4 +30,7 @@ export class User extends Model<IUser, PartialExcept<IUser, 'id'>> {
 
   @HasMany(() => Article)
   articles: Article[];
+
+  @HasMany(() => Comment)
+  comments: Comment[];
 }

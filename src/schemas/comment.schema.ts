@@ -1,19 +1,21 @@
 import {
   BelongsToMany,
   Column,
+  CreatedAt,
   DataType,
   ForeignKey,
   Model,
   Table,
+  UpdatedAt,
 } from 'sequelize-typescript';
 import { v4 as uuidv4 } from 'uuid';
-import { User } from './user.schema';
-import { Likes } from './likes.schema';
-import { Dislikes } from './dislikes.schema';
 import { IComment } from 'src/modules/comments/interfaces/comments.interfaces';
 import { PartialExcept } from 'src/utils/types';
+import { Dislikes } from './dislikes.schema';
+import { Likes } from './likes.schema';
+import { User } from './user.schema';
 
-@Table
+@Table({ tableName: 'comments' })
 export class Comment extends Model<IComment, PartialExcept<IComment, 'id'>> {
   @Column({ defaultValue: uuidv4(), primaryKey: true, type: DataType.UUID })
   id: string;
@@ -30,4 +32,10 @@ export class Comment extends Model<IComment, PartialExcept<IComment, 'id'>> {
 
   @Column(DataType.TEXT)
   text: string;
+
+  @CreatedAt
+  creationAt: Date;
+
+  @UpdatedAt
+  updatedAt: Date;
 }
