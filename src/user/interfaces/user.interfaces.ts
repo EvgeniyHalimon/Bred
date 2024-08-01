@@ -11,4 +11,6 @@ export interface IUser {
   photo?: string;
   articles?: IArticle[];
   comments?: IComment[];
+  createdAt: Date;
+  updatedAt: Date;
 }

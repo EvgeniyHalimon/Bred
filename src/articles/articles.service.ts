@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { Sequelize } from 'sequelize';
 import { CreateArticleDto } from './dto/create-article.dto';
-import { Article } from 'src/articles/schema/article.schema';
+import { Article } from './schema/article.schema';
 
 @Injectable()
 export class ArticlesService {
@@ -20,8 +20,6 @@ export class ArticlesService {
           title: createUserDto.title,
           text: createUserDto.text,
           authorId: createUserDto.authorId,
-          createdAt: createUserDto.createdAt,
-          updatedAt: createUserDto.updatedAt,
         };
         const createdArticle = await this.articleModel.create(
           article,

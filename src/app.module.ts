@@ -5,8 +5,10 @@ import { config } from './config';
 import { User } from './user/schema/user.schema';
 import { CommentsModule } from './comments/comments.module';
 import { ArticlesModule } from './articles/articles.module';
-import { AuthModule } from './auth/auth.module';
 import { ReactionsModule } from './reactions/reactions.module';
+import { Article } from './articles/schema/article.schema';
+import { Comment } from './comments/schema/comment.schema';
+import { Reaction } from './reactions/schema/reaction.schema';
 
 @Module({
   imports: [
@@ -17,12 +19,11 @@ import { ReactionsModule } from './reactions/reactions.module';
       username: config.USERNAME,
       password: config.PASSWORD,
       database: config.DATABASE,
-      models: [User],
+      models: [User, Article, Comment, Reaction],
     }),
     UsersModule,
     CommentsModule,
     ArticlesModule,
-    AuthModule,
     ReactionsModule,
   ],
 })

@@ -9,12 +9,12 @@ import {
   Table,
   UpdatedAt,
 } from 'sequelize-typescript';
-import { v4 as uuidv4 } from 'uuid';
-import { IComment } from 'src/comments/interfaces/comments.interfaces';
-import { PartialExcept } from 'src/shared/types';
-import { User } from '../../user/schema/user.schema';
-import { Reaction } from 'src/reactions/schema/reaction.schema';
 import { SourceTypeEnum } from 'src/reactions/interfaces/reaction.interfaces';
+import { Reaction } from 'src/reactions/schema/reaction.schema';
+import { PartialExcept } from 'src/shared/types';
+import { User } from 'src/user/schema/user.schema';
+import { v4 as uuidv4 } from 'uuid';
+import { IComment } from '../interfaces/comments.interfaces';
 
 @Table({ tableName: 'comments' })
 export class Comment extends Model<IComment, PartialExcept<IComment, 'id'>> {
@@ -43,7 +43,7 @@ export class Comment extends Model<IComment, PartialExcept<IComment, 'id'>> {
   @HasMany(() => Reaction, {
     foreignKey: 'sourceId',
     constraints: false,
-    scope: { sourceType: SourceTypeEnum.ARTICLE },
+    scope: { sourceType: SourceTypeEnum.COMMENT },
   })
   reactions: Reaction[];
 }

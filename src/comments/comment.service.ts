@@ -1,11 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { Sequelize } from 'sequelize';
-import { Comment } from 'src/comments/schema/comment.schema';
 import { CreateCommentDto } from './dto/create-comments.dto';
+import { Comment } from './schema/comment.schema';
 
 @Injectable()
-export class UsersService {
+export class CommentsService {
   constructor(
     @InjectModel(Comment) private commentModel: typeof Comment,
     private sequelize: Sequelize,
@@ -18,7 +18,7 @@ export class UsersService {
 
         const comment = {
           text: createUserDto.text,
-          authorId: createUserDto.author,
+          authorId: createUserDto.authorId,
         };
         const createdComment = await this.commentModel.create(
           comment,

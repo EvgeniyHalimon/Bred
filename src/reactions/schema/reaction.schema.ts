@@ -7,8 +7,8 @@ import {
   BelongsTo,
 } from 'sequelize-typescript';
 import { User } from '../../user/schema/user.schema';
-import { Article } from 'src/articles/schema/article.schema';
-import { Comment } from 'src/comments/schema/comment.schema';
+import { Comment } from '../../comments/schema/comment.schema';
+import { Article } from '../../articles/schema/article.schema';
 import {
   SourceTypeEnum,
   ReactionTypeEnum,

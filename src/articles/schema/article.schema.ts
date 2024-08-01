@@ -11,15 +11,15 @@ import {
 } from 'sequelize-typescript';
 import { v4 as uuidv4 } from 'uuid';
 import { User } from '../../user/schema/user.schema';
-import { IArticle } from 'src/articles/interfaces/article.interfaces';
-import { PartialExcept } from 'src/shared/types';
-import { Reaction } from 'src/reactions/schema/reaction.schema';
 import { SourceTypeEnum } from 'src/reactions/interfaces/reaction.interfaces';
+import { Reaction } from 'src/reactions/schema/reaction.schema';
+import { PartialExcept } from 'src/shared/types';
+import { IArticle } from '../interfaces/article.interfaces';
 
 @Table({ tableName: 'articles' })
 export class Article extends Model<
   IArticle,
-  PartialExcept<IArticle, 'id' | 'rating'>
+  PartialExcept<IArticle, 'id' | 'rating' | 'createdAt' | 'updatedAt'>
 > {
   @Column({ defaultValue: uuidv4(), primaryKey: true })
   id: string;
