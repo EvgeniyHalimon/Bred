@@ -9,6 +9,10 @@ import {
 import { User } from '../../user/schema/user.schema';
 import { Article } from 'src/articles/schema/article.schema';
 import { Comment } from 'src/comments/schema/comment.schema';
+import {
+  SourceTypeEnum,
+  ReactionTypeEnum,
+} from '../interfaces/reaction.interfaces';
 
 @Table
 export class Reaction extends Model {
@@ -17,19 +21,19 @@ export class Reaction extends Model {
   userId: string;
 
   @Column({
-    type: DataType.ENUM('Article', 'Comment'),
+    type: DataType.ENUM(...Object.values(SourceTypeEnum)),
     allowNull: false,
   })
-  sourceType: 'Article' | 'Comment';
+  sourceType: SourceTypeEnum;
 
   @Column
   sourceId: string;
 
   @Column({
-    type: DataType.ENUM('upvote', 'downvote', 'like', 'dislike'),
+    type: DataType.ENUM(...Object.values(ReactionTypeEnum)),
     allowNull: false,
   })
-  reactionType: 'upvote' | 'downvote' | 'like' | 'dislike';
+  reactionType: ReactionTypeEnum;
 
   @BelongsTo(() => Article, { foreignKey: 'sourceId', constraints: false })
   article: Article;

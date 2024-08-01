@@ -1,5 +1,4 @@
-import { IsNumber, IsString } from 'class-validator';
-import { IUser } from 'src/user/interfaces/user.interfaces';
+import { IsNumber, IsString, IsUUID } from 'class-validator';
 
 export class CreateArticleDto {
   @IsString()
@@ -7,11 +6,8 @@ export class CreateArticleDto {
   @IsNumber()
   readonly rating: number;
   @IsString()
+  @IsUUID(4)
   readonly authorId: string;
-  readonly upvoters: IUser;
-  readonly downvoters: IUser;
   @IsString()
   readonly text: string;
-  readonly createdAt: Date;
-  readonly updatedAt: Date;
 }

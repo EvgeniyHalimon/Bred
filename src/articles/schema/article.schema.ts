@@ -14,6 +14,7 @@ import { User } from '../../user/schema/user.schema';
 import { IArticle } from 'src/articles/interfaces/article.interfaces';
 import { PartialExcept } from 'src/shared/types';
 import { Reaction } from 'src/reactions/schema/reaction.schema';
+import { SourceTypeEnum } from 'src/reactions/interfaces/reaction.interfaces';
 
 @Table({ tableName: 'articles' })
 export class Article extends Model<
@@ -54,7 +55,7 @@ export class Article extends Model<
   @HasMany(() => Reaction, {
     foreignKey: 'sourceId',
     constraints: false,
-    scope: { sourceType: 'Article' },
+    scope: { sourceType: SourceTypeEnum.ARTICLE },
   })
   reactions: Reaction[];
 }

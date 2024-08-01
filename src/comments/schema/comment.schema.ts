@@ -14,6 +14,7 @@ import { IComment } from 'src/comments/interfaces/comments.interfaces';
 import { PartialExcept } from 'src/shared/types';
 import { User } from '../../user/schema/user.schema';
 import { Reaction } from 'src/reactions/schema/reaction.schema';
+import { SourceTypeEnum } from 'src/reactions/interfaces/reaction.interfaces';
 
 @Table({ tableName: 'comments' })
 export class Comment extends Model<IComment, PartialExcept<IComment, 'id'>> {
@@ -42,7 +43,7 @@ export class Comment extends Model<IComment, PartialExcept<IComment, 'id'>> {
   @HasMany(() => Reaction, {
     foreignKey: 'sourceId',
     constraints: false,
-    scope: { sourceType: 'Comment' },
+    scope: { sourceType: SourceTypeEnum.ARTICLE },
   })
   reactions: Reaction[];
 }
