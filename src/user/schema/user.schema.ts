@@ -1,9 +1,9 @@
 import { Column, HasMany, Model, Table } from 'sequelize-typescript';
-import { Article } from './article.schema';
-import { Comment } from './comment.schema';
+import { Article } from '../../articles/schema/article.schema';
+import { Comment } from '../../comments/schema/comment.schema';
 import { v4 as uuidv4 } from 'uuid';
-import { IUser } from 'src/modules/user/interfaces/user.interfaces';
-import { PartialExcept } from 'src/utils/types';
+import { IUser } from 'src/user/interfaces/user.interfaces';
+import { PartialExcept } from 'src/shared/types';
 
 @Table({ tableName: 'users' })
 export class User extends Model<IUser, PartialExcept<IUser, 'id'>> {

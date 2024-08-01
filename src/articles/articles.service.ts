@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { Sequelize } from 'sequelize';
 import { CreateArticleDto } from './dto/create-article.dto';
-import { Article } from 'src/schemas/article.schema';
+import { Article } from 'src/articles/schema/article.schema';
 
 @Injectable()
 export class ArticlesService {

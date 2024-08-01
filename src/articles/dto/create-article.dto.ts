@@ -1,5 +1,5 @@
 import { IsNumber, IsString } from 'class-validator';
-import { IUser } from 'src/modules/user/interfaces/user.interfaces';
+import { IUser } from 'src/user/interfaces/user.interfaces';
 
 export class CreateArticleDto {
   @IsString()

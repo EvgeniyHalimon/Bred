@@ -9,11 +9,10 @@ import {
   UpdatedAt,
 } from 'sequelize-typescript';
 import { v4 as uuidv4 } from 'uuid';
-import { IComment } from 'src/modules/comments/interfaces/comments.interfaces';
-import { PartialExcept } from 'src/utils/types';
-import { Dislikes } from './dislikes.schema';
-import { Likes } from './likes.schema';
-import { User } from './user.schema';
+import { IComment } from 'src/comments/interfaces/comments.interfaces';
+import { PartialExcept } from 'src/shared/types';
+import { User } from '../../user/schema/user.schema';
+import { Reaction } from 'src/reactions/schema/reaction.schema';
 
 @Table({ tableName: 'comments' })
 export class Comment extends Model<IComment, PartialExcept<IComment, 'id'>> {
@@ -24,10 +23,10 @@ export class Comment extends Model<IComment, PartialExcept<IComment, 'id'>> {
   @Column(DataType.UUID)
   authorId: string;
 
-  @BelongsToMany(() => User, () => Likes)
+  @BelongsToMany(() => User, () => Reaction)
   likes: User[];
 
-  @BelongsToMany(() => User, () => Dislikes)
+  @BelongsToMany(() => User, () => Reaction)
   dislikes: User[];
 
   @Column(DataType.TEXT)

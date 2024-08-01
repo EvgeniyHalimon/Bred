@@ -1,5 +1,5 @@
-import { IArticle } from 'src/modules/articles/interfaces/article.interfaces';
-import { IComment } from 'src/modules/comments/interfaces/comments.interfaces';
+import { IArticle } from 'src/articles/interfaces/article.interfaces';
+import { IComment } from 'src/comments/interfaces/comments.interfaces';
 
 export interface IUser {
   id: string;
