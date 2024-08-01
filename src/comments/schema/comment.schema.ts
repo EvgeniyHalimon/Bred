@@ -4,6 +4,7 @@ import {
   CreatedAt,
   DataType,
   ForeignKey,
+  HasMany,
   Model,
   Table,
   UpdatedAt,
@@ -37,4 +38,11 @@ export class Comment extends Model<IComment, PartialExcept<IComment, 'id'>> {
 
   @UpdatedAt
   updatedAt: Date;
+
+  @HasMany(() => Reaction, {
+    foreignKey: 'sourceId',
+    constraints: false,
+    scope: { sourceType: 'Comment' },
+  })
+  reactions: Reaction[];
 }

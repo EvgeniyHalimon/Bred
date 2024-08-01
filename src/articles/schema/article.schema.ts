@@ -4,6 +4,7 @@ import {
   Column,
   CreatedAt,
   ForeignKey,
+  HasMany,
   Model,
   Table,
   UpdatedAt,
@@ -49,4 +50,11 @@ export class Article extends Model<
 
   @UpdatedAt
   updatedAt: Date;
+
+  @HasMany(() => Reaction, {
+    foreignKey: 'sourceId',
+    constraints: false,
+    scope: { sourceType: 'Article' },
+  })
+  reactions: Reaction[];
 }
