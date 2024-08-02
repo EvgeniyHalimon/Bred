@@ -1,11 +1,14 @@
 import { Module } from '@nestjs/common';
-import { UsersModule } from './modules/user/user.module';
+import { UsersModule } from './user/user.module';
 import { SequelizeModule } from '@nestjs/sequelize';
 import { config } from './config';
-import { User } from './schemas/user.schema';
-import { CommentsModule } from './modules/comments/comments.module';
-import { ArticlesModule } from './modules/articles/articles.module';
-import { AuthModule } from './modules/auth/auth.module';
+import { User } from './user/schema/user.schema';
+import { CommentsModule } from './comments/comments.module';
+import { ArticlesModule } from './articles/articles.module';
+import { ReactionsModule } from './reactions/reactions.module';
+import { Article } from './articles/schema/article.schema';
+import { Comment } from './comments/schema/comment.schema';
+import { Reaction } from './reactions/schema/reaction.schema';
 
 @Module({
   imports: [
@@ -16,12 +19,12 @@ import { AuthModule } from './modules/auth/auth.module';
       username: config.USERNAME,
       password: config.PASSWORD,
       database: config.DATABASE,
-      models: [User],
+      models: [User, Article, Comment, Reaction],
     }),
     UsersModule,
     CommentsModule,
     ArticlesModule,
-    AuthModule,
+    ReactionsModule,
   ],
 })
 export class AppModule {}
