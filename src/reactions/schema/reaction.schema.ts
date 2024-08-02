@@ -14,7 +14,7 @@ import {
   ReactionTypeEnum,
 } from '../interfaces/reaction.interfaces';
 
-@Table
+@Table({ tableName: 'reactions' })
 export class Reaction extends Model {
   @ForeignKey(() => User)
   @Column
@@ -26,8 +26,19 @@ export class Reaction extends Model {
   })
   sourceType: SourceTypeEnum;
 
-  @Column
-  sourceId: string;
+  @Column({
+    type: DataType.UUID,
+    allowNull: true,
+  })
+  @ForeignKey(() => Article)
+  articleId: string;
+
+  @Column({
+    type: DataType.UUID,
+    allowNull: true,
+  })
+  @ForeignKey(() => Comment)
+  commentId: string;
 
   @Column({
     type: DataType.ENUM(...Object.values(ReactionTypeEnum)),
@@ -35,9 +46,9 @@ export class Reaction extends Model {
   })
   reactionType: ReactionTypeEnum;
 
-  @BelongsTo(() => Article, { foreignKey: 'sourceId', constraints: false })
+  @BelongsTo(() => Article, { foreignKey: 'articleId', constraints: false })
   article: Article;
 
-  @BelongsTo(() => Comment, { foreignKey: 'sourceId', constraints: false })
+  @BelongsTo(() => Comment, { foreignKey: 'commentId', constraints: false })
   comment: Comment;
 }

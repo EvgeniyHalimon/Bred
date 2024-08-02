@@ -39,5 +39,5 @@ export class CreateUserDto {
   readonly bio: string;
 
   @IsString()
-  readonly photo: string;
+  readonly photo: Buffer;
 }

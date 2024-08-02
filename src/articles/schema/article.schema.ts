@@ -3,6 +3,7 @@ import {
   BelongsToMany,
   Column,
   CreatedAt,
+  DataType,
   ForeignKey,
   HasMany,
   Model,
@@ -21,7 +22,7 @@ export class Article extends Model<
   IArticle,
   PartialExcept<IArticle, 'id' | 'rating' | 'createdAt' | 'updatedAt'>
 > {
-  @Column({ defaultValue: uuidv4(), primaryKey: true })
+  @Column({ defaultValue: uuidv4(), primaryKey: true, type: DataType.UUIDV4 })
   id: string;
 
   @Column
@@ -31,7 +32,7 @@ export class Article extends Model<
   rating: number;
 
   @ForeignKey(() => User)
-  @Column
+  @Column({ type: DataType.UUIDV4 })
   authorId: string;
 
   @BelongsTo(() => User, 'id')
@@ -47,9 +48,11 @@ export class Article extends Model<
   text: string;
 
   @CreatedAt
+  @Column
   creationAt: Date;
 
   @UpdatedAt
+  @Column
   updatedAt: Date;
 
   @HasMany(() => Reaction, {

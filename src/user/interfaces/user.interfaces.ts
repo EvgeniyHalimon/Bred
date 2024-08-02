@@ -8,7 +8,7 @@ export interface IUser {
   email: string;
   password: string;
   bio: string;
-  photo?: string;
+  photo?: Buffer;
   articles?: IArticle[];
   comments?: IComment[];
   createdAt: Date;

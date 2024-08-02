@@ -22,7 +22,7 @@ export class Comment extends Model<IComment, PartialExcept<IComment, 'id'>> {
   id: string;
 
   @ForeignKey(() => User)
-  @Column(DataType.UUID)
+  @Column(DataType.UUIDV4)
   authorId: string;
 
   @BelongsToMany(() => User, () => Reaction)
@@ -35,9 +35,11 @@ export class Comment extends Model<IComment, PartialExcept<IComment, 'id'>> {
   text: string;
 
   @CreatedAt
+  @Column
   creationAt: Date;
 
   @UpdatedAt
+  @Column
   updatedAt: Date;
 
   @HasMany(() => Reaction, {

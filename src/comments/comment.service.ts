@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
-import { Sequelize } from 'sequelize';
+import { Sequelize } from 'sequelize-typescript';
 import { CreateCommentDto } from './dto/create-comments.dto';
 import { Comment } from './schema/comment.schema';
 
