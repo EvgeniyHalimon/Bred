@@ -7,4 +7,5 @@ export const config = {
   USERNAME: process.env.USERNAME || '',
   PASSWORD: process.env.PASSWORD || '',
   DATABASE: process.env.DATABASE || '',
+  SECRET: process.env.SECRET || '',
 };

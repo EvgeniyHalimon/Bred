@@ -2,36 +2,36 @@ import { Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { InjectModel } from '@nestjs/sequelize';
 import { User } from './schema/user.schema';
-import { Sequelize } from 'sequelize-typescript';
+import { SignInDto } from './dto/sign-in.dto';
 
 @Injectable()
 export class UsersService {
-  constructor(
-    @InjectModel(User) private userModel: typeof User,
-    private sequelize: Sequelize,
-  ) {}
+  constructor(@InjectModel(User) private userModel: typeof User) {}
 
   async create(createUserDto: CreateUserDto): Promise<User> {
     try {
-      const result = await this.sequelize.transaction(async t => {
-        const transactionHost = { transaction: t };
+      const userAttributes = {
+        firstName: createUserDto.firstName,
+        lastName: createUserDto.lastName,
+        email: createUserDto.email,
+        password: createUserDto.password,
+        bio: createUserDto.bio,
+        photo: createUserDto.photo,
+      };
+      const createdUser = await this.userModel.create(userAttributes);
+      return createdUser;
+    } catch (err) {
+      console.log('🚀 ~ UsersService ~ create ~ err:', err);
+      throw err;
+    }
+  }
 
-        const userAttributes = {
-          firstName: createUserDto.firstName,
-          lastName: createUserDto.lastName,
-          email: createUserDto.email,
-          password: createUserDto.password,
-          bio: createUserDto.bio,
-          photo: createUserDto.photo,
-        };
-        const createdUser = await this.userModel.create(
-          userAttributes,
-          transactionHost,
-        );
-        return createdUser;
+  async signIn(signInDto: SignInDto): Promise<User | null> {
+    try {
+      const createdUser = await this.userModel.findOne({
+        where: { email: signInDto.email },
       });
-
-      return result;
+      return createdUser;
     } catch (err) {
       console.log('🚀 ~ UsersService ~ create ~ err:', err);
       throw err;

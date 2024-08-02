@@ -9,6 +9,7 @@ import { ReactionsModule } from './reactions/reactions.module';
 import { Article } from './articles/schema/article.schema';
 import { Comment } from './comments/schema/comment.schema';
 import { Reaction } from './reactions/schema/reaction.schema';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { Reaction } from './reactions/schema/reaction.schema';
     CommentsModule,
     ArticlesModule,
     ReactionsModule,
+    AuthModule,
   ],
 })
 export class AppModule {}
