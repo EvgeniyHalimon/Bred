@@ -8,4 +8,5 @@ export const config = {
   PASSWORD: process.env.PASSWORD || '',
   DATABASE: process.env.DATABASE || '',
   SECRET: process.env.SECRET || '',
+  EXPIRES_IN: process.env.EXPIRES_IN || '1h',
 };

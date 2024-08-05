@@ -1,6 +1,6 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { CreateUserDto } from 'src/user/dto/create-user.dto';
+import { CreateUserDto } from '../user/dto/create-user.dto';
 import { User } from 'src/user/schema/user.schema';
 import { UsersService } from 'src/user/user.service';
 import { SignInDto } from '../user/dto/sign-in.dto';
@@ -31,7 +31,9 @@ export class AuthService {
     }
   }
 
-  async signIn(signInDto: SignInDto): Promise<User | undefined> {
+  async signIn(
+    signInDto: SignInDto,
+  ): Promise<{ accessToken: string; refreshToken: string } | undefined> {
     try {
       const userAttributes = {
         email: signInDto.email,
@@ -44,7 +46,10 @@ export class AuthService {
         if (!match) {
           throw new BadRequestException();
         }
-        return user;
+        return {
+          accessToken: await this.jwtService.signAsync(user),
+          refreshToken: await this.jwtService.signAsync(user),
+        };
       }
     } catch (err) {
       console.log('🚀 ~ UsersService ~ create ~ err:', err);

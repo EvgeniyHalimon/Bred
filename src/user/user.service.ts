@@ -1,4 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { InjectModel } from '@nestjs/sequelize';
 import { User } from './schema/user.schema';
@@ -10,6 +14,12 @@ export class UsersService {
 
   async create(createUserDto: CreateUserDto): Promise<User> {
     try {
+      const user = await this.userModel.findOne({
+        where: { email: createUserDto.email },
+      });
+      if (!user) {
+        throw new BadRequestException('User already exists');
+      }
       const userAttributes = {
         firstName: createUserDto.firstName,
         lastName: createUserDto.lastName,
@@ -28,10 +38,13 @@ export class UsersService {
 
   async signIn(signInDto: SignInDto): Promise<User | null> {
     try {
-      const createdUser = await this.userModel.findOne({
+      const user = await this.userModel.findOne({
         where: { email: signInDto.email },
       });
-      return createdUser;
+      if (!user) {
+        throw new NotFoundException('User not found');
+      }
+      return user;
     } catch (err) {
       console.log('🚀 ~ UsersService ~ create ~ err:', err);
       throw err;
