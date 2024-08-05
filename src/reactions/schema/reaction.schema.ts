@@ -12,10 +12,18 @@ import { Article } from '../../articles/schema/article.schema';
 import {
   SourceTypeEnum,
   ReactionTypeEnum,
+  IReactions,
 } from '../interfaces/reaction.interfaces';
+import { PartialExcept } from 'src/shared/types';
+import { v4 as uuidv4 } from 'uuid';
 
 @Table({ tableName: 'reactions' })
-export class Reaction extends Model {
+export class Reaction extends Model<
+  PartialExcept<IReactions, 'id' | 'createdAt' | 'updatedAt'>
+> {
+  @Column({ defaultValue: uuidv4(), primaryKey: true, type: DataType.UUIDV4 })
+  id: string;
+
   @ForeignKey(() => User)
   @Column
   userId: string;

@@ -17,7 +17,7 @@ export class UsersService {
       const user = await this.userModel.findOne({
         where: { email: createUserDto.email },
       });
-      if (!user) {
+      if (user) {
         throw new BadRequestException('User already exists');
       }
       const userAttributes = {

@@ -8,9 +8,17 @@ export interface IUser {
   email: string;
   password: string;
   bio: string;
+  role: UserRole;
   photo?: Buffer;
   articles?: IArticle[];
   comments?: IComment[];
   createdAt: Date;
   updatedAt: Date;
 }
+
+export enum UserRolesEnum {
+  USER = 'user',
+  ADMIN = 'admin',
+}
+
+export type UserRole = UserRolesEnum.USER | UserRolesEnum.ADMIN;

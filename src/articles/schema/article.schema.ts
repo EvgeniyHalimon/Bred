@@ -49,7 +49,7 @@ export class Article extends Model<
 
   @CreatedAt
   @Column
-  creationAt: Date;
+  createdAt: Date;
 
   @UpdatedAt
   @Column

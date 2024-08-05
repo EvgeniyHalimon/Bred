@@ -36,7 +36,7 @@ export class Comment extends Model<IComment, PartialExcept<IComment, 'id'>> {
 
   @CreatedAt
   @Column
-  creationAt: Date;
+  createdAt: Date;
 
   @UpdatedAt
   @Column

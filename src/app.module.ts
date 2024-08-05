@@ -17,7 +17,7 @@ import { AuthModule } from './auth/auth.module';
       dialect: 'mysql',
       host: config.HOST,
       port: config.PORT as number,
-      username: config.USERNAME,
+      username: config.DB_USERNAME,
       password: config.PASSWORD,
       database: config.DATABASE,
       models: [User, Article, Comment, Reaction],

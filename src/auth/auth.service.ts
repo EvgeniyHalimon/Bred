@@ -14,19 +14,20 @@ export class AuthService {
   ) {}
 
   async signUp(signUpDto: CreateUserDto): Promise<User> {
+    console.log('🚀 ~ AuthService ~ signUp ~ signUpDto:', signUpDto);
     try {
       const userAttributes = {
         firstName: signUpDto.firstName,
         lastName: signUpDto.lastName,
         email: signUpDto.email,
-        password: hashPassword(signUpDto.password) as unknown as string,
+        password: await hashPassword(signUpDto.password),
         bio: signUpDto.bio,
         photo: signUpDto.photo,
       };
       const createdUser = await this.usersService.create(userAttributes);
       return createdUser;
     } catch (err) {
-      console.log('🚀 ~ UsersService ~ create ~ err:', err);
+      console.log('🚀 ~ AuthService ~ signUp ~ err:', err);
       throw err;
     }
   }
