@@ -1,9 +1,18 @@
+// nest
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { CreateUserDto } from '../user/dto/create-user.dto';
+
+// schema
 import { User } from 'src/user/schema/user.schema';
+
+// service
 import { UsersService } from 'src/user/user.service';
+
+// dto's
+import { CreateUserDto } from '../user/dto/create-user.dto';
 import { SignInDto } from '../user/dto/sign-in.dto';
+
+// utils
 import { hashPassword, verifyPassword } from 'src/shared/passwordUtils';
 
 @Injectable()
@@ -14,7 +23,6 @@ export class AuthService {
   ) {}
 
   async signUp(signUpDto: CreateUserDto): Promise<User> {
-    console.log('🚀 ~ AuthService ~ signUp ~ signUpDto:', signUpDto);
     try {
       const userAttributes = {
         firstName: signUpDto.firstName,
@@ -27,7 +35,10 @@ export class AuthService {
       const createdUser = await this.usersService.create(userAttributes);
       return createdUser;
     } catch (err) {
-      console.log('🚀 ~ AuthService ~ signUp ~ err:', err);
+      console.log(
+        '🚀 ~ file: auth.service.ts:29 ~ AuthService ~ signUp ~ err:',
+        err,
+      );
       throw err;
     }
   }
@@ -53,7 +64,7 @@ export class AuthService {
         };
       }
     } catch (err) {
-      console.log('🚀 ~ UsersService ~ create ~ err:', err);
+      console.log('🚀 ~ file: auth.service.ts:58 ~ AuthService ~ err:', err);
       throw err;
     }
   }

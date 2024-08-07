@@ -1,4 +1,7 @@
+// libraries
 import { IsEmail, IsEmpty, IsString, MinLength } from 'class-validator';
+
+// constants
 import { userFieldLengths } from 'src/user/validation/validationConstants';
 
 export class SignInDto {

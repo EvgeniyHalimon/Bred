@@ -1,3 +1,4 @@
+// libraries
 import {
   Column,
   CreatedAt,
@@ -7,14 +8,16 @@ import {
   Table,
   UpdatedAt,
 } from 'sequelize-typescript';
-
 import { v4 as uuidv4 } from 'uuid';
-import { IUser, UserRolesEnum } from 'src/user/interfaces/user.interfaces';
-import { PartialExcept } from 'src/shared/types';
+
+// schema
 import { Article } from 'src/articles/schema/article.schema';
 import { Comment } from 'src/comments/schema/comment.schema';
 import { Reaction } from 'src/reactions/schema/reaction.schema';
 
+// types
+import { IUser, UserRolesEnum } from 'src/user/interfaces/user.interfaces';
+import { PartialExcept } from 'src/shared/types';
 @Table({ tableName: 'users' })
 export class User extends Model<
   IUser,

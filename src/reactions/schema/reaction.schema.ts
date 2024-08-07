@@ -1,3 +1,4 @@
+// libraries
 import {
   Column,
   Model,
@@ -6,16 +7,20 @@ import {
   DataType,
   BelongsTo,
 } from 'sequelize-typescript';
+import { v4 as uuidv4 } from 'uuid';
+
+// schemas
 import { User } from '../../user/schema/user.schema';
 import { Comment } from '../../comments/schema/comment.schema';
 import { Article } from '../../articles/schema/article.schema';
+
+// types
 import {
   SourceTypeEnum,
   ReactionTypeEnum,
   IReactions,
 } from '../interfaces/reaction.interfaces';
 import { PartialExcept } from 'src/shared/types';
-import { v4 as uuidv4 } from 'uuid';
 
 @Table({ tableName: 'reactions' })
 export class Reaction extends Model<

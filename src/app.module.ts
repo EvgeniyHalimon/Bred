@@ -16,7 +16,7 @@ import { AuthModule } from './auth/auth.module';
     SequelizeModule.forRoot({
       dialect: 'mysql',
       host: config.HOST,
-      port: config.PORT as number,
+      port: config.DB_PORT as number,
       username: config.DB_USERNAME,
       password: config.PASSWORD,
       database: config.DATABASE,

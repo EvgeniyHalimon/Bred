@@ -1,3 +1,4 @@
+// libraries
 import {
   BelongsToMany,
   Column,
@@ -9,12 +10,16 @@ import {
   Table,
   UpdatedAt,
 } from 'sequelize-typescript';
-import { SourceTypeEnum } from 'src/reactions/interfaces/reaction.interfaces';
-import { Reaction } from 'src/reactions/schema/reaction.schema';
-import { PartialExcept } from 'src/shared/types';
-import { User } from 'src/user/schema/user.schema';
 import { v4 as uuidv4 } from 'uuid';
+
+// schemas
+import { Reaction } from 'src/reactions/schema/reaction.schema';
+import { User } from 'src/user/schema/user.schema';
+
+// types
+import { SourceTypeEnum } from 'src/reactions/interfaces/reaction.interfaces';
 import { IComment } from '../interfaces/comments.interfaces';
+import { PartialExcept } from 'src/shared/types';
 
 @Table({ tableName: 'comments' })
 export class Comment extends Model<IComment, PartialExcept<IComment, 'id'>> {

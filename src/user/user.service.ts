@@ -1,11 +1,16 @@
+// nest
 import {
   BadRequestException,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { CreateUserDto } from './dto/create-user.dto';
 import { InjectModel } from '@nestjs/sequelize';
+
+// schema
 import { User } from './schema/user.schema';
+
+// dto's
+import { CreateUserDto } from './dto/create-user.dto';
 import { SignInDto } from './dto/sign-in.dto';
 
 @Injectable()
@@ -31,7 +36,10 @@ export class UsersService {
       const createdUser = await this.userModel.create(userAttributes);
       return createdUser;
     } catch (err) {
-      console.log('🚀 ~ UsersService ~ create ~ err:', err);
+      console.log(
+        '🚀 ~ file: user.service.ts:34 ~ UsersService ~ create ~ err:',
+        err,
+      );
       throw err;
     }
   }
@@ -46,7 +54,10 @@ export class UsersService {
       }
       return user;
     } catch (err) {
-      console.log('🚀 ~ UsersService ~ create ~ err:', err);
+      console.log(
+        '🚀 ~ file: user.service.ts:49 ~ UsersService ~ signIn ~ err:',
+        err,
+      );
       throw err;
     }
   }

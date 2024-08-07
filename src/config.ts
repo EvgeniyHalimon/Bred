@@ -3,7 +3,8 @@ dotenv.config();
 
 export const config = {
   HOST: process.env.HOST || '',
-  PORT: process.env.PORT || 3003,
+  DB_PORT: process.env.DB_PORT || 3003,
+  SERVER_PORT: process.env.SERVER_PORT || 3001,
   DB_USERNAME: process.env.DB_USERNAME || '',
   PASSWORD: process.env.PASSWORD || '',
   DATABASE: process.env.DATABASE || '',

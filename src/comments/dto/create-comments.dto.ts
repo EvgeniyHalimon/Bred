@@ -1,4 +1,7 @@
+// library
 import { IsString, IsUUID, MaxLength, MinLength } from 'class-validator';
+
+// constants
 import { commentFieldLengths } from '../validation/validationConstants';
 
 export class CreateCommentDto {

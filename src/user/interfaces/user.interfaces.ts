@@ -1,3 +1,4 @@
+// types
 import { IArticle } from 'src/articles/interfaces/article.interfaces';
 import { IComment } from 'src/comments/interfaces/comments.interfaces';
 

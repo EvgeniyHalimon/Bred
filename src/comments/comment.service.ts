@@ -1,8 +1,15 @@
+// nest
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
-import { Sequelize } from 'sequelize-typescript';
-import { CreateCommentDto } from './dto/create-comments.dto';
+
+// schema
 import { Comment } from './schema/comment.schema';
+
+// library
+import { Sequelize } from 'sequelize-typescript';
+
+// dto
+import { CreateCommentDto } from './dto/create-comments.dto';
 
 @Injectable()
 export class CommentsService {
@@ -29,7 +36,10 @@ export class CommentsService {
 
       return result;
     } catch (err) {
-      console.log('🚀 ~ UsersService ~ create ~ err:', err);
+      console.log(
+        '🚀 ~ file: comment.service.ts:32 ~ CommentsService ~ create ~ err:',
+        err,
+      );
       throw err;
     }
   }

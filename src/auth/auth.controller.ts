@@ -1,8 +1,15 @@
+// nest
 import { Body, Controller, Post, HttpCode, HttpStatus } from '@nestjs/common';
+
+// service
 import { AuthService } from './auth.service';
+
+// decorator
+import { Public } from 'src/shared/public.decorator';
+
+// dto's
 import { SignInDto } from 'src/user/dto/sign-in.dto';
 import { CreateUserDto } from 'src/user/dto/create-user.dto';
-import { Public } from 'src/shared/public.decorator';
 
 @Controller('auth')
 export class AuthController {

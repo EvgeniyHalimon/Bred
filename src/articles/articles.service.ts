@@ -1,8 +1,15 @@
+// nest
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
+
+// library
 import { Sequelize } from 'sequelize-typescript';
-import { CreateArticleDto } from './dto/create-article.dto';
+
+// schema
 import { Article } from './schema/article.schema';
+
+// dto
+import { CreateArticleDto } from './dto/create-article.dto';
 
 @Injectable()
 export class ArticlesService {
@@ -30,7 +37,10 @@ export class ArticlesService {
 
       return result;
     } catch (err) {
-      console.log('🚀 ~ UsersService ~ create ~ err:', err);
+      console.log(
+        '🚀 ~ file: articles.service.ts:33 ~ ArticlesService ~ create ~ err:',
+        err,
+      );
       throw err;
     }
   }
