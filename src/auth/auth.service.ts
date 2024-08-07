@@ -12,6 +12,9 @@ import { UsersService } from 'src/user/user.service';
 import { CreateUserDto } from '../user/dto/create-user.dto';
 import { SignInDto } from '../user/dto/sign-in.dto';
 
+// types
+import { IMessageResponse } from 'src/shared/types';
+
 // utils
 import { hashPassword, verifyPassword } from 'src/shared/passwordUtils';
 
@@ -22,7 +25,7 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
-  async signUp(signUpDto: CreateUserDto): Promise<User> {
+  async signUp(signUpDto: CreateUserDto): Promise<IMessageResponse<User>> {
     try {
       const userAttributes = {
         firstName: signUpDto.firstName,
@@ -33,7 +36,7 @@ export class AuthService {
         photo: signUpDto.photo,
       };
       const createdUser = await this.usersService.create(userAttributes);
-      return createdUser;
+      return { data: createdUser, message: 'User created successfully' };
     } catch (err) {
       console.log(
         '🚀 ~ file: auth.service.ts:29 ~ AuthService ~ signUp ~ err:',

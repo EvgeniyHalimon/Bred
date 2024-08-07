@@ -13,6 +13,9 @@ import { User } from './schema/user.schema';
 import { CreateUserDto } from './dto/create-user.dto';
 import { SignInDto } from './dto/sign-in.dto';
 
+// types
+import { IUser } from './interfaces/user.interfaces';
+
 @Injectable()
 export class UsersService {
   constructor(@InjectModel(User) private userModel: typeof User) {}
@@ -44,15 +47,19 @@ export class UsersService {
     }
   }
 
-  async signIn(signInDto: SignInDto): Promise<User | null> {
+  async signIn(signInDto: SignInDto): Promise<IUser | null> {
     try {
       const user = await this.userModel.findOne({
         where: { email: signInDto.email },
       });
+      console.log(
+        '🚀 ~ file: user.service.ts:55 ~ UsersService ~ signIn ~ user:',
+        user,
+      );
       if (!user) {
         throw new NotFoundException('User not found');
       }
-      return user;
+      return user.dataValues;
     } catch (err) {
       console.log(
         '🚀 ~ file: user.service.ts:49 ~ UsersService ~ signIn ~ err:',
