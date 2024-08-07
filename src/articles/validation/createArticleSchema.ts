@@ -1,4 +1,7 @@
+// library
 import { z as zod } from 'zod';
+
+// constants
 import { commentsFieldLengths } from './validationConstants';
 
 export const createArticleSchema = zod
