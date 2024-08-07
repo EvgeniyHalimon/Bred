@@ -1,5 +1,5 @@
 // nest
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Post, Req } from '@nestjs/common';
 
 // service
 import { ArticlesService } from './articles.service';
@@ -14,8 +14,8 @@ export class ArticlesController {
 
   @Post('/')
   async create(
-    @Body() request: ICustomRequest,
-    createArticleDto: CreateArticleDto,
+    @Req() request: ICustomRequest,
+    @Body() createArticleDto: CreateArticleDto,
   ) {
     console.log(
       '🚀 ~ file: articles.controller.ts:17 ~ ArticlesController ~ create ~ request:',
