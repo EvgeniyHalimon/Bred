@@ -2,40 +2,32 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 
-// library
-import { Sequelize } from 'sequelize-typescript';
-
 // schema
 import { Article } from './schema/article.schema';
 
 // dto
 import { CreateArticleDto } from './dto/create-article.dto';
+import { IUser } from 'src/user/interfaces/user.interfaces';
 
 @Injectable()
 export class ArticlesService {
-  constructor(
-    @InjectModel(Article) private articleModel: typeof Article,
-    private sequelize: Sequelize,
-  ) {}
+  constructor(@InjectModel(Article) private articleModel: typeof Article) {}
 
-  async create(createUserDto: CreateArticleDto): Promise<Article> {
+  async create({
+    user,
+    createArticleDto,
+  }: {
+    user: IUser;
+    createArticleDto: CreateArticleDto;
+  }): Promise<Article> {
     try {
-      const result = await this.sequelize.transaction(async t => {
-        const transactionHost = { transaction: t };
-
-        const article = {
-          title: createUserDto.title,
-          text: createUserDto.text,
-          authorId: createUserDto.authorId,
-        };
-        const createdArticle = await this.articleModel.create(
-          article,
-          transactionHost,
-        );
-        return createdArticle;
-      });
-
-      return result;
+      const article = {
+        title: createArticleDto.title,
+        text: createArticleDto.text,
+        authorId: user.id,
+      };
+      const createdArticle = await this.articleModel.create(article);
+      return createdArticle;
     } catch (err) {
       console.log(
         '🚀 ~ file: articles.service.ts:33 ~ ArticlesService ~ create ~ err:',
