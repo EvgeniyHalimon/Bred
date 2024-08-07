@@ -1,4 +1,7 @@
+// library
 import { IsEnum, IsString, IsUUID } from 'class-validator';
+
+// types
 import {
   ReactionType,
   ReactionTypeEnum,

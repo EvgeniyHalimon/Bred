@@ -1,4 +1,7 @@
+// libraries
 import { IsEmail, IsString, MaxLength, MinLength } from 'class-validator';
+
+// constants
 import { userFieldLengths } from '../validation/validationConstants';
 
 export class CreateUserDto {

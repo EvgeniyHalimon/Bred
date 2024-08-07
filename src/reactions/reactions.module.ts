@@ -1,5 +1,8 @@
+// nest
 import { Module } from '@nestjs/common';
 import { SequelizeModule } from '@nestjs/sequelize';
+
+// schema
 import { Reaction } from './schema/reaction.schema';
 
 @Module({

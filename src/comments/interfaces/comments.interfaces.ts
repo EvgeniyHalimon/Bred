@@ -5,8 +5,3 @@ export interface IComment {
   createdAt?: Date;
   updatedAt?: Date;
 }
-
-export interface IReactions {
-  userId: string;
-  commentId: string;
-}

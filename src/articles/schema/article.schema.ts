@@ -1,3 +1,4 @@
+// libraries
 import {
   BelongsTo,
   BelongsToMany,
@@ -11,9 +12,13 @@ import {
   UpdatedAt,
 } from 'sequelize-typescript';
 import { v4 as uuidv4 } from 'uuid';
+
+// schemas
 import { User } from '../../user/schema/user.schema';
-import { SourceTypeEnum } from 'src/reactions/interfaces/reaction.interfaces';
 import { Reaction } from 'src/reactions/schema/reaction.schema';
+
+// types
+import { SourceTypeEnum } from 'src/reactions/interfaces/reaction.interfaces';
 import { PartialExcept } from 'src/shared/types';
 import { IArticle } from '../interfaces/article.interfaces';
 
@@ -49,7 +54,7 @@ export class Article extends Model<
 
   @CreatedAt
   @Column
-  creationAt: Date;
+  createdAt: Date;
 
   @UpdatedAt
   @Column
