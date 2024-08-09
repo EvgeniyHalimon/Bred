@@ -33,14 +33,25 @@ export class Article extends Model<
   @Column
   title: string;
 
-  @Column({ defaultValue: 0 })
+  @Column({ defaultValue: 0, type: DataType.INTEGER })
   rating: number;
 
   @ForeignKey(() => User)
   @Column({ type: DataType.UUIDV4 })
   authorId: string;
 
-  @BelongsTo(() => User, 'id')
+  @Column
+  text: string;
+
+  @CreatedAt
+  @Column({ type: DataType.NOW })
+  createdAt: Date;
+
+  @UpdatedAt
+  @Column({ type: DataType.NOW })
+  updatedAt: Date;
+
+  @BelongsTo(() => User, 'authorId')
   author: User;
 
   @BelongsToMany(() => User, () => Reaction)
@@ -48,17 +59,6 @@ export class Article extends Model<
 
   @BelongsToMany(() => User, () => Reaction)
   downvoters: User[];
-
-  @Column
-  text: string;
-
-  @CreatedAt
-  @Column
-  createdAt: Date;
-
-  @UpdatedAt
-  @Column
-  updatedAt: Date;
 
   @HasMany(() => Reaction, {
     foreignKey: 'sourceId',

@@ -11,7 +11,7 @@ import { User } from './schema/user.schema';
 import { Public } from 'src/shared/public.decorator';
 
 // dto
-import { CreateUserDto } from './dto/create-user.dto';
+import { CreateUserDto } from './dto';
 
 @Controller('users')
 export class UsersController {

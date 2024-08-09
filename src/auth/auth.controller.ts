@@ -8,8 +8,7 @@ import { AuthService } from './auth.service';
 import { Public } from 'src/shared/public.decorator';
 
 // dto's
-import { SignInDto } from 'src/user/dto/sign-in.dto';
-import { CreateUserDto } from 'src/user/dto/create-user.dto';
+import { SignInDto, CreateUserDto } from 'src/user/dto';
 
 @Controller('auth')
 export class AuthController {

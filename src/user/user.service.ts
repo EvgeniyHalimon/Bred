@@ -10,8 +10,7 @@ import { InjectModel } from '@nestjs/sequelize';
 import { User } from './schema/user.schema';
 
 // dto's
-import { CreateUserDto } from './dto/create-user.dto';
-import { SignInDto } from './dto/sign-in.dto';
+import { CreateUserDto, SignInDto } from './dto';
 
 // types
 import { IUser } from './interfaces/user.interfaces';
