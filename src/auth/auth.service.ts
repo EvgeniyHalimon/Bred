@@ -9,8 +9,7 @@ import { User } from 'src/user/schema/user.schema';
 import { UsersService } from 'src/user/user.service';
 
 // dto's
-import { CreateUserDto } from '../user/dto/create-user.dto';
-import { SignInDto } from '../user/dto/sign-in.dto';
+import { CreateUserDto, SignInDto } from 'src/user/dto';
 
 // types
 import { IMessageResponse } from 'src/shared/types';
@@ -36,7 +35,7 @@ export class AuthService {
         photo: signUpDto.photo,
       };
       const createdUser = await this.usersService.create(userAttributes);
-      return { data: createdUser, message: 'User created successfully' };
+      return { data: { createdUser }, message: 'User created successfully' };
     } catch (err) {
       console.log(
         '🚀 ~ file: auth.service.ts:29 ~ AuthService ~ signUp ~ err:',

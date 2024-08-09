@@ -1,10 +1,10 @@
 // library
-import { IsString, MaxLength, MinLength } from 'class-validator';
+import { IsOptional, IsString, MaxLength, MinLength } from 'class-validator';
 
 // constants
 import { articlesFieldLengths } from '../validation/validationConstants';
 
-export class CreateArticleDto {
+export class PatchArticleDto {
   @IsString()
   @MinLength(articlesFieldLengths.title.min, {
     message: `$property must be ${articlesFieldLengths.title.min} or more characters long`,
@@ -12,6 +12,7 @@ export class CreateArticleDto {
   @MaxLength(articlesFieldLengths.title.max, {
     message: `$property must be ${articlesFieldLengths.title.max} or more characters long`,
   })
+  @IsOptional()
   readonly title: string;
   @IsString()
   @MinLength(articlesFieldLengths.text.min, {
@@ -20,5 +21,6 @@ export class CreateArticleDto {
   @MaxLength(articlesFieldLengths.text.max, {
     message: `$property must be ${articlesFieldLengths.text.max} or more characters long`,
   })
+  @IsOptional()
   readonly text: string;
 }
