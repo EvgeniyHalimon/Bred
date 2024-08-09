@@ -21,6 +21,12 @@ export interface ISimpleMessageResponse {
   message: string;
 }
 
+export interface IPaginationResponse<T> extends ISimpleResponse<T> {
+  count: number;
+}
+
 export interface ICustomRequest extends Request {
   user: IUser;
 }
+
+export type OrderType = 'ASC' | 'DESC';

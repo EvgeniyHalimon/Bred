@@ -6,19 +6,29 @@ import {
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 
-// schema
+// schemas
 import { Article } from './schema/article.schema';
+import { User } from 'src/user/schema/user.schema';
 
 // dto's
-import { CreateArticleDto, PatchArticleDto } from './dto';
+import {
+  CreateArticleDto,
+  DeleteArticleDto,
+  GetArticleDto,
+  PatchArticleDto,
+} from './dto';
 
 // types
 import { IUser } from 'src/user/interfaces/user.interfaces';
-import { IArticle } from './interfaces/article.interfaces';
+import {
+  IArticle,
+  IQueryFindAllArticles,
+} from './interfaces/article.interfaces';
 import {
   ISimpleResponse,
   IMessageResponse,
   ISimpleMessageResponse,
+  IPaginationResponse,
 } from 'src/shared/types';
 
 @Injectable()
@@ -54,12 +64,13 @@ export class ArticlesService {
 
   async getById({
     articleId,
-  }: {
-    articleId: string;
-  }): Promise<ISimpleResponse<IArticle> | undefined> {
+  }: GetArticleDto): Promise<ISimpleResponse<IArticle> | undefined> {
     try {
       const article = await this.articleModel.findOne({
         where: { id: articleId },
+        include: [
+          { model: User, as: 'author', attributes: { exclude: ['password'] } },
+        ],
       });
 
       if (!article) {
@@ -75,8 +86,27 @@ export class ArticlesService {
     }
   }
 
-  async findAll(): Promise<Article[]> {
-    return this.articleModel.findAll();
+  async findAll({
+    queries,
+  }: {
+    queries: IQueryFindAllArticles;
+  }): Promise<IPaginationResponse<IArticle[]>> {
+    const whereCondition = queries.title ? { title: queries.title } : {};
+    const result = await this.articleModel.findAndCountAll({
+      where: whereCondition,
+      limit: queries.limit,
+      offset: queries.offset,
+      order: [[queries.orderBy, queries.order]],
+      include: [
+        { model: User, as: 'author', attributes: { exclude: ['password'] } },
+      ],
+    });
+    return {
+      data: {
+        articles: result.rows,
+      },
+      count: result.count,
+    };
   }
 
   async patchById({
@@ -125,10 +155,7 @@ export class ArticlesService {
   async deleteById({
     userId,
     articleId,
-  }: {
-    userId: string;
-    articleId: string;
-  }): Promise<ISimpleMessageResponse> {
+  }: DeleteArticleDto): Promise<ISimpleMessageResponse> {
     const article = await this.articleModel.findOne({
       where: { id: articleId },
     });

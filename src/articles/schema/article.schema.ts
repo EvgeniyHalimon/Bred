@@ -51,7 +51,7 @@ export class Article extends Model<
   @Column({ type: DataType.NOW })
   updatedAt: Date;
 
-  @BelongsTo(() => User, 'id')
+  @BelongsTo(() => User, 'authorId')
   author: User;
 
   @BelongsToMany(() => User, () => Reaction)

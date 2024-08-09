@@ -14,8 +14,14 @@ import { ArticlesService } from './articles.service';
 
 // dto
 import { CreateArticleDto } from './dto/create-article.dto';
-import { ICustomRequest } from 'src/shared/types';
 import { PatchArticleDto } from './dto/patch-article.dto';
+
+// types
+import { ICustomRequest, OrderType } from 'src/shared/types';
+import {
+  IArticle,
+  IQueryFindAllArticles,
+} from './interfaces/article.interfaces';
 
 @Controller('articles')
 export class ArticlesController {
@@ -36,6 +42,19 @@ export class ArticlesController {
   async getById(@Req() request: ICustomRequest) {
     const articleId = request.params.id;
     return this.articlesService.getById({ articleId });
+  }
+
+  @Get('/')
+  async getAll(@Req() request: ICustomRequest) {
+    const { page, limit, title, order, orderBy } = request.query;
+    const queries: IQueryFindAllArticles = {
+      offset: page ? (Number(page) - 1) * (limit ? Number(limit) : 10) : 0,
+      limit: limit ? Number(limit) : 10,
+      order: (order as OrderType) ?? 'DESC',
+      orderBy: (orderBy as keyof IArticle) ?? 'createdAt',
+      title: typeof title === 'string' ? title : undefined,
+    };
+    return this.articlesService.findAll({ queries });
   }
 
   @Patch('/:id')
