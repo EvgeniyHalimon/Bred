@@ -1,7 +1,8 @@
 export interface IReactions {
   id: string;
   userId: string;
-  sourceId: string;
+  commentId?: string;
+  articleId?: string;
   reactionType: ReactionType;
   sourceType: SourceType;
   createdAt: Date;

@@ -6,6 +6,8 @@ import {
   ForeignKey,
   DataType,
   BelongsTo,
+  CreatedAt,
+  UpdatedAt,
 } from 'sequelize-typescript';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -43,21 +45,29 @@ export class Reaction extends Model<
     type: DataType.UUID,
     allowNull: true,
   })
-  @ForeignKey(() => Article)
-  articleId: string;
-
   @Column({
     type: DataType.UUID,
     allowNull: true,
   })
-  @ForeignKey(() => Comment)
-  commentId: string;
-
   @Column({
     type: DataType.ENUM(...Object.values(ReactionTypeEnum)),
     allowNull: false,
   })
   reactionType: ReactionTypeEnum;
+
+  @CreatedAt
+  @Column
+  createdAt: Date;
+
+  @UpdatedAt
+  @Column
+  updatedAt: Date;
+
+  @ForeignKey(() => Article)
+  articleId: string;
+
+  @ForeignKey(() => Comment)
+  commentId: string;
 
   @BelongsTo(() => Article, { foreignKey: 'articleId', constraints: false })
   article: Article;

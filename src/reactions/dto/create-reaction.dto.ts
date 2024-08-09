@@ -1,5 +1,5 @@
 // library
-import { IsEnum, IsString, IsUUID } from 'class-validator';
+import { IsEnum, IsOptional, IsUUID } from 'class-validator';
 
 // types
 import {
@@ -10,12 +10,12 @@ import {
 } from '../interfaces/reaction.interfaces';
 
 export class CreateReactionDto {
-  @IsString()
+  @IsOptional()
   @IsUUID(4)
-  readonly userId: string;
-  @IsString()
+  readonly commentId: string;
+  @IsOptional()
   @IsUUID(4)
-  readonly sourceId: string;
+  readonly articleId: string;
   @IsEnum(ReactionTypeEnum)
   readonly reactionType: ReactionType;
   @IsEnum(SourceTypeEnum)
