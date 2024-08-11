@@ -2,11 +2,12 @@
 import { IsString, IsUUID, MaxLength, MinLength } from 'class-validator';
 
 // constants
-import { commentFieldLengths } from '../validation/validationConstants';
+import { commentFieldLengths } from '../comment.constants';
 
 export class CreateCommentDto {
   @IsUUID('4')
   readonly authorId: string;
+
   @IsString()
   @MinLength(commentFieldLengths.text.min, {
     message: `$property must be ${commentFieldLengths.text.min} or more characters long`,

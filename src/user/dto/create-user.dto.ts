@@ -2,7 +2,7 @@
 import { IsEmail, IsString, MaxLength, MinLength } from 'class-validator';
 
 // constants
-import { userFieldLengths } from '../validation/validationConstants';
+import { userFieldLengths } from '../user.constants';
 
 export class CreateUserDto {
   @IsString()

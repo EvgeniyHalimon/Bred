@@ -13,12 +13,12 @@ import {
 import { v4 as uuidv4 } from 'uuid';
 
 // schemas
-import { Reaction } from 'src/reactions/schema/reaction.schema';
-import { User } from 'src/user/schema/user.schema';
+import { Reaction } from 'src/reaction/reaction.schema';
+import { User } from 'src/user/user.schema';
 
 // types
-import { SourceTypeEnum } from 'src/reactions/interfaces/reaction.interfaces';
-import { IComment } from '../interfaces/comments.interfaces';
+import { SourceTypeEnum } from 'src/reaction/reaction.constants';
+import { IComment } from './comment.types';
 import { PartialExcept } from 'src/shared/types';
 
 @Table({ tableName: 'comments' })

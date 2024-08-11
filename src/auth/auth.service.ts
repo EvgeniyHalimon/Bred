@@ -3,7 +3,7 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 
 // schema
-import { User } from 'src/user/schema/user.schema';
+import { User } from 'src/user/user.schema';
 
 // service
 import { UsersService } from 'src/user/user.service';
@@ -15,7 +15,7 @@ import { CreateUserDto, SignInDto } from 'src/user/dto';
 import { IMessageResponse } from 'src/shared/types';
 
 // utils
-import { hashPassword, verifyPassword } from 'src/shared/passwordUtils';
+import { hashPassword, verifyPassword } from './utils/passwordUtils';
 
 @Injectable()
 export class AuthService {
@@ -27,12 +27,8 @@ export class AuthService {
   async signUp(signUpDto: CreateUserDto): Promise<IMessageResponse<User>> {
     try {
       const userAttributes = {
-        firstName: signUpDto.firstName,
-        lastName: signUpDto.lastName,
-        email: signUpDto.email,
+        ...signUpDto,
         password: await hashPassword(signUpDto.password),
-        bio: signUpDto.bio,
-        photo: signUpDto.photo,
       };
       const createdUser = await this.usersService.create(userAttributes);
       return { data: { createdUser }, message: 'User created successfully' };
@@ -49,14 +45,11 @@ export class AuthService {
     signInDto: SignInDto,
   ): Promise<{ accessToken: string; refreshToken: string } | undefined> {
     try {
-      const userAttributes = {
-        email: signInDto.email,
-        password: signInDto.password,
-      };
-      const user = await this.usersService.signIn(userAttributes);
+      const { password } = signInDto;
+      const user = await this.usersService.signIn(signInDto);
 
       if (user) {
-        const match = verifyPassword(userAttributes.password, user.password);
+        const match = await verifyPassword(password, user.password);
         if (!match) {
           throw new BadRequestException();
         }

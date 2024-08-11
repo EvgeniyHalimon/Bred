@@ -1,3 +1,8 @@
+export enum UserRolesEnum {
+  USER = 'user',
+  ADMIN = 'admin',
+}
+
 export const userFieldLengths = {
   firstName: {
     min: 2,

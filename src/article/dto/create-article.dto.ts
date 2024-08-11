@@ -2,7 +2,7 @@
 import { IsString, MaxLength, MinLength } from 'class-validator';
 
 // constants
-import { articlesFieldLengths } from '../validation/validationConstants';
+import { articlesFieldLengths } from '../article.constants';
 
 export class CreateArticleDto {
   @IsString()
@@ -13,6 +13,7 @@ export class CreateArticleDto {
     message: `$property must be ${articlesFieldLengths.title.max} or more characters long`,
   })
   readonly title: string;
+
   @IsString()
   @MinLength(articlesFieldLengths.text.min, {
     message: `$property must be ${articlesFieldLengths.text.min} or more characters long`,

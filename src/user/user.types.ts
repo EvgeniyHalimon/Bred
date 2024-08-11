@@ -1,6 +1,9 @@
 // types
-import { IArticle } from 'src/articles/interfaces/article.interfaces';
-import { IComment } from 'src/comments/interfaces/comments.interfaces';
+import { IArticle } from 'src/article/article.types';
+import { IComment } from 'src/comment/comment.types';
+
+// constants
+import { UserRolesEnum } from './user.constants';
 
 export interface IUser {
   id: string;
@@ -15,11 +18,6 @@ export interface IUser {
   comments?: IComment[];
   createdAt: Date;
   updatedAt: Date;
-}
-
-export enum UserRolesEnum {
-  USER = 'user',
-  ADMIN = 'admin',
 }
 
 export type UserRole = UserRolesEnum.USER | UserRolesEnum.ADMIN;

@@ -11,13 +11,17 @@ import {
 import { v4 as uuidv4 } from 'uuid';
 
 // schema
-import { Article } from 'src/articles/schema/article.schema';
-import { Comment } from 'src/comments/schema/comment.schema';
-import { Reaction } from 'src/reactions/schema/reaction.schema';
+import { Article } from 'src/article/article.schema';
+import { Comment } from 'src/comment/comment.schema';
+import { Reaction } from 'src/reaction/reaction.schema';
 
 // types
-import { IUser, UserRolesEnum } from 'src/user/interfaces/user.interfaces';
+import { IUser } from 'src/user/user.types';
 import { PartialExcept } from 'src/shared/types';
+
+// constants
+import { UserRolesEnum } from './user.constants';
+
 @Table({ tableName: 'users' })
 export class User extends Model<
   IUser,

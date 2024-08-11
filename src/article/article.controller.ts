@@ -10,7 +10,7 @@ import {
 } from '@nestjs/common';
 
 // service
-import { ArticlesService } from './articles.service';
+import { ArticlesService } from './article.service';
 
 // dto
 import { CreateArticleDto } from './dto/create-article.dto';
@@ -18,10 +18,7 @@ import { PatchArticleDto } from './dto/patch-article.dto';
 
 // types
 import { ICustomRequest, OrderType } from 'src/shared/types';
-import {
-  IArticle,
-  IQueryFindAllArticles,
-} from './interfaces/article.interfaces';
+import { IArticle, IQueryFindAllArticles } from './article.types';
 
 @Controller('articles')
 export class ArticlesController {

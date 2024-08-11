@@ -1,3 +1,6 @@
+// constant
+import { ReactionTypeEnum, SourceTypeEnum } from './reaction.constants';
+
 export interface IReactions {
   id: string;
   userId: string;
@@ -15,15 +18,3 @@ export type ReactionType =
   | ReactionTypeEnum.DISLIKE;
 
 export type SourceType = SourceTypeEnum.ARTICLE | SourceTypeEnum.COMMENT;
-
-export enum ReactionTypeEnum {
-  UPVOTE = 'upvote',
-  DOWNVOTE = 'downvote',
-  LIKE = 'like',
-  DISLIKE = 'dislike',
-}
-
-export enum SourceTypeEnum {
-  ARTICLE = 'article',
-  COMMENT = 'comment',
-}

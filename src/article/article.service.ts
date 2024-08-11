@@ -7,8 +7,8 @@ import {
 import { InjectModel } from '@nestjs/sequelize';
 
 // schemas
-import { Article } from './schema/article.schema';
-import { User } from 'src/user/schema/user.schema';
+import { Article } from './article.schema';
+import { User } from 'src/user/user.schema';
 
 // dto's
 import {
@@ -19,11 +19,8 @@ import {
 } from './dto';
 
 // types
-import { IUser } from 'src/user/interfaces/user.interfaces';
-import {
-  IArticle,
-  IQueryFindAllArticles,
-} from './interfaces/article.interfaces';
+import { IUser } from 'src/user/user.types';
+import { IArticle, IQueryFindAllArticles } from './article.types';
 import {
   ISimpleResponse,
   IMessageResponse,
@@ -44,8 +41,7 @@ export class ArticlesService {
   }): Promise<IMessageResponse<IArticle>> {
     try {
       const article = {
-        title: createArticleDto.title,
-        text: createArticleDto.text,
+        ...createArticleDto,
         authorId: user.id,
       };
       const createdArticle = await this.articleModel.create(article);
@@ -134,7 +130,7 @@ export class ArticlesService {
       throw new NotFoundException('You are not author of this article');
     }
 
-    Object.assign(article, patchArticleDto);
+    article.set(patchArticleDto);
 
     const updatedArticle = await article.save();
 

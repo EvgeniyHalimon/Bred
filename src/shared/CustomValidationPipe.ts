@@ -16,10 +16,6 @@ export class CustomValidationPipe extends ValidationPipe {
           ),
         };
       });
-      console.log(
-        '🚀 ~ file: CustomValidationPipe.ts:19 ~ CustomValidationPipe ~ formattedErrors ~ formattedErrors:',
-        formattedErrors,
-      );
       return new BadRequestException({
         message: formattedErrors.flatMap(error => error.constraints),
         error: 'Bad Request',

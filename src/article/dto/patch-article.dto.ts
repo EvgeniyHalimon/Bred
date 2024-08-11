@@ -2,7 +2,7 @@
 import { IsOptional, IsString, MaxLength, MinLength } from 'class-validator';
 
 // constants
-import { articlesFieldLengths } from '../validation/validationConstants';
+import { articlesFieldLengths } from '../article.constants';
 
 export class PatchArticleDto {
   @IsString()
@@ -14,6 +14,7 @@ export class PatchArticleDto {
   })
   @IsOptional()
   readonly title: string;
+
   @IsString()
   @MinLength(articlesFieldLengths.text.min, {
     message: `$property must be ${articlesFieldLengths.text.min} or more characters long`,

@@ -10,17 +10,16 @@ import {
 import { v4 as uuidv4 } from 'uuid';
 
 // schemas
-import { User } from '../../user/schema/user.schema';
-import { Comment } from '../../comments/schema/comment.schema';
-import { Article } from '../../articles/schema/article.schema';
+import { Article } from 'src/article/article.schema';
+import { User } from 'src/user/user.schema';
+import { Comment } from 'src/comment/comment.schema';
 
 // types
-import {
-  SourceTypeEnum,
-  ReactionTypeEnum,
-  IReactions,
-} from '../interfaces/reaction.interfaces';
+import { IReactions } from './reaction.types';
 import { PartialExcept } from 'src/shared/types';
+
+// constants
+import { SourceTypeEnum, ReactionTypeEnum } from './reaction.constants';
 
 @Table({ tableName: 'reactions' })
 export class Reaction extends Model<

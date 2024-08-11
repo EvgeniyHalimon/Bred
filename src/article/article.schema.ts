@@ -14,13 +14,15 @@ import {
 import { v4 as uuidv4 } from 'uuid';
 
 // schemas
-import { User } from '../../user/schema/user.schema';
-import { Reaction } from 'src/reactions/schema/reaction.schema';
+import { User } from 'src/user/user.schema';
+import { Reaction } from 'src/reaction/reaction.schema';
 
 // types
-import { SourceTypeEnum } from 'src/reactions/interfaces/reaction.interfaces';
 import { PartialExcept } from 'src/shared/types';
-import { IArticle } from '../interfaces/article.interfaces';
+import { IArticle } from './article.types';
+
+// constants
+import { SourceTypeEnum } from 'src/reaction/reaction.constants';
 
 @Table({ tableName: 'articles' })
 export class Article extends Model<

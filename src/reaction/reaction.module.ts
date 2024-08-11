@@ -3,7 +3,7 @@ import { Module } from '@nestjs/common';
 import { SequelizeModule } from '@nestjs/sequelize';
 
 // schema
-import { Reaction } from './schema/reaction.schema';
+import { Reaction } from './reaction.schema';
 
 @Module({
   imports: [SequelizeModule.forFeature([Reaction])],

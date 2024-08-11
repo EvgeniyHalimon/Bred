@@ -3,7 +3,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 
 // schema
-import { Comment } from './schema/comment.schema';
+import { Comment } from './comment.schema';
 
 // library
 import { Sequelize } from 'sequelize-typescript';
