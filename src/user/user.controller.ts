@@ -19,8 +19,9 @@ export class UsersController {
 
   @Public()
   @Post()
-  async create(@Body() createCatDto: CreateUserDto) {
-    return this.usersService.create(createCatDto);
+  async create(@Body() createUserDto: CreateUserDto) {
+    const createdUser = this.usersService.create(createUserDto);
+    return { data: { createdUser }, message: 'User created successfully' };
   }
 
   @Public()

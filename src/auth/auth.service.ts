@@ -1,18 +1,17 @@
 // nest
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
+import { InjectModel } from '@nestjs/sequelize';
 
 // schema
 import { User } from 'src/user/user.schema';
 
-// service
-import { UsersService } from 'src/user/user.service';
-
 // dto's
 import { CreateUserDto, SignInDto } from 'src/user/dto';
-
-// types
-import { IMessageResponse } from 'src/shared/types';
 
 // utils
 import { hashPassword, verifyPassword } from './utils/passwordUtils';
@@ -20,18 +19,27 @@ import { hashPassword, verifyPassword } from './utils/passwordUtils';
 @Injectable()
 export class AuthService {
   constructor(
-    private usersService: UsersService,
+    @InjectModel(User) private userModel: typeof User,
     private jwtService: JwtService,
   ) {}
 
-  async signUp(signUpDto: CreateUserDto): Promise<IMessageResponse<User>> {
+  async signUp(signUpDto: CreateUserDto): Promise<User> {
     try {
+      const user = await this.userModel.findOne({
+        where: { email: signUpDto.email },
+      });
+
+      if (user) {
+        throw new BadRequestException('User already exists');
+      }
+
       const userAttributes = {
         ...signUpDto,
         password: await hashPassword(signUpDto.password),
       };
-      const createdUser = await this.usersService.create(userAttributes);
-      return { data: { createdUser }, message: 'User created successfully' };
+
+      const createdUser = await this.userModel.create(userAttributes);
+      return createdUser;
     } catch (err) {
       console.log(
         '🚀 ~ file: auth.service.ts:29 ~ AuthService ~ signUp ~ err:',
@@ -46,7 +54,14 @@ export class AuthService {
   ): Promise<{ accessToken: string; refreshToken: string } | undefined> {
     try {
       const { password } = signInDto;
-      const user = await this.usersService.signIn(signInDto);
+
+      const user = await this.userModel.findOne({
+        where: { email: signInDto.email },
+      });
+
+      if (!user) {
+        throw new NotFoundException('User not found');
+      }
 
       if (user) {
         const match = await verifyPassword(password, user.password);
