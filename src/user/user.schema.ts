@@ -3,8 +3,10 @@ import {
   Column,
   CreatedAt,
   DataType,
+  DefaultScope,
   HasMany,
   Model,
+  Scopes,
   Table,
   UpdatedAt,
 } from 'sequelize-typescript';
@@ -22,6 +24,14 @@ import { PartialExcept } from 'src/shared/types';
 // constants
 import { UserRolesEnum } from './user.constants';
 
+@DefaultScope(() => ({
+  attributes: { exclude: ['password'] },
+}))
+@Scopes(() => ({
+  withPassword: {
+    attributes: { include: ['password'] },
+  },
+}))
 @Table({ tableName: 'users' })
 export class User extends Model<
   IUser,

@@ -4,6 +4,7 @@ import {
   Controller,
   Delete,
   Get,
+  Param,
   Patch,
   Post,
   Req,
@@ -29,16 +30,22 @@ export class ArticlesController {
     @Req() request: ICustomRequest,
     @Body() createArticleDto: CreateArticleDto,
   ) {
-    return this.articlesService.create({
-      user: request.user,
+    const userId = request.user.id;
+    const createdArticle = await this.articlesService.create({
+      userId,
       createArticleDto,
     });
+    return {
+      data: { article: createdArticle },
+      message: `Article "${createArticleDto.title}" created successfully`,
+    };
   }
 
   @Get('/:id')
-  async getById(@Req() request: ICustomRequest) {
-    const articleId = request.params.id;
-    return this.articlesService.getById({ articleId });
+  async getById(@Req() request: ICustomRequest, @Param('id') id: string) {
+    const articleId = id;
+    const article = await this.articlesService.getById({ articleId });
+    return { data: { article } };
   }
 
   @Get('/')
@@ -61,17 +68,25 @@ export class ArticlesController {
   ) {
     const articleId = request.params.id;
     const userId = request.user.id;
-    return this.articlesService.patchById({
+    const updatedArticle = await this.articlesService.patchById({
       articleId,
       userId,
       patchArticleDto,
     });
+
+    return {
+      data: {
+        article: updatedArticle,
+      },
+      message: `Article "${updatedArticle?.title}" updated successfully`,
+    };
   }
 
   @Delete('/:id')
   async deleteById(@Req() request: ICustomRequest) {
     const articleId = request.params.id;
     const userId = request.user.id;
-    return this.articlesService.deleteById({ articleId, userId });
+    await this.articlesService.deleteById({ articleId, userId });
+    return { message: 'Article deleted successfully' };
   }
 }

@@ -25,7 +25,7 @@ export class AuthService {
 
   async signUp(signUpDto: CreateUserDto): Promise<User> {
     try {
-      const user = await this.userModel.findOne({
+      const user = await this.userModel.scope('withPassword').findOne({
         where: { email: signUpDto.email },
       });
 

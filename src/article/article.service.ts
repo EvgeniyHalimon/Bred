@@ -11,44 +11,29 @@ import { Article } from './article.schema';
 import { User } from 'src/user/user.schema';
 
 // dto's
-import {
-  CreateArticleDto,
-  DeleteArticleDto,
-  GetArticleDto,
-  PatchArticleDto,
-} from './dto';
+import { CreateArticleDto, PatchArticleDto } from './dto';
 
 // types
-import { IUser } from 'src/user/user.types';
 import { IArticle, IQueryFindAllArticles } from './article.types';
-import {
-  ISimpleResponse,
-  IMessageResponse,
-  ISimpleMessageResponse,
-  IPaginationResponse,
-} from 'src/shared/types';
+import { IPaginationResponse } from 'src/shared/types';
 
 @Injectable()
 export class ArticlesService {
   constructor(@InjectModel(Article) private articleModel: typeof Article) {}
 
   async create({
-    user,
+    userId,
     createArticleDto,
   }: {
-    user: IUser;
+    userId: string;
     createArticleDto: CreateArticleDto;
-  }): Promise<IMessageResponse<IArticle>> {
+  }): Promise<IArticle> {
     try {
       const article = {
         ...createArticleDto,
-        authorId: user.id,
+        authorId: userId,
       };
-      const createdArticle = await this.articleModel.create(article);
-      return {
-        data: { article: createdArticle.dataValues },
-        message: `Article "${createArticleDto.title}" created successfully`,
-      };
+      return await this.articleModel.create(article);
     } catch (err) {
       console.log(
         '🚀 ~ file: articles.service.ts:33 ~ ArticlesService ~ create ~ err:',
@@ -60,20 +45,20 @@ export class ArticlesService {
 
   async getById({
     articleId,
-  }: GetArticleDto): Promise<ISimpleResponse<IArticle> | undefined> {
+  }: {
+    articleId: string;
+  }): Promise<IArticle | undefined> {
     try {
       const article = await this.articleModel.findOne({
         where: { id: articleId },
-        include: [
-          { model: User, as: 'author', attributes: { exclude: ['password'] } },
-        ],
+        include: [{ model: User, as: 'author' }],
       });
 
       if (!article) {
         throw new NotFoundException('Article not found');
       }
 
-      return { data: { article } };
+      return article;
     } catch (err) {
       console.log(
         '🚀 ~ file: articles.service.ts:58 ~ ArticlesService ~ err:',
@@ -93,9 +78,7 @@ export class ArticlesService {
       limit: queries.limit,
       offset: queries.offset,
       order: [[queries.orderBy, queries.order]],
-      include: [
-        { model: User, as: 'author', attributes: { exclude: ['password'] } },
-      ],
+      include: [{ model: User, as: 'author' }],
     });
     return {
       data: {
@@ -113,7 +96,7 @@ export class ArticlesService {
     articleId: string;
     userId: string;
     patchArticleDto: PatchArticleDto;
-  }): Promise<IMessageResponse<IArticle> | undefined> {
+  }): Promise<IArticle | undefined> {
     const article = await this.articleModel.findOne({
       where: { id: articleId },
     });
@@ -123,7 +106,7 @@ export class ArticlesService {
     }
 
     const articleAuthor = await this.articleModel.findOne({
-      where: { authorId: userId },
+      where: { id: articleId, authorId: userId },
     });
 
     if (!articleAuthor) {
@@ -134,24 +117,16 @@ export class ArticlesService {
 
     const updatedArticle = await article.save();
 
-    if (!updatedArticle) {
-      throw new BadRequestException(
-        'Something went wrong while updating the article',
-      );
-    }
-
-    return {
-      data: {
-        article: updatedArticle,
-      },
-      message: `Article "${updatedArticle.title}" updated successfully`,
-    };
+    return updatedArticle;
   }
 
   async deleteById({
     userId,
     articleId,
-  }: DeleteArticleDto): Promise<ISimpleMessageResponse> {
+  }: {
+    userId: string;
+    articleId: string;
+  }) {
     const article = await this.articleModel.findOne({
       where: { id: articleId },
     });
@@ -161,7 +136,7 @@ export class ArticlesService {
     }
 
     const articleAuthor = await this.articleModel.findOne({
-      where: { authorId: userId },
+      where: { id: articleId, authorId: userId },
     });
 
     if (!articleAuthor) {
@@ -173,13 +148,10 @@ export class ArticlesService {
         id: articleId,
       },
     });
-    if (!deletedArticle) {
+    if (deletedArticle === 0) {
       throw new BadRequestException(
         'Something went wrong while deleting the article',
       );
     }
-    return {
-      message: `Article "${article.title}" deleted successfully`,
-    };
   }
 }
