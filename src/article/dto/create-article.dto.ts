@@ -1,25 +1,35 @@
 // library
-import { IsString, MaxLength, MinLength } from 'class-validator';
+import { IsString } from 'class-validator';
+
+// custom decorators
+import {
+  MaxLengthWithMessage,
+  MinLengthWithMessage,
+} from 'src/shared/decorators';
 
 // constants
 import { articlesFieldLengths } from '../article.constants';
 
 export class CreateArticleDto {
   @IsString()
-  @MinLength(articlesFieldLengths.title.min, {
-    message: `$property must be ${articlesFieldLengths.title.min} or more characters long`,
+  @MinLengthWithMessage({
+    min: articlesFieldLengths.title.min,
+    property: 'Title',
   })
-  @MaxLength(articlesFieldLengths.title.max, {
-    message: `$property must be ${articlesFieldLengths.title.max} or more characters long`,
+  @MaxLengthWithMessage({
+    max: articlesFieldLengths.title.max,
+    property: 'Title',
   })
   readonly title: string;
 
   @IsString()
-  @MinLength(articlesFieldLengths.text.min, {
-    message: `$property must be ${articlesFieldLengths.text.min} or more characters long`,
+  @MinLengthWithMessage({
+    min: articlesFieldLengths.text.min,
+    property: 'Text',
   })
-  @MaxLength(articlesFieldLengths.text.max, {
-    message: `$property must be ${articlesFieldLengths.text.max} or more characters long`,
+  @MaxLengthWithMessage({
+    max: articlesFieldLengths.text.max,
+    property: 'Text',
   })
   readonly text: string;
 }

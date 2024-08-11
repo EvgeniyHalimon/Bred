@@ -1,25 +1,29 @@
 // libraries
-import { IsEmail, IsString, MaxLength, MinLength } from 'class-validator';
+import { IsEmail, IsNotEmpty, IsString } from 'class-validator';
 
 // constants
 import { userFieldLengths } from '../user.constants';
 
+// custom decorators
+import {
+  MaxLengthWithMessage,
+  MinLengthWithMessage,
+} from 'src/shared/decorators';
+
 export class CreateUserDto {
   @IsString()
-  @MinLength(userFieldLengths.firstName.min, {
-    message: `$property must be ${userFieldLengths.firstName.min} or more characters long`,
-  })
-  @MaxLength(userFieldLengths.firstName.max, {
-    message: `$property must be maximum ${userFieldLengths.firstName.max} characters long`,
+  @IsNotEmpty({ message: '$property must be not empty' })
+  @MaxLengthWithMessage({
+    max: userFieldLengths.firstName.max,
+    property: 'First name',
   })
   readonly firstName: string;
 
   @IsString()
-  @MinLength(userFieldLengths.lastName.min, {
-    message: `$property must be ${userFieldLengths.lastName.min} or more characters long`,
-  })
-  @MaxLength(userFieldLengths.lastName.max, {
-    message: `$property must be maximum ${userFieldLengths.lastName.max} characters long`,
+  @IsNotEmpty({ message: '$property must be not empty' })
+  @MaxLengthWithMessage({
+    max: userFieldLengths.lastName.max,
+    property: 'Last name',
   })
   readonly lastName: string;
 
@@ -27,17 +31,17 @@ export class CreateUserDto {
   readonly email: string;
 
   @IsString()
-  @MinLength(userFieldLengths.password.min, {
-    message: `$property must be ${userFieldLengths.password.min} or more characters long`,
+  @MinLengthWithMessage({
+    min: userFieldLengths.password.min,
+    property: 'Password',
   })
   readonly password: string;
 
   @IsString()
-  @MinLength(userFieldLengths.bio.min, {
-    message: `$property must be ${userFieldLengths.bio.min} or more characters long`,
-  })
-  @MaxLength(userFieldLengths.bio.max, {
-    message: `$property must be maximum ${userFieldLengths.bio.max} characters long`,
+  @MinLengthWithMessage({ min: userFieldLengths.bio.min, property: 'Bio' })
+  @MaxLengthWithMessage({
+    max: userFieldLengths.bio.max,
+    property: 'Bio',
   })
   readonly bio: string;
 

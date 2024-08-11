@@ -5,11 +5,9 @@ export enum UserRolesEnum {
 
 export const userFieldLengths = {
   firstName: {
-    min: 2,
     max: 200,
   },
   lastName: {
-    min: 2,
     max: 200,
   },
   password: {

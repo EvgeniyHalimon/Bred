@@ -1,5 +1,11 @@
 // library
-import { IsString, IsUUID, MaxLength, MinLength } from 'class-validator';
+import { IsString, IsUUID } from 'class-validator';
+
+// custom decorators
+import {
+  MaxLengthWithMessage,
+  MinLengthWithMessage,
+} from 'src/shared/decorators';
 
 // constants
 import { commentFieldLengths } from '../comment.constants';
@@ -9,11 +15,13 @@ export class CreateCommentDto {
   readonly authorId: string;
 
   @IsString()
-  @MinLength(commentFieldLengths.text.min, {
-    message: `$property must be ${commentFieldLengths.text.min} or more characters long`,
+  @MinLengthWithMessage({
+    min: commentFieldLengths.text.min,
+    property: 'Text',
   })
-  @MaxLength(commentFieldLengths.text.max, {
-    message: `$property must be maximum ${commentFieldLengths.text.max} characters long`,
+  @MaxLengthWithMessage({
+    max: commentFieldLengths.text.max,
+    property: 'Text',
   })
   readonly text: string;
 }
