@@ -57,11 +57,6 @@ export class ArticlesService {
         where: { id: articleId },
         include: [{ model: User, as: 'author' }],
       });
-      console.log(
-        '🚀 ~ file: article.service.ts:60 ~ ArticlesService ~ article:',
-        article,
-      );
-
       if (!article) {
         throw new NotFoundException('Article not found');
       }
@@ -69,9 +64,10 @@ export class ArticlesService {
       return article;
     } catch (err) {
       console.log(
-        '🚀 ~ file: articles.service.ts:58 ~ ArticlesService ~ err:',
+        '🚀 ~ file: article.service.ts:66 ~ ArticlesService ~ err:',
         err,
       );
+      throw err;
     }
   }
 
@@ -80,11 +76,6 @@ export class ArticlesService {
   }: {
     query: GetAllQueryArticlesDto;
   }): Promise<IPaginationResponse<IArticle[]>> {
-    console.log(
-      '🚀 ~ file: article.service.ts:83 ~ ArticlesService ~ query:',
-      query.toPaginationOptions(),
-      query.toWhereOption(),
-    );
     const result = await this.articleModel.findAndCountAll({
       where: query.toWhereOption(),
       ...query.toPaginationOptions(),
@@ -107,27 +98,35 @@ export class ArticlesService {
     userId: string;
     patchArticleDto: PatchArticleDto;
   }): Promise<IArticle | undefined> {
-    const article = await this.articleModel.findOne({
-      where: { id: articleId },
-    });
+    try {
+      const article = await this.articleModel.findOne({
+        where: { id: articleId },
+      });
 
-    if (!article) {
-      throw new NotFoundException('Article not found');
+      if (!article) {
+        throw new NotFoundException('Article not found');
+      }
+
+      const articleAuthor = await this.articleModel.findOne({
+        where: { id: articleId, authorId: userId },
+      });
+
+      if (!articleAuthor) {
+        throw new NotFoundException('You are not author of this article');
+      }
+
+      article.set(patchArticleDto);
+
+      const updatedArticle = await article.save();
+
+      return updatedArticle;
+    } catch (err) {
+      console.log(
+        '🚀 ~ file: article.service.ts:125 ~ ArticlesService ~ err:',
+        err,
+      );
+      throw err;
     }
-
-    const articleAuthor = await this.articleModel.findOne({
-      where: { id: articleId, authorId: userId },
-    });
-
-    if (!articleAuthor) {
-      throw new NotFoundException('You are not author of this article');
-    }
-
-    article.set(patchArticleDto);
-
-    const updatedArticle = await article.save();
-
-    return updatedArticle;
   }
 
   async deleteById({
@@ -137,31 +136,39 @@ export class ArticlesService {
     userId: string;
     articleId: string;
   }) {
-    const article = await this.articleModel.findOne({
-      where: { id: articleId },
-    });
+    try {
+      const article = await this.articleModel.findOne({
+        where: { id: articleId },
+      });
 
-    if (!article) {
-      throw new NotFoundException('Article not found');
-    }
+      if (!article) {
+        throw new NotFoundException('Article not found');
+      }
 
-    const articleAuthor = await this.articleModel.findOne({
-      where: { id: articleId, authorId: userId },
-    });
+      const articleAuthor = await this.articleModel.findOne({
+        where: { id: articleId, authorId: userId },
+      });
 
-    if (!articleAuthor) {
-      throw new NotFoundException('You are not author of this article');
-    }
+      if (!articleAuthor) {
+        throw new NotFoundException('You are not author of this article');
+      }
 
-    const deletedArticle = await this.articleModel.destroy({
-      where: {
-        id: articleId,
-      },
-    });
-    if (deletedArticle === 0) {
-      throw new BadRequestException(
-        'Something went wrong while deleting the article',
+      const deletedArticle = await this.articleModel.destroy({
+        where: {
+          id: articleId,
+        },
+      });
+      if (deletedArticle === 0) {
+        throw new BadRequestException(
+          'Something went wrong while deleting the article',
+        );
+      }
+    } catch (err) {
+      console.log(
+        '🚀 ~ file: article.service.ts:159 ~ ArticlesService ~ err:',
+        err,
       );
+      throw err;
     }
   }
 }
