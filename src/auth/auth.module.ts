@@ -17,7 +17,7 @@ import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 
 // schema
-import { User } from 'src/user/user.schema';
+import User from 'src/user/user.schema';
 
 // guard
 import { AuthGuard } from './guards/auth.guard';

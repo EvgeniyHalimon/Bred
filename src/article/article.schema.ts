@@ -14,8 +14,8 @@ import {
 import { v4 as uuidv4 } from 'uuid';
 
 // schemas
-import { User } from 'src/user/user.schema';
-import { Reaction } from 'src/reaction/reaction.schema';
+import Reaction from 'src/reaction/reaction.schema';
+import User from 'src/user/user.schema';
 
 // types
 import { PartialExcept } from 'src/shared/types';
@@ -25,7 +25,7 @@ import { IArticle } from './article.types';
 import { SourceTypeEnum } from 'src/reaction/reaction.constants';
 
 @Table({ tableName: 'articles' })
-export class Article extends Model<
+export default class Article extends Model<
   IArticle,
   PartialExcept<IArticle, 'id' | 'rating' | 'createdAt' | 'updatedAt'>
 > {

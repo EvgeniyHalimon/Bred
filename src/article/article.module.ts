@@ -3,7 +3,7 @@ import { Module } from '@nestjs/common';
 import { SequelizeModule } from '@nestjs/sequelize';
 
 // schema
-import { Article } from './article.schema';
+import Article from './article.schema';
 
 //controllers
 import { ArticlesController } from './article.controller';

@@ -7,6 +7,7 @@ import { config } from './config';
 
 // library
 import { Dialect } from 'sequelize';
+import { join } from 'path';
 
 // modules
 import { UsersModule } from './user/user.module';
@@ -14,12 +15,6 @@ import { CommentsModule } from './comment/comment.module';
 import { ArticlesModule } from './article/article.module';
 import { ReactionsModule } from './reaction/reaction.module';
 import { AuthModule } from './auth/auth.module';
-
-// schemas
-import { User } from './user/user.schema';
-import { Article } from './article/article.schema';
-import { Comment } from './comment/comment.schema';
-import { Reaction } from './reaction/reaction.schema';
 
 @Module({
   imports: [
@@ -30,7 +25,9 @@ import { Reaction } from './reaction/reaction.schema';
       username: config.DB_USERNAME,
       password: config.PASSWORD,
       database: config.DATABASE,
-      models: [User, Article, Comment, Reaction],
+      autoLoadModels: true,
+      synchronize: true,
+      models: [join(__dirname, '**', '*.schema.{ts,js}')],
     }),
     UsersModule,
     CommentsModule,

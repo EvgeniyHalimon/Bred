@@ -10,9 +10,9 @@ import {
 import { v4 as uuidv4 } from 'uuid';
 
 // schemas
-import { Article } from 'src/article/article.schema';
-import { User } from 'src/user/user.schema';
-import { Comment } from 'src/comment/comment.schema';
+import Article from 'src/article/article.schema';
+import User from 'src/user/user.schema';
+import Comment from 'src/comment/comment.schema';
 
 // types
 import { IReactions } from './reaction.types';
@@ -22,7 +22,7 @@ import { PartialExcept } from 'src/shared/types';
 import { SourceTypeEnum, ReactionTypeEnum } from './reaction.constants';
 
 @Table({ tableName: 'reactions' })
-export class Reaction extends Model<
+export default class Reaction extends Model<
   PartialExcept<IReactions, 'id' | 'createdAt' | 'updatedAt'>
 > {
   @Column({ defaultValue: uuidv4(), primaryKey: true, type: DataType.UUIDV4 })

@@ -13,9 +13,9 @@ import {
 import { v4 as uuidv4 } from 'uuid';
 
 // schema
-import { Article } from 'src/article/article.schema';
-import { Comment } from 'src/comment/comment.schema';
-import { Reaction } from 'src/reaction/reaction.schema';
+import Article from 'src/article/article.schema';
+import Comment from 'src/comment/comment.schema';
+import Reaction from 'src/reaction/reaction.schema';
 
 // types
 import { IUser } from 'src/user/user.types';
@@ -33,7 +33,7 @@ import { UserRolesEnum } from './user.constants';
   },
 }))
 @Table({ tableName: 'users' })
-export class User extends Model<
+export default class User extends Model<
   IUser,
   PartialExcept<IUser, 'id' | 'role' | 'createdAt' | 'updatedAt'>
 > {

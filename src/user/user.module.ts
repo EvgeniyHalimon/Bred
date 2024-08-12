@@ -9,7 +9,7 @@ import { UsersController } from './user.controller';
 import { UsersService } from './user.service';
 
 // schema
-import { User } from './user.schema';
+import User from './user.schema';
 
 @Module({
   imports: [SequelizeModule.forFeature([User])],

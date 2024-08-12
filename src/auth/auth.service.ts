@@ -8,7 +8,7 @@ import { JwtService } from '@nestjs/jwt';
 import { InjectModel } from '@nestjs/sequelize';
 
 // schema
-import { User } from 'src/user/user.schema';
+import User from 'src/user/user.schema';
 
 // dto's
 import { CreateUserDto, SignInDto } from 'src/user/dto';

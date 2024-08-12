@@ -13,8 +13,8 @@ import {
 import { v4 as uuidv4 } from 'uuid';
 
 // schemas
-import { Reaction } from 'src/reaction/reaction.schema';
-import { User } from 'src/user/user.schema';
+import Reaction from 'src/reaction/reaction.schema';
+import User from 'src/user/user.schema';
 
 // types
 import { SourceTypeEnum } from 'src/reaction/reaction.constants';
@@ -22,7 +22,10 @@ import { IComment } from './comment.types';
 import { PartialExcept } from 'src/shared/types';
 
 @Table({ tableName: 'comments' })
-export class Comment extends Model<IComment, PartialExcept<IComment, 'id'>> {
+export default class Comment extends Model<
+  IComment,
+  PartialExcept<IComment, 'id'>
+> {
   @Column({ defaultValue: uuidv4(), primaryKey: true, type: DataType.UUID })
   id: string;
 

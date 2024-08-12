@@ -7,8 +7,8 @@ import {
 import { InjectModel } from '@nestjs/sequelize';
 
 // schemas
-import { Article } from './article.schema';
-import { User } from 'src/user/user.schema';
+import Article from './article.schema';
+import User from 'src/user/user.schema';
 
 // dto's
 import {

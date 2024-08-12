@@ -5,7 +5,7 @@ import { Controller, Get } from '@nestjs/common';
 import { UsersService } from './user.service';
 
 // schema
-import { User } from './user.schema';
+import User from './user.schema';
 
 // decorator
 import { Public } from 'src/shared/public.decorator';

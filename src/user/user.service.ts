@@ -3,7 +3,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 
 // schema
-import { User } from './user.schema';
+import User from './user.schema';
 
 @Injectable()
 export class UsersService {
