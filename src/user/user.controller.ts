@@ -1,5 +1,5 @@
 // nest
-import { Controller, Get, Post, Body } from '@nestjs/common';
+import { Controller, Get } from '@nestjs/common';
 
 // service
 import { UsersService } from './user.service';
@@ -10,19 +10,9 @@ import { User } from './user.schema';
 // decorator
 import { Public } from 'src/shared/public.decorator';
 
-// dto
-import { CreateUserDto } from './dto';
-
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
-
-  @Public()
-  @Post()
-  async create(@Body() createUserDto: CreateUserDto) {
-    const createdUser = this.usersService.create(createUserDto);
-    return { data: { createdUser }, message: 'User created successfully' };
-  }
 
   @Public()
   @Get()
