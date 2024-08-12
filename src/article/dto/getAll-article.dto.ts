@@ -1,5 +1,5 @@
 // library
-import { IsOptional, IsInt, IsString } from 'class-validator';
+import { IsOptional, IsString } from 'class-validator';
 
 // types
 import { OrderType } from 'src/shared/types';
@@ -7,11 +7,9 @@ import { IArticle } from '../article.types';
 
 export class GetAllQueryArticlesDto {
   @IsOptional()
-  @IsInt()
   readonly page?: number;
 
   @IsOptional()
-  @IsInt()
   readonly limit?: number;
 
   @IsOptional()
@@ -34,7 +32,12 @@ export class GetAllQueryArticlesDto {
       offset: this.page
         ? (Number(this.page) - 1) * (this.limit ? Number(this.limit) : 10)
         : 0,
-      order: [this.orderBy ? this.orderBy : 'createdAt', this.order ?? 'DESC'],
+      order: [
+        [this.orderBy ?? 'createdAt', this.order ?? 'DESC'] as [
+          keyof IArticle,
+          OrderType,
+        ],
+      ],
     };
   }
 }

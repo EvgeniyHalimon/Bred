@@ -55,7 +55,7 @@ export class AuthService {
     try {
       const { password } = signInDto;
 
-      const user = await this.userModel.findOne({
+      const user = await this.userModel.scope('withPassword').findOne({
         where: { email: signInDto.email },
       });
 
@@ -66,11 +66,11 @@ export class AuthService {
       if (user) {
         const match = await verifyPassword(password, user.password);
         if (!match) {
-          throw new BadRequestException();
+          throw new BadRequestException('Wrong password');
         }
         return {
-          accessToken: await this.jwtService.signAsync(user),
-          refreshToken: await this.jwtService.signAsync(user),
+          accessToken: await this.jwtService.signAsync(user.dataValues),
+          refreshToken: await this.jwtService.signAsync(user.dataValues),
         };
       }
     } catch (err) {

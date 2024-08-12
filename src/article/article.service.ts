@@ -57,6 +57,10 @@ export class ArticlesService {
         where: { id: articleId },
         include: [{ model: User, as: 'author' }],
       });
+      console.log(
+        '🚀 ~ file: article.service.ts:60 ~ ArticlesService ~ article:',
+        article,
+      );
 
       if (!article) {
         throw new NotFoundException('Article not found');
@@ -76,6 +80,11 @@ export class ArticlesService {
   }: {
     query: GetAllQueryArticlesDto;
   }): Promise<IPaginationResponse<IArticle[]>> {
+    console.log(
+      '🚀 ~ file: article.service.ts:83 ~ ArticlesService ~ query:',
+      query.toPaginationOptions(),
+      query.toWhereOption(),
+    );
     const result = await this.articleModel.findAndCountAll({
       where: query.toWhereOption(),
       ...query.toPaginationOptions(),

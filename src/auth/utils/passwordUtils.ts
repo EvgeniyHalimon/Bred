@@ -14,10 +14,7 @@ const hashPassword = async (password: string) => {
 
 const verifyPassword = async (password: string, hashPassword: string) => {
   try {
-    const comparedPassword = await bcrypt.compare(
-      password.toString(),
-      hashPassword.toString(),
-    );
+    const comparedPassword = await bcrypt.compare(password, hashPassword);
     return comparedPassword;
   } catch (err) {
     throw new Error(err instanceof Error ? err.message : 'Unknown error');
