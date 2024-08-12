@@ -7,6 +7,7 @@ import {
   Param,
   Patch,
   Post,
+  Query,
   Req,
 } from '@nestjs/common';
 
@@ -18,8 +19,8 @@ import { CreateArticleDto } from './dto/create-article.dto';
 import { PatchArticleDto } from './dto/patch-article.dto';
 
 // types
-import { ICustomRequest, OrderType } from 'src/shared/types';
-import { IArticle, IQueryFindAllArticles } from './article.types';
+import { ICustomRequest } from 'src/shared/types';
+import { GetAllQueryArticlesDto } from './dto';
 
 @Controller('articles')
 export class ArticlesController {
@@ -49,16 +50,8 @@ export class ArticlesController {
   }
 
   @Get('/')
-  async getAll(@Req() request: ICustomRequest) {
-    const { page, limit, title, order, orderBy } = request.query;
-    const queries: IQueryFindAllArticles = {
-      offset: page ? (Number(page) - 1) * (limit ? Number(limit) : 10) : 0,
-      limit: limit ? Number(limit) : 10,
-      order: (order as OrderType) ?? 'DESC',
-      orderBy: (orderBy as keyof IArticle) ?? 'createdAt',
-      title: typeof title === 'string' ? title : undefined,
-    };
-    return this.articlesService.findAll({ queries });
+  async getAll(@Query() query: GetAllQueryArticlesDto) {
+    return this.articlesService.findAll({ query });
   }
 
   @Patch('/:id')

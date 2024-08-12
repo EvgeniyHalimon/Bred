@@ -11,10 +11,14 @@ import { Article } from './article.schema';
 import { User } from 'src/user/user.schema';
 
 // dto's
-import { CreateArticleDto, PatchArticleDto } from './dto';
+import {
+  CreateArticleDto,
+  GetAllQueryArticlesDto,
+  PatchArticleDto,
+} from './dto';
 
 // types
-import { IArticle, IQueryFindAllArticles } from './article.types';
+import { IArticle } from './article.types';
 import { IPaginationResponse } from 'src/shared/types';
 
 @Injectable()
@@ -68,16 +72,13 @@ export class ArticlesService {
   }
 
   async findAll({
-    queries,
+    query,
   }: {
-    queries: IQueryFindAllArticles;
+    query: GetAllQueryArticlesDto;
   }): Promise<IPaginationResponse<IArticle[]>> {
-    const whereCondition = queries.title ? { title: queries.title } : {};
     const result = await this.articleModel.findAndCountAll({
-      where: whereCondition,
-      limit: queries.limit,
-      offset: queries.offset,
-      order: [[queries.orderBy, queries.order]],
+      where: query.toWhereOption(),
+      ...query.toPaginationOptions(),
       include: [{ model: User, as: 'author' }],
     });
     return {
