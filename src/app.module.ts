@@ -7,7 +7,7 @@ import { config } from './config';
 
 // modules
 import { UsersModule } from './user/user.module';
-import { CommentsModule } from './comments/comments.module';
+import { CommentsModule } from './comments/comment.module';
 import { ArticlesModule } from './articles/articles.module';
 import { ReactionsModule } from './reactions/reactions.module';
 import { AuthModule } from './auth/auth.module';

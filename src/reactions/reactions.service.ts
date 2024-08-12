@@ -86,24 +86,25 @@ export class ReactionsService {
         '🚀 ~ file: reactions.service.ts:85 ~ ReactionsService ~ delete ~ error:',
         error,
       );
+      throw error;
     }
   }
 
   async update({
     userId,
     reactionId,
-    updateArticleDto,
+    updateReactionDto,
   }: {
     userId: string;
     reactionId: string;
-    updateArticleDto: any;
+    updateReactionDto: any;
   }) {
     const reaction = await this.reactionModel.findOne({
       where: { id: reactionId },
     });
 
     if (!reaction) {
-      throw new NotFoundException('Article not found');
+      throw new NotFoundException('Reaction not found');
     }
 
     const reactionAuthor = await this.reactionModel.findOne({
@@ -111,18 +112,14 @@ export class ReactionsService {
     });
 
     if (!reactionAuthor) {
-      throw new NotFoundException(`You are not author of this article`);
+      throw new NotFoundException(`You are not author of this reaction`);
     }
 
-    Object.assign(reaction, updateArticleDto);
+    reaction.set(updateReactionDto);
 
-    const updatedReaction = await reaction.save();
+    const updatedArticle = await reaction.save();
 
-    if (!updatedReaction) {
-      throw new BadRequestException(`Something went wrong while updating the `);
-    }
-
-    return updatedReaction;
+    return updatedArticle;
   }
 
   async getById({ reactionId }: { reactionId: string }) {
@@ -148,6 +145,7 @@ export class ReactionsService {
         '🚀 ~ file: reactions.service.ts:131 ~ ReactionsService ~ get ~ error:',
         error,
       );
+      throw error;
     }
   }
 

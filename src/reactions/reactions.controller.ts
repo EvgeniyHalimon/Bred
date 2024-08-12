@@ -10,7 +10,7 @@ import { CreateReactionDto } from './dto';
 // types
 import { ICustomRequest } from 'src/shared/types';
 
-@Controller('reactions')
+@Controller('reaction')
 export class ReactionsController {
   constructor(private reactionsService: ReactionsService) {}
 
@@ -29,13 +29,13 @@ export class ReactionsController {
     return this.reactionsService.delete({ userId, reactionId });
   }
   @Put('/:id')
-  update(@Req() request: ICustomRequest, @Body() updateArticleDto: any) {
+  update(@Req() request: ICustomRequest, @Body() updateReactionDto: any) {
     const reactionId = request.params.id;
     const userId = request.user.id;
     return this.reactionsService.update({
       userId,
       reactionId,
-      updateArticleDto,
+      updateReactionDto,
     });
   }
   @Get('/')
