@@ -146,6 +146,10 @@ export class ReactionsService {
   }
 
   async getById({ reactionId }: { reactionId: string }) {
+    console.log(
+      '🚀 ~ file: reaction.service.ts:149 ~ ReactionsService ~ getById ~ reactionId:',
+      reactionId,
+    );
     try {
       const article = await this.reactionModel.findOne({
         where: { id: reactionId },

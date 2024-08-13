@@ -57,7 +57,19 @@ export class ArticlesService {
     try {
       const article = await this.articleModel.findOne({
         where: { id: articleId },
-        include: [{ model: User, as: 'author' }],
+        include: [
+          { model: User, as: 'author' },
+          {
+            model: Reaction,
+            as: 'reactions',
+            include: [{ model: User, as: 'user' }],
+          },
+          {
+            model: Comment,
+            as: 'comments',
+            include: [{ model: User, as: 'author' }],
+          },
+        ],
       });
       if (!article) {
         throw new NotFoundException('Article not found');
@@ -83,8 +95,16 @@ export class ArticlesService {
       ...query.toPaginationOptions(),
       include: [
         { model: User, as: 'author' },
-        { model: Reaction, as: 'reactions' },
-        { model: Comment, as: 'comments' },
+        {
+          model: Reaction,
+          as: 'reactions',
+          include: [{ model: User, as: 'user' }],
+        },
+        {
+          model: Comment,
+          as: 'comments',
+          include: [{ model: User, as: 'author' }],
+        },
       ],
     });
     return {

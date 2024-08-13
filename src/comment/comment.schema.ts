@@ -57,12 +57,12 @@ export default class Comment extends Model<
   updatedAt: Date;
 
   @HasMany(() => Reaction, {
-    foreignKey: 'sourceId',
+    foreignKey: 'commentId',
     constraints: false,
     scope: { sourceType: SourceTypeEnum.COMMENT },
   })
   reactions: Reaction[];
 
-  @BelongsTo(() => User, 'userId')
+  @BelongsTo(() => User, 'authorId')
   author: User;
 }

@@ -20,7 +20,7 @@ import { CreateReactionDto, GetAllQueryReactionsDto } from './dto';
 // types
 import { ICustomRequest } from 'src/shared/types';
 
-@Controller('reaction')
+@Controller('reactions')
 export class ReactionsController {
   constructor(private reactionsService: ReactionsService) {}
 
@@ -55,7 +55,7 @@ export class ReactionsController {
     });
   }
 
-  @Get('/:id')
+  @Get('/')
   getAll(@Query() query: GetAllQueryReactionsDto) {
     return this.reactionsService.findAll({ query });
   }

@@ -1,5 +1,5 @@
 // libraries
-import { IsEmail, IsNotEmpty, IsString } from 'class-validator';
+import { IsEmail, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
 // constants
 import { userFieldLengths } from '../user.constants';
@@ -45,6 +45,6 @@ export class CreateUserDto {
   })
   readonly bio: string;
 
-  @IsString()
-  readonly photo: Buffer;
+  @IsOptional()
+  readonly photo?: Buffer;
 }

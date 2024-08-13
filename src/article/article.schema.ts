@@ -71,7 +71,7 @@ export default class Article extends Model<
   reactions: Reaction[];
 
   @HasMany(() => Comment, {
-    foreignKey: 'sourceId',
+    foreignKey: 'articleId',
     constraints: false,
   })
   comments: Comment[];

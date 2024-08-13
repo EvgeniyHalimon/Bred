@@ -24,7 +24,7 @@ import {
 // types
 import { ICustomRequest } from 'src/shared/types';
 
-@Controller('reaction')
+@Controller('comments')
 export class CommentController {
   constructor(private commentService: CommentsService) {}
 
