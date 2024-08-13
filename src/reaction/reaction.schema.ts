@@ -44,10 +44,16 @@ export default class Reaction extends Model<
     type: DataType.UUID,
     allowNull: true,
   })
+  @ForeignKey(() => Article)
+  articleId: string;
+
   @Column({
     type: DataType.UUID,
     allowNull: true,
   })
+  @ForeignKey(() => Comment)
+  commentId: string;
+
   @Column({
     type: DataType.ENUM(...Object.values(ReactionTypeEnum)),
     allowNull: false,
@@ -62,15 +68,12 @@ export default class Reaction extends Model<
   @Column
   updatedAt: Date;
 
-  @ForeignKey(() => Article)
-  articleId: string;
-
-  @ForeignKey(() => Comment)
-  commentId: string;
-
   @BelongsTo(() => Article, { foreignKey: 'articleId', constraints: false })
   article: Article;
 
   @BelongsTo(() => Comment, { foreignKey: 'commentId', constraints: false })
   comment: Comment;
+
+  @BelongsTo(() => User, 'userId')
+  user: User;
 }

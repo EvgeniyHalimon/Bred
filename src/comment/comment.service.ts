@@ -6,11 +6,17 @@ import {
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 
-// schema
+// schemas
 import Comment from './comment.schema';
+import User from 'src/user/user.schema';
 
 // dto
-import { CreateCommentDto, UpdateCommentDto } from './dto';
+import {
+  CreateCommentDto,
+  GetAllQueryCommentsDto,
+  UpdateCommentDto,
+} from './dto';
+import Reaction from 'src/reaction/reaction.schema';
 
 @Injectable()
 export class CommentsService {
@@ -106,7 +112,22 @@ export class CommentsService {
     }
   }
 
-  async findAll(): Promise<Comment[]> {
-    return this.commentModel.findAll();
+  async findAll({ query }: { query: GetAllQueryCommentsDto }) {
+    return this.commentModel.findAll({
+      where: query.toPaginationOptions(),
+      ...query.toPaginationOptions(),
+      include: [
+        { model: User, as: 'author' },
+        { model: Reaction, as: 'reactions' },
+      ],
+    });
+  }
+
+  async findOne({ commentId }: { commentId: string }): Promise<Comment | null> {
+    return this.commentModel.findOne({
+      where: {
+        id: commentId,
+      },
+    });
   }
 }

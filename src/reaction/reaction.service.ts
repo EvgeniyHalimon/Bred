@@ -6,19 +6,30 @@ import {
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 
+// service
+import { CommentsService } from 'src/comment/comment.service';
+import { ArticlesService } from 'src/article/article.service';
+
 // schemas
 import Reaction from './reaction.schema';
 import User from 'src/user/user.schema';
 
 //dto's
-import { CreateReactionDto } from './dto';
+import { CreateReactionDto, GetAllQueryReactionsDto } from './dto';
 
 // types
 import { IReactions } from './reaction.types';
 
+// constants
+import { SourceTypeEnum } from './reaction.constants';
+
 @Injectable()
 export class ReactionsService {
-  constructor(@InjectModel(Reaction) private reactionModel: typeof Reaction) {}
+  constructor(
+    @InjectModel(Reaction) private reactionModel: typeof Reaction,
+    private commentService: CommentsService,
+    private articleService: ArticlesService,
+  ) {}
 
   async create({
     userId,
@@ -28,7 +39,19 @@ export class ReactionsService {
     createReactionDto: CreateReactionDto;
   }): Promise<IReactions | undefined> {
     try {
-      const source = createReactionDto.sourceType;
+      const { sourceType, articleId, commentId } = createReactionDto;
+
+      if (sourceType === SourceTypeEnum.ARTICLE) {
+        const article = await this.articleService.findOne({ articleId });
+        if (!article) {
+          throw new NotFoundException('Article not found');
+        }
+      } else {
+        const comment = await this.commentService.findOne({ commentId });
+        if (!comment) {
+          throw new NotFoundException('Comment not found');
+        }
+      }
 
       const reaction = await this.reactionModel.create({
         userId,
@@ -37,7 +60,7 @@ export class ReactionsService {
 
       if (!reaction) {
         throw new BadRequestException(
-          `Something went wrong while making ${source}`,
+          `Something went wrong while making ${sourceType}`,
         );
       }
 
@@ -149,17 +172,12 @@ export class ReactionsService {
     }
   }
 
-  async findAll({ queries }: { queries: any }) {
-    const whereCondition = queries.title ? { title: queries.title } : {};
-    const result = await this.reactionModel.findAndCountAll({
-      where: whereCondition,
-      limit: queries.limit,
-      offset: queries.offset,
-      order: [[queries.orderBy, queries.order]],
-      include: [
-        { model: User, as: 'author', attributes: { exclude: ['password'] } },
-      ],
+  async findAll({ query }: { query: GetAllQueryReactionsDto }) {
+    const reactions = await this.reactionModel.findAndCountAll({
+      where: query.toWhereCondition(),
+      ...query.toPaginationOptions(),
+      include: [{ model: User, as: 'user' }],
     });
-    return result;
+    return reactions;
   }
 }

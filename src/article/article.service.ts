@@ -20,6 +20,8 @@ import {
 // types
 import { IArticle } from './article.types';
 import { IPaginationResponse } from 'src/shared/types';
+import Reaction from 'src/reaction/reaction.schema';
+import Comment from 'src/comment/comment.schema';
 
 @Injectable()
 export class ArticlesService {
@@ -79,7 +81,11 @@ export class ArticlesService {
     const result = await this.articleModel.findAndCountAll({
       where: query.toWhereOption(),
       ...query.toPaginationOptions(),
-      include: [{ model: User, as: 'author' }],
+      include: [
+        { model: User, as: 'author' },
+        { model: Reaction, as: 'reactions' },
+        { model: Comment, as: 'comments' },
+      ],
     });
     return {
       data: {
@@ -170,5 +176,12 @@ export class ArticlesService {
       );
       throw err;
     }
+  }
+  async findOne({ articleId }: { articleId: string }) {
+    return this.articleModel.findOne({
+      where: {
+        id: articleId,
+      },
+    });
   }
 }

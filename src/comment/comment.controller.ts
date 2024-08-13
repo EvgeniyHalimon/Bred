@@ -8,19 +8,24 @@ import {
   Get,
   Req,
   Param,
+  Query,
 } from '@nestjs/common';
 
 //service
 import { CommentsService } from './comment.service';
 
 // dto's
-import { CreateCommentDto, UpdateCommentDto } from './dto';
+import {
+  CreateCommentDto,
+  GetAllQueryCommentsDto,
+  UpdateCommentDto,
+} from './dto';
 
 // types
 import { ICustomRequest } from 'src/shared/types';
 
 @Controller('reaction')
-export class ReactionsController {
+export class CommentController {
   constructor(private commentService: CommentsService) {}
 
   @Post('/')
@@ -53,7 +58,7 @@ export class ReactionsController {
   }
 
   @Get('/')
-  getAll() {
-    return this.commentService.findAll();
+  getAll(@Query() query: GetAllQueryCommentsDto) {
+    return this.commentService.findAll({ query });
   }
 }
