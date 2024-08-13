@@ -14,7 +14,7 @@ import {
 import { CommentsService } from './comment.service';
 
 // dto's
-import { CreateCommentDto } from './dto/create-comments.dto';
+import { CreateCommentDto, UpdateCommentDto } from './dto';
 
 // types
 import { ICustomRequest } from 'src/shared/types';
@@ -42,7 +42,7 @@ export class ReactionsController {
   update(
     @Req() request: ICustomRequest,
     @Param('id') id: string,
-    @Body() updateCommentDto: any,
+    @Body() updateCommentDto: UpdateCommentDto,
   ) {
     const userId = request.user.id;
     return this.commentService.update({

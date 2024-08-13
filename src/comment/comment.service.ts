@@ -10,7 +10,7 @@ import { InjectModel } from '@nestjs/sequelize';
 import Comment from './comment.schema';
 
 // dto
-import { CreateCommentDto } from './dto/create-comments.dto';
+import { CreateCommentDto, UpdateCommentDto } from './dto';
 
 @Injectable()
 export class CommentsService {
@@ -46,7 +46,7 @@ export class CommentsService {
   }: {
     userId: string;
     commentId: string;
-    updateCommentDto: any;
+    updateCommentDto: UpdateCommentDto;
   }) {
     const comment = await this.commentModel.findOne({
       where: { id: commentId },

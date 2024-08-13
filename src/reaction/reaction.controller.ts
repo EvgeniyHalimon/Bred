@@ -2,7 +2,7 @@
 import { Body, Controller, Post, Delete, Put, Get, Req } from '@nestjs/common';
 
 //service
-import { ReactionsService } from './reactions.service';
+import { ReactionsService } from './reaction.service';
 
 // dto's
 import { CreateReactionDto } from './dto';
@@ -22,12 +22,14 @@ export class ReactionsController {
     const userId = request.user.id;
     return this.reactionsService.create({ userId, createReactionDto });
   }
+
   @Delete('/:id')
   delete(@Req() request: ICustomRequest) {
     const userId = request.user.id;
     const reactionId = request.query.id as string;
     return this.reactionsService.delete({ userId, reactionId });
   }
+
   @Put('/:id')
   update(@Req() request: ICustomRequest, @Body() updateReactionDto: any) {
     const reactionId = request.params.id;
@@ -38,6 +40,7 @@ export class ReactionsController {
       updateReactionDto,
     });
   }
+
   @Get('/')
   get(@Req() request: ICustomRequest) {
     const reactionId = request.query.id as string;
