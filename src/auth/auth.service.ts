@@ -1,41 +1,45 @@
 // nest
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
+import { InjectModel } from '@nestjs/sequelize';
 
 // schema
-import { User } from 'src/user/schema/user.schema';
-
-// service
-import { UsersService } from 'src/user/user.service';
+import User from 'src/user/user.schema';
 
 // dto's
 import { CreateUserDto, SignInDto } from 'src/user/dto';
 
-// types
-import { IMessageResponse } from 'src/shared/types';
-
 // utils
-import { hashPassword, verifyPassword } from 'src/shared/passwordUtils';
+import { hashPassword, verifyPassword } from './utils/passwordUtils';
 
 @Injectable()
 export class AuthService {
   constructor(
-    private usersService: UsersService,
+    @InjectModel(User) private userModel: typeof User,
     private jwtService: JwtService,
   ) {}
 
-  async signUp(signUpDto: CreateUserDto): Promise<IMessageResponse<User>> {
+  async signUp(signUpDto: CreateUserDto): Promise<User> {
     try {
+      const user = await this.userModel.scope('withPassword').findOne({
+        where: { email: signUpDto.email },
+      });
+
+      if (user) {
+        throw new BadRequestException('User already exists');
+      }
+
       const userAttributes = {
-        firstName: signUpDto.firstName,
-        lastName: signUpDto.lastName,
-        email: signUpDto.email,
+        ...signUpDto,
         password: await hashPassword(signUpDto.password),
-        bio: signUpDto.bio,
-        photo: signUpDto.photo,
       };
-      const createdUser = await this.usersService.create(userAttributes);
-      return { data: { createdUser }, message: 'User created successfully' };
+
+      const createdUser = await this.userModel.create(userAttributes);
+      return createdUser;
     } catch (err) {
       console.log(
         '🚀 ~ file: auth.service.ts:29 ~ AuthService ~ signUp ~ err:',
@@ -49,20 +53,24 @@ export class AuthService {
     signInDto: SignInDto,
   ): Promise<{ accessToken: string; refreshToken: string } | undefined> {
     try {
-      const userAttributes = {
-        email: signInDto.email,
-        password: signInDto.password,
-      };
-      const user = await this.usersService.signIn(userAttributes);
+      const { password } = signInDto;
+
+      const user = await this.userModel.scope('withPassword').findOne({
+        where: { email: signInDto.email },
+      });
+
+      if (!user) {
+        throw new NotFoundException('User not found');
+      }
 
       if (user) {
-        const match = verifyPassword(userAttributes.password, user.password);
+        const match = await verifyPassword(password, user.password);
         if (!match) {
-          throw new BadRequestException();
+          throw new BadRequestException('Wrong password');
         }
         return {
-          accessToken: await this.jwtService.signAsync(user),
-          refreshToken: await this.jwtService.signAsync(user),
+          accessToken: await this.jwtService.signAsync(user.dataValues),
+          refreshToken: await this.jwtService.signAsync(user.dataValues),
         };
       }
     } catch (err) {
