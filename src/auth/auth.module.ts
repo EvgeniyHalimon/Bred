@@ -1,5 +1,6 @@
 // nest
 import { Module } from '@nestjs/common';
+import { SequelizeModule } from '@nestjs/sequelize';
 import { JwtModule } from '@nestjs/jwt';
 import { APP_GUARD } from '@nestjs/core';
 
@@ -15,6 +16,9 @@ import { AuthController } from './auth.controller';
 // service
 import { AuthService } from './auth.service';
 
+// schema
+import User from 'src/user/user.schema';
+
 // guard
 import { AuthGuard } from './guards/auth.guard';
 
@@ -26,6 +30,7 @@ import { AuthGuard } from './guards/auth.guard';
       signOptions: { expiresIn: config.EXPIRES_IN },
     }),
     UsersModule,
+    SequelizeModule.forFeature([User]),
   ],
   controllers: [AuthController],
   providers: [
