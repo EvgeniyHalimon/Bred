@@ -19,6 +19,16 @@ module.exports = {
         },
         allowNull: false,
       },
+      articleId: {
+        type: Sequelize.UUID,
+        references: {
+          model: {
+            tableName: 'articles',
+          },
+          key: 'id',
+        },
+        allowNull: false,
+      },
       text: {
         type: Sequelize.STRING,
         allowNull: false,

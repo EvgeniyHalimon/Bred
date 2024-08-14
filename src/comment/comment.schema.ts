@@ -1,5 +1,6 @@
 // libraries
 import {
+  BelongsTo,
   BelongsToMany,
   Column,
   CreatedAt,
@@ -15,6 +16,7 @@ import { v4 as uuidv4 } from 'uuid';
 // schemas
 import Reaction from 'src/reaction/reaction.schema';
 import User from 'src/user/user.schema';
+import Article from 'src/article/article.schema';
 
 // types
 import { SourceTypeEnum } from 'src/reaction/reaction.constants';
@@ -32,6 +34,10 @@ export default class Comment extends Model<
   @ForeignKey(() => User)
   @Column(DataType.UUIDV4)
   authorId: string;
+
+  @ForeignKey(() => Article)
+  @Column(DataType.UUIDV4)
+  articleId: string;
 
   @BelongsToMany(() => User, () => Reaction)
   likes: User[];
@@ -51,9 +57,12 @@ export default class Comment extends Model<
   updatedAt: Date;
 
   @HasMany(() => Reaction, {
-    foreignKey: 'sourceId',
+    foreignKey: 'commentId',
     constraints: false,
     scope: { sourceType: SourceTypeEnum.COMMENT },
   })
   reactions: Reaction[];
+
+  @BelongsTo(() => User, 'authorId')
+  author: User;
 }
