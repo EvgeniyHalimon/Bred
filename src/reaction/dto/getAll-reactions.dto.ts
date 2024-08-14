@@ -1,40 +1,17 @@
 // library
-import {
-  IsOptional,
-  IsUUID,
-  ValidateIf,
-  ValidationArguments,
-  ValidatorConstraint,
-  ValidatorConstraintInterface,
-} from 'class-validator';
+import { IsOptional, IsUUID } from 'class-validator';
 
 // types
 import { OrderType } from 'src/shared/types';
 import { IReactions } from '../reaction.types';
 
-@ValidatorConstraint({ name: 'atLeastOne', async: false })
-export class AtLeastOne implements ValidatorConstraintInterface {
-  validate(_: any, args: ValidationArguments) {
-    const object = args.object as GetAllQueryReactionsDto;
-    return !!(object.commentId || object.articleId);
-  }
-
-  defaultMessage() {
-    return 'Either commentId or articleId must be provided.';
-  }
-}
-
 export class GetAllQueryReactionsDto {
   @IsOptional()
   @IsUUID(4)
-  @ValidateIf(o => !o.articleId)
-  @ValidateIf(() => false, { groups: ['atLeastOne'] })
   readonly commentId?: string;
 
   @IsOptional()
   @IsUUID(4)
-  @ValidateIf(o => !o.commentId)
-  @ValidateIf(() => false, { groups: ['atLeastOne'] })
   readonly articleId?: string;
 
   @IsOptional()

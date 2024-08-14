@@ -9,13 +9,19 @@ import {
   Req,
   Param,
   Query,
+  UsePipes,
+  ValidationPipe,
 } from '@nestjs/common';
 
 //service
 import { ReactionsService } from './reaction.service';
 
 // dto's
-import { CreateReactionDto, GetAllQueryReactionsDto } from './dto';
+import {
+  CreateReactionDto,
+  GetAllQueryReactionsDto,
+  UpdateReactionDto,
+} from './dto';
 
 // types
 import { ICustomRequest } from 'src/shared/types';
@@ -25,6 +31,7 @@ export class ReactionsController {
   constructor(private reactionsService: ReactionsService) {}
 
   @Post('/')
+  @UsePipes(new ValidationPipe({ transform: true, whitelist: true }))
   create(
     @Req() request: ICustomRequest,
     @Body() createReactionDto: CreateReactionDto,
@@ -44,7 +51,7 @@ export class ReactionsController {
   update(
     @Req() request: ICustomRequest,
     @Param('id') id: string,
-    @Body() updateReactionDto: any,
+    @Body() updateReactionDto: UpdateReactionDto,
   ) {
     const reactionId = id;
     const userId = request.user.id;

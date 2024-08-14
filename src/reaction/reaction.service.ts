@@ -15,13 +15,17 @@ import Reaction from './reaction.schema';
 import User from 'src/user/user.schema';
 
 //dto's
-import { CreateReactionDto, GetAllQueryReactionsDto } from './dto';
+import {
+  CreateReactionDto,
+  GetAllQueryReactionsDto,
+  UpdateReactionDto,
+} from './dto';
 
 // types
 import { IReactions } from './reaction.types';
 
 // constants
-import { SourceTypeEnum } from './reaction.constants';
+import { ReactionTypeEnum, SourceTypeEnum } from './reaction.constants';
 
 @Injectable()
 export class ReactionsService {
@@ -39,19 +43,16 @@ export class ReactionsService {
     createReactionDto: CreateReactionDto;
   }): Promise<IReactions | undefined> {
     try {
-      const { sourceType, articleId, commentId } = createReactionDto;
+      const { sourceType, articleId, commentId, reactionType } =
+        createReactionDto;
 
-      if (sourceType === SourceTypeEnum.ARTICLE) {
-        const article = await this.articleService.findOne({ articleId });
-        if (!article) {
-          throw new NotFoundException('Article not found');
-        }
-      } else {
-        const comment = await this.commentService.findOne({ commentId });
-        if (!comment) {
-          throw new NotFoundException('Comment not found');
-        }
-      }
+      await this.checks({
+        commentId,
+        articleId,
+        userId,
+        sourceType,
+        reactionType,
+      });
 
       const reaction = await this.reactionModel.create({
         userId,
@@ -76,17 +77,15 @@ export class ReactionsService {
 
   async delete({ userId, reactionId }: { userId: string; reactionId: string }) {
     try {
-      const reaction = await this.reactionModel.findOne({
-        where: { id: reactionId },
+      const reaction = await this.findOne({
+        whereCondition: { id: reactionId },
       });
 
       if (!reaction) {
         throw new NotFoundException('Reaction not found');
       }
 
-      const reactionAuthor = await this.reactionModel.findOne({
-        where: { userId },
-      });
+      const reactionAuthor = await this.findOne({ whereCondition: { userId } });
 
       if (!reactionAuthor) {
         throw new NotFoundException(
@@ -121,19 +120,17 @@ export class ReactionsService {
   }: {
     userId: string;
     reactionId: string;
-    updateReactionDto: any;
+    updateReactionDto: UpdateReactionDto;
   }) {
-    const reaction = await this.reactionModel.findOne({
-      where: { id: reactionId },
+    const reaction = await this.findOne({
+      whereCondition: { id: reactionId },
     });
 
     if (!reaction) {
       throw new NotFoundException('Reaction not found');
     }
 
-    const reactionAuthor = await this.reactionModel.findOne({
-      where: { userId },
-    });
+    const reactionAuthor = await this.findOne({ whereCondition: { userId } });
 
     if (!reactionAuthor) {
       throw new NotFoundException(`You are not author of this reaction`);
@@ -179,5 +176,112 @@ export class ReactionsService {
       include: [{ model: User, as: 'user' }],
     });
     return reactions;
+  }
+
+  async findOne({ whereCondition }: { whereCondition: Partial<IReactions> }) {
+    return this.reactionModel.findOne({ where: whereCondition });
+  }
+
+  async checks({
+    commentId,
+    articleId,
+    userId,
+    sourceType,
+    reactionType,
+  }: {
+    commentId: string;
+    articleId: string;
+    userId: string;
+    sourceType: SourceTypeEnum;
+    reactionType: ReactionTypeEnum;
+  }) {
+    if (!commentId && !articleId) {
+      throw new BadRequestException(
+        'Either commentId or articleId must be provided.',
+      );
+    }
+
+    this.validateReactionType(commentId, articleId, sourceType, reactionType);
+
+    if (sourceType === SourceTypeEnum.ARTICLE) {
+      await this.validateArticleReaction(articleId, userId);
+    } else {
+      await this.validateCommentReaction(commentId, userId);
+    }
+  }
+
+  private validateReactionType(
+    commentId: string,
+    articleId: string,
+    sourceType: SourceTypeEnum,
+    reactionType: ReactionTypeEnum,
+  ) {
+    if (commentId && this.getCommentCondition({ sourceType, reactionType })) {
+      throw new BadRequestException('Wrong reaction types for comment.');
+    }
+
+    if (articleId && this.getArticleCondition({ sourceType, reactionType })) {
+      throw new BadRequestException('Wrong reaction types for article.');
+    }
+  }
+
+  private async validateArticleReaction(articleId: string, userId: string) {
+    const article = await this.articleService.findOne({ articleId });
+    if (!article) {
+      throw new NotFoundException('Article not found.');
+    }
+
+    const reaction = await this.findOne({
+      whereCondition: { userId, articleId },
+    });
+    if (reaction) {
+      throw new BadRequestException(
+        'You have already reacted to this article.',
+      );
+    }
+  }
+
+  private async validateCommentReaction(commentId: string, userId: string) {
+    const comment = await this.commentService.findOne({ commentId });
+    if (!comment) {
+      throw new NotFoundException('Comment not found.');
+    }
+
+    const reaction = await this.findOne({
+      whereCondition: { userId, commentId },
+    });
+    if (reaction) {
+      throw new BadRequestException(
+        'You have already reacted to this comment.',
+      );
+    }
+  }
+
+  private getArticleCondition({
+    sourceType,
+    reactionType,
+  }: {
+    sourceType: SourceTypeEnum;
+    reactionType: ReactionTypeEnum;
+  }) {
+    return (
+      SourceTypeEnum.COMMENT === sourceType ||
+      reactionType === ReactionTypeEnum.LIKE ||
+      reactionType === ReactionTypeEnum.DISLIKE
+    );
+  }
+
+  private getCommentCondition({
+    sourceType,
+    reactionType,
+  }: {
+    sourceType: SourceTypeEnum;
+    reactionType: ReactionTypeEnum;
+  }) {
+    return (
+      SourceTypeEnum.ARTICLE === sourceType ||
+      reactionType === ReactionTypeEnum.UPVOTE ||
+      reactionType === ReactionTypeEnum.DOWNVOTE
+    );
   }
 }
