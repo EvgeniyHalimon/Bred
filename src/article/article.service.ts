@@ -20,6 +20,8 @@ import {
 // types
 import { IArticle } from './article.types';
 import { IPaginationResponse } from 'src/shared/types';
+import Reaction from 'src/reaction/reaction.schema';
+import Comment from 'src/comment/comment.schema';
 
 @Injectable()
 export class ArticlesService {
@@ -55,7 +57,19 @@ export class ArticlesService {
     try {
       const article = await this.articleModel.findOne({
         where: { id: articleId },
-        include: [{ model: User, as: 'author' }],
+        include: [
+          { model: User, as: 'author' },
+          {
+            model: Reaction,
+            as: 'reactions',
+            include: [{ model: User, as: 'user' }],
+          },
+          {
+            model: Comment,
+            as: 'comments',
+            include: [{ model: User, as: 'author' }],
+          },
+        ],
       });
       if (!article) {
         throw new NotFoundException('Article not found');
@@ -79,7 +93,19 @@ export class ArticlesService {
     const result = await this.articleModel.findAndCountAll({
       where: query.toWhereOption(),
       ...query.toPaginationOptions(),
-      include: [{ model: User, as: 'author' }],
+      include: [
+        { model: User, as: 'author' },
+        {
+          model: Reaction,
+          as: 'reactions',
+          include: [{ model: User, as: 'user' }],
+        },
+        {
+          model: Comment,
+          as: 'comments',
+          include: [{ model: User, as: 'author' }],
+        },
+      ],
     });
     return {
       data: {
@@ -170,5 +196,12 @@ export class ArticlesService {
       );
       throw err;
     }
+  }
+  async findOne({ articleId }: { articleId: string }) {
+    return this.articleModel.findOne({
+      where: {
+        id: articleId,
+      },
+    });
   }
 }

@@ -44,7 +44,7 @@ module.exports = {
         onDelete: 'SET NULL',
       },
       reactionType: {
-        type: Sequelize.ENUM('like', 'dislike'),
+        type: Sequelize.ENUM('like', 'dislike', 'upvote', 'downvote'),
         allowNull: false,
       },
       createdAt: {

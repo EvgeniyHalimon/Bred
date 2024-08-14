@@ -9,7 +9,7 @@ import User from './user.schema';
 export class UsersService {
   constructor(@InjectModel(User) private userModel: typeof User) {}
 
-  async findAll(): Promise<User[]> {
-    return this.userModel.findAll();
+  async findAll() {
+    return this.userModel.findAndCountAll();
   }
 }

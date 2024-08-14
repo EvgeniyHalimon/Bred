@@ -15,5 +15,6 @@ import { ArticlesService } from './article.service';
   imports: [SequelizeModule.forFeature([Article])],
   controllers: [ArticlesController],
   providers: [ArticlesService],
+  exports: [ArticlesService],
 })
 export class ArticlesModule {}
