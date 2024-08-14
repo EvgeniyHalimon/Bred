@@ -113,8 +113,8 @@ export class CommentsService {
   }
 
   async findAll({ query }: { query: GetAllQueryCommentsDto }) {
-    return this.commentModel.findAll({
-      where: query.toPaginationOptions(),
+    return await this.commentModel.findAndCountAll({
+      where: query.toWhereCondition(),
       ...query.toPaginationOptions(),
       include: [
         { model: User, as: 'author' },

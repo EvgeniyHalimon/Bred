@@ -4,11 +4,11 @@ import {
   Controller,
   Post,
   Delete,
-  Put,
   Get,
   Req,
   Param,
   Query,
+  Patch,
 } from '@nestjs/common';
 
 //service
@@ -43,7 +43,7 @@ export class CommentController {
     return this.commentService.deleteById({ userId, commentId: id });
   }
 
-  @Put('/:id')
+  @Patch('/:id')
   update(
     @Req() request: ICustomRequest,
     @Param('id') id: string,

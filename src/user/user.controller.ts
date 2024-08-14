@@ -4,9 +4,6 @@ import { Controller, Get } from '@nestjs/common';
 // service
 import { UsersService } from './user.service';
 
-// schema
-import User from './user.schema';
-
 // decorator
 import { Public } from 'src/shared/public.decorator';
 
@@ -16,7 +13,7 @@ export class UsersController {
 
   @Public()
   @Get()
-  async findAll(): Promise<User[]> {
+  async findAll() {
     return this.usersService.findAll();
   }
 }
