@@ -23,6 +23,7 @@ import { IArticle } from './article.types';
 
 // constants
 import { SourceTypeEnum } from 'src/reaction/reaction.constants';
+import Comment from 'src/comment/comment.schema';
 
 @Table({ tableName: 'articles' })
 export default class Article extends Model<
@@ -63,9 +64,15 @@ export default class Article extends Model<
   downvoters: User[];
 
   @HasMany(() => Reaction, {
-    foreignKey: 'sourceId',
+    foreignKey: 'articleId',
     constraints: false,
     scope: { sourceType: SourceTypeEnum.ARTICLE },
   })
   reactions: Reaction[];
+
+  @HasMany(() => Comment, {
+    foreignKey: 'articleId',
+    constraints: false,
+  })
+  comments: Comment[];
 }

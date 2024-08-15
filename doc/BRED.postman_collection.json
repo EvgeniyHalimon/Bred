@@ -1,114 +1,536 @@
 {
-  "info": {
-    "_postman_id": "13835a98-f86f-4834-a4ca-3bd670ee9882",
-    "name": "BRED",
-    "description": "",
-    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-    "_exporter_id": "18395076"
-  },
-  "item": [
-    {
-      "name": "AUTH",
-      "item": [
-        {
-          "name": "POST - Register user",
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "exec": [
-                  "pm.test(\"Successful POST request\", function () {",
-                  "    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
-                  "});",
-                  ""
-                ],
-                "type": "text/javascript",
-                "packages": {}
-              }
-            }
-          ],
-          "request": {
-            "method": "POST",
-            "header": [],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n\t\"firstName\": \"string\",\n  \"lastName\": \"string\",\n  \"email\": \"q@email.com\",\n  \"password\": \"qwertyqwertyqwerty\",\n  \"bio\": \"string\"\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            },
-            "url": {
-              "raw": "{{base_url}}/auth/register",
-              "host": ["{{base_url}}"],
-              "path": ["auth", "register"]
-            },
-            "description": "This is a POST request, submitting data to an API via the request body. This request submits JSON data, and the data is reflected in the response.\n\nA successful POST request typically returns a `200 OK` or `201 Created` response code."
-          },
-          "response": []
-        },
-        {
-          "name": "POST - Login",
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "exec": [
-                  "pm.test(\"Successful POST request\", function () {",
-                  "    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
-                  "});",
-                  ""
-                ],
-                "type": "text/javascript",
-                "packages": {}
-              }
-            }
-          ],
-          "request": {
-            "method": "POST",
-            "header": [],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"email\": \"q@email.com\",\n  \"password\": \"qwertyqwertyqwerty\"\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            },
-            "url": {
-              "raw": "{{base_url}}/auth/login",
-              "host": ["{{base_url}}"],
-              "path": ["auth", "login"]
-            },
-            "description": "This is a POST request, submitting data to an API via the request body. This request submits JSON data, and the data is reflected in the response.\n\nA successful POST request typically returns a `200 OK` or `201 Created` response code."
-          },
-          "response": []
-        }
-      ]
-    }
-  ],
-  "event": [
-    {
-      "listen": "prerequest",
-      "script": {
-        "type": "text/javascript",
-        "exec": [""]
-      }
-    },
-    {
-      "listen": "test",
-      "script": {
-        "type": "text/javascript",
-        "exec": [""]
-      }
-    }
-  ],
-  "variable": [
-    {
-      "key": "base_url",
-      "value": "http://localhost:3001"
-    }
-  ]
+	"info": {
+		"_postman_id": "13835a98-f86f-4834-a4ca-3bd670ee9882",
+		"name": "BRED",
+		"description": "# 🚀 Get started here\n\nThis template guides you through CRUD operations (GET, POST, PUT, DELETE), variables, and tests.\n\n## 🔖 **How to use this template**\n\n#### **Step 1: Send requests**\n\nRESTful APIs allow you to perform CRUD operations using the POST, GET, PUT, and DELETE HTTP methods.\n\nThis collection contains each of these [request](https://learning.postman.com/docs/sending-requests/requests/) types. Open each request and click \"Send\" to see what happens.\n\n#### **Step 2: View responses**\n\nObserve the response tab for status code (200 OK), response time, and size.\n\n#### **Step 3: Send new Body data**\n\nUpdate or add new data in \"Body\" in the POST request. Typically, Body data is also used in PUT request.\n\n```\n{\n    \"name\": \"Add your name in the body\"\n}\n\n ```\n\n#### **Step 4: Update the variable**\n\nVariables enable you to store and reuse values in Postman. We have created a [variable](https://learning.postman.com/docs/sending-requests/variables/) called `base_url` with the sample request [https://postman-api-learner.glitch.me](https://postman-api-learner.glitch.me). Replace it with your API endpoint to customize this collection.\n\n#### **Step 5: Add tests in the \"Scripts\" tab**\n\nAdding tests to your requests can help you confirm that your API is working as expected. You can write test scripts in JavaScript and view the output in the \"Test Results\" tab.\n\n<img src=\"https://content.pstmn.io/fa30ea0a-373d-4545-a668-e7b283cca343/aW1hZ2UucG5n\" alt=\"\" height=\"1530\" width=\"2162\">\n\n## 💪 Pro tips\n\n- Use folders to group related requests and organize the collection.\n    \n- Add more [scripts](https://learning.postman.com/docs/writing-scripts/intro-to-scripts/) to verify if the API works as expected and execute workflows.\n    \n\n## 💡Related templates\n\n[API testing basics](https://go.postman.co/redirect/workspace?type=personal&collectionTemplateId=e9a37a28-055b-49cd-8c7e-97494a21eb54&sourceTemplateId=ddb19591-3097-41cf-82af-c84273e56719)  \n[API documentation](https://go.postman.co/redirect/workspace?type=personal&collectionTemplateId=e9c28f47-1253-44af-a2f3-20dce4da1f18&sourceTemplateId=ddb19591-3097-41cf-82af-c84273e56719)  \n[Authorization methods](https://go.postman.co/redirect/workspace?type=personal&collectionTemplateId=31a9a6ed-4cdf-4ced-984c-d12c9aec1c27&sourceTemplateId=ddb19591-3097-41cf-82af-c84273e56719)",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "18395076"
+	},
+	"item": [
+		{
+			"name": "AUTH",
+			"item": [
+				{
+					"name": "POST - Register user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"firstName\": \"string\",\n    \"lastName\": \"string\",\n    \"email\": \"q@email.com\",\n    \"password\": \"qwertyqwertyqwerty\",\n    \"bio\": \"Hello my name is Monti\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/auth/register",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"auth",
+								"register"
+							]
+						},
+						"description": "This is a POST request, submitting data to an API via the request body. This request submits JSON data, and the data is reflected in the response.\n\nA successful POST request typically returns a `200 OK` or `201 Created` response code."
+					},
+					"response": []
+				},
+				{
+					"name": "POST - Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"q@email.com\",\n  \"password\": \"qwertyqwertyqwerty\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/auth/login",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"auth",
+								"login"
+							]
+						},
+						"description": "This is a POST request, submitting data to an API via the request body. This request submits JSON data, and the data is reflected in the response.\n\nA successful POST request typically returns a `200 OK` or `201 Created` response code."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "ARTICLE",
+			"item": [
+				{
+					"name": "GET - Get all articles",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/articles/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"articles",
+								""
+							],
+							"query": [
+								{
+									"key": "title",
+									"value": "Big",
+									"description": "OPTIONAL; Search by title name",
+									"disabled": true
+								},
+								{
+									"key": "page",
+									"value": "1",
+									"description": "OPTIONAL; Page",
+									"disabled": true
+								},
+								{
+									"key": "limit",
+									"value": "10",
+									"description": "OPTIONAL; Limit",
+									"disabled": true
+								},
+								{
+									"key": "order",
+									"value": "ASC",
+									"description": "OPTIONAL; Order in ordering, can be ASC or DESC",
+									"disabled": true
+								},
+								{
+									"key": "orderBy",
+									"value": "createdAt",
+									"description": "OPTIONAL;",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET - Get article by id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/articles/d5e6e531-b41d-4ba8-aff9-2450c30bbc89",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"articles",
+								"d5e6e531-b41d-4ba8-aff9-2450c30bbc89"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "POST - Post an article",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"Vemon Snake\",\n    \"text\": \"New Big Boss\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/articles/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"articles",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PATCH - Patch an article",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    // optional fields\n    \"title\": \"Big boss\",\n    \"text\": \"Man who sold the world\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/articles/fe7693b9-cbc3-4817-afa4-7ccc8aa2be981",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"articles",
+								"fe7693b9-cbc3-4817-afa4-7ccc8aa2be981"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE - Delete by id",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/articles/fe7693b9-cbc3-4817-afa4-7ccc8aa2be98",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"articles",
+								"fe7693b9-cbc3-4817-afa4-7ccc8aa2be98"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "COMMENTS",
+			"item": [
+				{
+					"name": "GET - Get all comment by article id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/comments/?text&page=1&limit=10&order=ASC&orderBy=createdAt",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"comments",
+								""
+							],
+							"query": [
+								{
+									"key": "text",
+									"value": null,
+									"description": "OPTINAL; search by comment text"
+								},
+								{
+									"key": "page",
+									"value": "1",
+									"description": "OPTINAL; Page"
+								},
+								{
+									"key": "limit",
+									"value": "10",
+									"description": "OPTINAL; Limit"
+								},
+								{
+									"key": "order",
+									"value": "ASC",
+									"description": "OPTINAL; Order in ordering, can be ASC or DESC"
+								},
+								{
+									"key": "orderBy",
+									"value": "createdAt",
+									"description": "OPTINAL; "
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "POST - Create comment",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"text\" : \"cool\",\n    \"articleId\" : \"659a80d5-2057-4866-bea9-18c3c76b4884\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/comments/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"comments",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PATCH - Patch comment by id",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"text\": \"testify\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/comments/8858fe8c-82cb-42ef-b358-eadd33211db0",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"comments",
+								"8858fe8c-82cb-42ef-b358-eadd33211db0"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE - Delete comment by id",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/comments/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"comments",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "REACTIONS",
+			"item": [
+				{
+					"name": "GET - Get all reactions by reactionid",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/reactions/?page=1&limit=10&order=ASC&orderBy=createdAt",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"reactions",
+								""
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1",
+									"description": "OPTINAL; Page"
+								},
+								{
+									"key": "limit",
+									"value": "10",
+									"description": "OPTINAL; Limit"
+								},
+								{
+									"key": "order",
+									"value": "ASC",
+									"description": "OPTINAL; Order in ordering, can be ASC or DESC"
+								},
+								{
+									"key": "orderBy",
+									"value": "createdAt",
+									"description": "OPTINAL; "
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET - Get reaction by id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/reactions/4459d5f5-cc1a-44fb-9b18-d90001b150a5",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"reactions",
+								"4459d5f5-cc1a-44fb-9b18-d90001b150a5"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "POST - Create reaction",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    // optional, but one of this is required\n    /* \"commentId\":\"\", */\n    \"articleId\":\"659a80d5-2057-4866-bea9-18c3c76b4884\",\n    // can be \"upvote\" or \"downvote\" for article, \"like\" or \"dislike\" for comment\n    \"reactionType\": \"upvote\",\n    // can be \"article\" or \"comment\"\n    \"sourceType\": \"article\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/reactions/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"reactions",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PATCH - Patch reaction by id",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/reactions/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"reactions",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE - Delete reaction by id",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/reactions/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"reactions",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{token}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:3001"
+		},
+		{
+			"key": "token",
+			"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjEyODIxNWY3LTc4NjItNDk0Yi1iMjc4LTgwNWE2MjE2ZmRhYyIsImZpcnN0TmFtZSI6InN0cmluZyIsImxhc3ROYW1lIjoic3RyaW5nIiwiZW1haWwiOiJxQGVtYWlsLmNvbSIsInBhc3N3b3JkIjoiJDJiJDEwJEFreUsvektWMi9wRlBVR3VyWGNNb2VPbmVkazhKeU9hZ01JejNCWi8vN2N0dDlDT1JBQjJLIiwiYmlvIjoic3RyaW5nIiwicm9sZSI6InVzZXIiLCJwaG90byI6bnVsbCwiY3JlYXRlZEF0IjoiMjAyNC0wOC0wN1QxNTozMTo1NS4wMDBaIiwidXBkYXRlZEF0IjoiMjAyNC0wOC0wN1QxNTozMTo1NS4wMDBaIiwiaWF0IjoxNzIzMTMxNDc0LCJleHAiOjE3MjMyMTc4NzR9.26k3rt-luTHB2k2axbPzwT3j9mKJ4ECcPPnRO-UgLSU",
+			"type": "string"
+		}
+	]
 }

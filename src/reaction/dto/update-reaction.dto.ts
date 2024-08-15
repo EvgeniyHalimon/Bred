@@ -5,7 +5,7 @@ import { IsEnum, IsOptional, IsUUID } from 'class-validator';
 import { ReactionType, SourceType } from '../reaction.types';
 import { ReactionTypeEnum, SourceTypeEnum } from '../reaction.constants';
 
-export class CreateReactionDto {
+export class UpdateReactionDto {
   @IsOptional()
   @IsUUID(4)
   readonly commentId: string;

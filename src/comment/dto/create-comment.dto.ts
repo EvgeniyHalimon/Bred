@@ -11,17 +11,11 @@ import {
 import { commentFieldLengths } from '../comment.constants';
 
 export class CreateCommentDto {
-  @IsUUID('4')
-  readonly authorId: string;
+  @IsUUID(4)
+  readonly articleId: string;
 
   @IsString()
-  @MinLengthWithMessage({
-    min: commentFieldLengths.text.min,
-    property: 'Text',
-  })
-  @MaxLengthWithMessage({
-    max: commentFieldLengths.text.max,
-    property: 'Text',
-  })
+  @MinLengthWithMessage({ min: commentFieldLengths.text.min, property: 'Text' })
+  @MaxLengthWithMessage({ max: commentFieldLengths.text.max, property: 'Text' })
   readonly text: string;
 }
