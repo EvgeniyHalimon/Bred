@@ -24,9 +24,10 @@ export class PatchArticleDto {
   @IsOptional()
   @ApiProperty({
     description: 'Title of article',
-    minimum: articlesFieldLengths.title.min,
-    maximum: articlesFieldLengths.title.max,
+    minLength: articlesFieldLengths.title.min,
+    maxLength: articlesFieldLengths.title.max,
     required: false,
+    type: String,
   })
   readonly title: string;
 
@@ -42,9 +43,10 @@ export class PatchArticleDto {
   @IsOptional()
   @ApiProperty({
     description: 'Text content of article',
-    minimum: articlesFieldLengths.text.min,
-    maximum: articlesFieldLengths.text.max,
+    minLength: articlesFieldLengths.text.min,
+    maxLength: articlesFieldLengths.text.max,
     required: false,
+    type: String,
   })
   readonly text: string;
 }

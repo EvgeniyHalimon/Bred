@@ -1,5 +1,6 @@
 // libraries
 import { IsEmail, IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import { ApiProperty } from '@nestjs/swagger';
 
 // constants
 import { userFieldLengths } from '../user.constants';
@@ -43,8 +44,20 @@ export class CreateUserDto {
     max: userFieldLengths.bio.max,
     property: 'Bio',
   })
+  @ApiProperty({
+    type: String,
+    description: 'Bio of user',
+    required: true,
+    minLength: userFieldLengths.bio.min,
+    maxLength: userFieldLengths.bio.max,
+  })
   readonly bio: string;
 
   @IsOptional()
+  @ApiProperty({
+    type: Buffer,
+    description: 'Photo of user',
+    required: false,
+  })
   readonly photo?: Buffer;
 }
