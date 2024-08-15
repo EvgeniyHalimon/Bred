@@ -10,6 +10,7 @@ import {
   Query,
   Patch,
 } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 
 //service
 import { CommentsService } from './comment.service';
@@ -25,6 +26,7 @@ import {
 import { ICustomRequest } from 'src/shared/types';
 
 @Controller('comments')
+@ApiTags('comment')
 export class CommentController {
   constructor(private commentService: CommentsService) {}
 

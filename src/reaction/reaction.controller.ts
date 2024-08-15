@@ -12,6 +12,7 @@ import {
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 
 //service
 import { ReactionsService } from './reaction.service';
@@ -27,6 +28,7 @@ import {
 import { ICustomRequest } from 'src/shared/types';
 
 @Controller('reactions')
+@ApiTags('reactions')
 export class ReactionsController {
   constructor(private reactionsService: ReactionsService) {}
 

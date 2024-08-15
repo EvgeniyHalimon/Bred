@@ -10,19 +10,23 @@ import {
   Query,
   Req,
 } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 
 // service
 import { ArticlesService } from './article.service';
 
-// dto
-import { CreateArticleDto } from './dto/create-article.dto';
-import { PatchArticleDto } from './dto/patch-article.dto';
+// dtos
+import {
+  GetAllQueryArticlesDto,
+  CreateArticleDto,
+  PatchArticleDto,
+} from './dto';
 
 // types
 import { ICustomRequest } from 'src/shared/types';
-import { GetAllQueryArticlesDto } from './dto';
 
 @Controller('articles')
+@ApiTags('articles')
 export class ArticlesController {
   constructor(private articlesService: ArticlesService) {}
 

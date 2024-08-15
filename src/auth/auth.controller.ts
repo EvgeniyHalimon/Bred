@@ -1,5 +1,6 @@
 // nest
 import { Body, Controller, Post, HttpCode, HttpStatus } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 
 // service
 import { AuthService } from './auth.service';
@@ -11,6 +12,7 @@ import { Public } from 'src/shared/public.decorator';
 import { SignInDto, CreateUserDto } from 'src/user/dto';
 
 @Controller('auth')
+@ApiTags('auth')
 export class AuthController {
   constructor(private authService: AuthService) {}
 
