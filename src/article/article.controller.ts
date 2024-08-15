@@ -24,6 +24,8 @@ import {
 
 // types
 import { ICustomRequest } from 'src/shared/types';
+import { ApiQueriesFromDto } from 'src/shared/decorators';
+import { ArticleOrderByEnum } from './article.types';
 
 @Controller('articles')
 @ApiTags('articles')
@@ -54,6 +56,7 @@ export class ArticlesController {
   }
 
   @Get('/')
+  @ApiQueriesFromDto(GetAllQueryArticlesDto, ArticleOrderByEnum)
   async getAll(@Query() query: GetAllQueryArticlesDto) {
     return this.articlesService.findAll({ query });
   }

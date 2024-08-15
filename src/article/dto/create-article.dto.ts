@@ -26,6 +26,7 @@ export class CreateArticleDto {
     minLength: articlesFieldLengths.title.min,
     maxLength: articlesFieldLengths.title.max,
     type: String,
+    example: 'Big Boss',
   })
   readonly title: string;
 
@@ -43,6 +44,7 @@ export class CreateArticleDto {
     minLength: articlesFieldLengths.text.min,
     maxLength: articlesFieldLengths.text.max,
     type: String,
+    example: 'Man who sold the world',
   })
   readonly text: string;
 }

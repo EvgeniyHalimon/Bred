@@ -28,6 +28,7 @@ export class PatchArticleDto {
     maxLength: articlesFieldLengths.title.max,
     required: false,
     type: String,
+    example: 'Big Boss',
   })
   readonly title: string;
 
@@ -47,6 +48,7 @@ export class PatchArticleDto {
     maxLength: articlesFieldLengths.text.max,
     required: false,
     type: String,
+    example: 'Man who sold the world',
   })
   readonly text: string;
 }
