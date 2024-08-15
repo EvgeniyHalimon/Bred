@@ -18,6 +18,12 @@ export class CreateUserDto {
     max: userFieldLengths.firstName.max,
     property: 'First name',
   })
+  @ApiProperty({
+    type: String,
+    description: 'First name of user',
+    required: true,
+    example: 'Morgan',
+  })
   readonly firstName: string;
 
   @IsString()
@@ -26,15 +32,34 @@ export class CreateUserDto {
     max: userFieldLengths.lastName.max,
     property: 'Last name',
   })
+  @ApiProperty({
+    type: String,
+    description: 'Last name of user',
+    required: true,
+    example: 'Blackhand',
+  })
   readonly lastName: string;
 
   @IsEmail()
+  @ApiProperty({
+    type: String,
+    description: 'Email of user',
+    required: true,
+    example: 'morgan-blackhand@gmail.com',
+  })
   readonly email: string;
 
   @IsString()
   @MinLengthWithMessage({
     min: userFieldLengths.password.min,
     property: 'Password',
+  })
+  @ApiProperty({
+    type: String,
+    description: 'Password of user',
+    required: true,
+    minLength: userFieldLengths.password.min,
+    example: 'qwertyui12345678',
   })
   readonly password: string;
 
@@ -50,6 +75,7 @@ export class CreateUserDto {
     required: true,
     minLength: userFieldLengths.bio.min,
     maxLength: userFieldLengths.bio.max,
+    example: 'Hello my name is Monty',
   })
   readonly bio: string;
 
