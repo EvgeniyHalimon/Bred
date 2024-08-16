@@ -11,7 +11,12 @@ import {
   Query,
   Req,
 } from '@nestjs/common';
-import { ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBadRequestResponse,
+  ApiNotFoundResponse,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 
 // service
 import { ArticlesService } from './article.service';
@@ -22,6 +27,8 @@ import {
   CreateArticleDto,
   PatchArticleDto,
   CreateArticleResponseDto,
+  DeletedArticleResponseDto,
+  UpdatedArticleResponseDto,
 } from './dto';
 
 // types
@@ -52,7 +59,7 @@ export class ArticlesController {
       createArticleDto,
     });
     return {
-      data: { article: createdArticle },
+      article: createdArticle,
       message: `Article "${createArticleDto.title}" created successfully`,
     };
   }
@@ -70,6 +77,27 @@ export class ArticlesController {
     return this.articlesService.findAll({ query });
   }
 
+  @ApiNotFoundResponse({
+    example: {
+      message: 'Article not found',
+      error: 'Not Found',
+      statusCode: HttpStatus.NOT_FOUND,
+    },
+    description: 'When article is not present in database',
+  })
+  @ApiNotFoundResponse({
+    example: {
+      message: 'You are not author of this article',
+      error: 'Not Found',
+      statusCode: HttpStatus.NOT_FOUND,
+    },
+    description: 'When user is not author of article',
+  })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'When article successfully updated',
+    type: UpdatedArticleResponseDto,
+  })
   @Patch('/:id')
   async patchById(
     @Req() request: ICustomRequest,
@@ -84,13 +112,40 @@ export class ArticlesController {
     });
 
     return {
-      data: {
-        article: updatedArticle,
-      },
+      article: updatedArticle,
       message: `Article "${updatedArticle?.title}" updated successfully`,
     };
   }
 
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'User successfully logged in.',
+    type: DeletedArticleResponseDto,
+  })
+  @ApiNotFoundResponse({
+    example: {
+      message: 'Article not found',
+      error: 'Not Found',
+      statusCode: HttpStatus.NOT_FOUND,
+    },
+    description: 'When article is not present in database',
+  })
+  @ApiNotFoundResponse({
+    example: {
+      message: 'You are not author of this article',
+      error: 'Not Found',
+      statusCode: HttpStatus.NOT_FOUND,
+    },
+    description: 'When user is not author of article',
+  })
+  @ApiBadRequestResponse({
+    description: 'When delete was not successful',
+    example: {
+      message: 'Something went wrong while deleting the article',
+      error: 'Bad Request',
+      statusCode: HttpStatus.BAD_REQUEST,
+    },
+  })
   @Delete('/:id')
   async deleteById(@Req() request: ICustomRequest) {
     const articleId = request.params.id;
