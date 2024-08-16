@@ -9,6 +9,7 @@ export class SignInDto {
     type: String,
     description: 'Email of user',
     required: true,
+    example: 'morgan-blackhand@gmail.com',
   })
   readonly email: string;
 
@@ -18,6 +19,7 @@ export class SignInDto {
     type: String,
     description: 'Password of user',
     required: true,
+    example: 'qwertyui12345678',
   })
   readonly password: string;
 }

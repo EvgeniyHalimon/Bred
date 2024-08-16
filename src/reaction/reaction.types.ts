@@ -12,6 +12,17 @@ export interface IReactions {
   updatedAt: Date;
 }
 
+export enum ReactionOrderByEnum {
+  id = 'id',
+  userId = 'userId',
+  commentId = 'commentId',
+  articleId = 'articleId',
+  reactionType = 'reactionType',
+  sourceType = 'sourceType',
+  createdAt = 'createdAt',
+  updatedAt = 'updatedAt',
+}
+
 export type ReactionType =
   | ReactionTypeEnum.UPVOTE
   | ReactionTypeEnum.DOWNVOTE

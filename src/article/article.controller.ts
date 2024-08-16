@@ -4,13 +4,14 @@ import {
   Controller,
   Delete,
   Get,
+  HttpStatus,
   Param,
   Patch,
   Post,
   Query,
   Req,
 } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiResponse, ApiTags } from '@nestjs/swagger';
 
 // service
 import { ArticlesService } from './article.service';
@@ -20,18 +21,26 @@ import {
   GetAllQueryArticlesDto,
   CreateArticleDto,
   PatchArticleDto,
+  CreateArticleResponseDto,
 } from './dto';
 
 // types
 import { ICustomRequest } from 'src/shared/types';
-import { ApiQueriesFromDto } from 'src/shared/decorators';
 import { ArticleOrderByEnum } from './article.types';
+
+// custom decorator
+import { ApiQueriesFromDto } from 'src/shared/decorators';
 
 @Controller('articles')
 @ApiTags('articles')
 export class ArticlesController {
   constructor(private articlesService: ArticlesService) {}
 
+  @ApiResponse({
+    status: HttpStatus.CREATED,
+    description: 'User successfully logged in.',
+    type: CreateArticleResponseDto,
+  })
   @Post('/')
   async create(
     @Req() request: ICustomRequest,
@@ -49,7 +58,7 @@ export class ArticlesController {
   }
 
   @Get('/:id')
-  async getById(@Req() request: ICustomRequest, @Param('id') id: string) {
+  async getById(@Param('id') id: string) {
     const articleId = id;
     const article = await this.articlesService.getById({ articleId });
     return { data: { article } };

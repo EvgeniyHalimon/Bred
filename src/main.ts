@@ -26,6 +26,10 @@ async function bootstrap() {
     .setTitle('Bred API')
     .setDescription('The Bred API v1')
     .setVersion('1.0')
+    .addSecurity('bearer', {
+      type: 'http',
+    })
+    .addBearerAuth()
     .build();
 
   const document = SwaggerModule.createDocument(app, swaggerConfig);

@@ -20,6 +20,7 @@ export class UpdateCommentDto {
     minLength: commentFieldLengths.text.min,
     maxLength: commentFieldLengths.text.max,
     type: String,
+    example: 'hey, thats pretty good',
   })
   readonly text: string;
 }

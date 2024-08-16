@@ -26,6 +26,10 @@ import {
 
 // types
 import { ICustomRequest } from 'src/shared/types';
+import { ReactionOrderByEnum } from './reaction.types';
+
+// custom decorators
+import { ApiQueriesFromDto } from 'src/shared/decorators';
 
 @Controller('reactions')
 @ApiTags('reactions')
@@ -65,6 +69,7 @@ export class ReactionsController {
   }
 
   @Get('/')
+  @ApiQueriesFromDto(GetAllQueryReactionsDto, ReactionOrderByEnum)
   getAll(@Query() query: GetAllQueryReactionsDto) {
     return this.reactionsService.findAll({ query });
   }

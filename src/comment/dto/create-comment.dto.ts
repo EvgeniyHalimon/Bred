@@ -16,6 +16,7 @@ export class CreateCommentDto {
   @ApiProperty({
     description: 'Id of article',
     type: String,
+    example: '659a80d5-2057-4866-bea9-18c3c76b4884',
   })
   readonly articleId: string;
 
@@ -27,6 +28,7 @@ export class CreateCommentDto {
     minLength: commentFieldLengths.text.min,
     maxLength: commentFieldLengths.text.max,
     type: String,
+    example: 'hey, thats pretty good',
   })
   readonly text: string;
 }

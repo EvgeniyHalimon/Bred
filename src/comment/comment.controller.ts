@@ -24,6 +24,10 @@ import {
 
 // types
 import { ICustomRequest } from 'src/shared/types';
+import { CommentOrderByEnum } from './comment.types';
+
+// custom decorator
+import { ApiQueriesFromDto } from 'src/shared/decorators';
 
 @Controller('comments')
 @ApiTags('comment')
@@ -60,6 +64,7 @@ export class CommentController {
   }
 
   @Get('/')
+  @ApiQueriesFromDto(GetAllQueryCommentsDto, CommentOrderByEnum)
   getAll(@Query() query: GetAllQueryCommentsDto) {
     return this.commentService.findAll({ query });
   }

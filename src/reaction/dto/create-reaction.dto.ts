@@ -13,6 +13,7 @@ export class CreateReactionDto {
     description: 'Id of comment',
     type: String,
     required: false,
+    example: '659a80d5-2057-4866-bea9-18c3c76b4884',
   })
   readonly commentId: string;
 
@@ -22,6 +23,7 @@ export class CreateReactionDto {
     description: 'Id of article',
     type: String,
     required: false,
+    example: '659a80d5-2057-4866-bea9-18c3c76b4884',
   })
   readonly articleId: string;
 
@@ -30,6 +32,7 @@ export class CreateReactionDto {
     description: 'Reaction type',
     enum: ReactionTypeEnum,
     name: 'reactionType',
+    example: ReactionTypeEnum.UPVOTE,
   })
   readonly reactionType: ReactionType;
 
@@ -38,6 +41,7 @@ export class CreateReactionDto {
     description: 'Type of source where we send the reaction',
     enum: SourceTypeEnum,
     name: 'sourceType',
+    example: SourceTypeEnum.ARTICLE,
   })
   readonly sourceType: SourceType;
 }

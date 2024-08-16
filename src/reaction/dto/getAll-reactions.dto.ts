@@ -1,22 +1,24 @@
 // library
-import { IsOptional, IsUUID } from 'class-validator';
+import { IsNumber, IsOptional, IsUUID } from 'class-validator';
 
 // types
 import { OrderType } from 'src/shared/types';
 import { IReactions } from '../reaction.types';
 
 export class GetAllQueryReactionsDto {
-  @IsOptional()
   @IsUUID(4)
+  @IsOptional()
   readonly commentId?: string;
 
-  @IsOptional()
   @IsUUID(4)
+  @IsOptional()
   readonly articleId?: string;
 
+  @IsNumber()
   @IsOptional()
   readonly page?: number;
 
+  @IsNumber()
   @IsOptional()
   readonly limit?: number;
 

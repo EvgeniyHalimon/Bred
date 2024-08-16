@@ -1,18 +1,20 @@
 // library
-import { IsOptional, IsString } from 'class-validator';
+import { IsNumber, IsOptional, IsString } from 'class-validator';
 
 // types
 import { IComment } from '../comment.types';
 import { OrderType } from 'src/shared/types';
 
 export class GetAllQueryCommentsDto {
-  @IsOptional()
   @IsString()
+  @IsOptional()
   readonly text?: string;
 
+  @IsNumber()
   @IsOptional()
   readonly page?: number;
 
+  @IsNumber()
   @IsOptional()
   readonly limit?: number;
 
