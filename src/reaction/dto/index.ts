@@ -5,3 +5,4 @@ export * from './reaction.dto';
 export * from './patch-reaction-response.dto';
 export * from './delete-reaction-response.dto';
 export * from './getById-reaction-response.dto';
+export * from './post-reaction-response.dto';

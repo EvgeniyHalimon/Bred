@@ -28,6 +28,7 @@ import {
   GetAllQueryReactionsDto,
   GetByIdReactionResponseDto,
   PatchReactionResponseDto,
+  PostReactionResponseDto,
   UpdateReactionDto,
 } from './dto';
 
@@ -43,6 +44,11 @@ import { ApiQueriesFromDto } from 'src/shared/decorators';
 export class ReactionsController {
   constructor(private reactionsService: ReactionsService) {}
 
+  @ApiResponse({
+    status: HttpStatus.CREATED,
+    description: 'When comment created',
+    type: PostReactionResponseDto,
+  })
   @Post('/')
   create(
     @Req() request: ICustomRequest,
