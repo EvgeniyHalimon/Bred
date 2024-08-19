@@ -4,18 +4,18 @@ import { ApiProperty } from '@nestjs/swagger';
 // dtos
 import { ArticleDto } from '.';
 import { UserDto } from 'src/user/dto';
-import { ReactionDto } from 'src/reaction/dto';
-import { CommentDto } from 'src/comment/dto/comment.dto';
+import { ReactionDtoWithUser } from 'src/reaction/dto';
+import { CommentWithAuthor } from 'src/comment/dto';
 
 export class DetailedArticleInfoDto extends ArticleDto {
   @ApiProperty({ type: UserDto })
   author: UserDto;
 
-  @ApiProperty({ type: [ReactionDto] })
-  reactions: ReactionDto[];
+  @ApiProperty({ type: [ReactionDtoWithUser] })
+  reactions: ReactionDtoWithUser[];
 
-  @ApiProperty({ type: [CommentDto] })
-  comments: CommentDto[];
+  @ApiProperty({ type: [CommentWithAuthor] })
+  comments: CommentWithAuthor[];
 }
 
 export class GetByIdArticleResponseDto {

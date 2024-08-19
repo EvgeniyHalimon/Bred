@@ -96,20 +96,20 @@ export class CommentsService {
       throw new NotFoundException('You are not author of this comment');
     }
 
-    const deletedArticle = await this.commentModel.destroy({
+    const deletedComment = await this.commentModel.destroy({
       where: {
         id: commentId,
       },
     });
-    if (deletedArticle === 0) {
+    if (deletedComment === 0) {
       throw new BadRequestException(
-        'Something went wrong while deleting the article',
+        'Something went wrong while deleting the comment',
       );
     }
   }
 
   async findAll({ query }: { query: GetAllQueryCommentsDto }) {
-    return await this.commentModel.findAndCountAll({
+    const comments = await this.commentModel.findAndCountAll({
       where: query.toWhereCondition(),
       ...query.toPaginationOptions(),
       include: [
@@ -117,6 +117,11 @@ export class CommentsService {
         { model: Reaction, as: 'reactions' },
       ],
     });
+
+    return {
+      comments: comments.rows,
+      count: comments.count,
+    };
   }
 
   async findOne({ commentId }: { commentId: string }): Promise<Comment | null> {

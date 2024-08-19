@@ -1,16 +1,16 @@
 // library
-import { IsNumber, IsOptional, IsString } from 'class-validator';
+import { IsOptional, IsString } from 'class-validator';
 
 // types
 import { OrderType } from 'src/shared/types';
 import { IArticle } from '../article.types';
 
 export class GetAllQueryArticlesDto {
-  @IsNumber()
+  @IsString()
   @IsOptional()
   readonly page?: number;
 
-  @IsNumber()
+  @IsString()
   @IsOptional()
   readonly limit?: number;
 

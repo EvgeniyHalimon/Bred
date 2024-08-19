@@ -62,7 +62,9 @@ export class ReactionDto {
     description: 'Represents the last update date of the reaction',
   })
   updatedAt: string;
+}
 
+export class ReactionDtoWithUser extends ReactionDto {
   @ApiProperty({ type: UserDto })
   user: UserDto;
 }

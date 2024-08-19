@@ -46,7 +46,9 @@ export class CommentDto {
     description: 'Represents the last update date of the comment',
   })
   updatedAt: string;
+}
 
+export class CommentWithAuthor extends CommentDto {
   @ApiProperty({ type: UserDto })
   author: UserDto;
 }
