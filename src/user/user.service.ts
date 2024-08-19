@@ -10,6 +10,11 @@ export class UsersService {
   constructor(@InjectModel(User) private userModel: typeof User) {}
 
   async findAll() {
-    return this.userModel.findAndCountAll();
+    const users = await this.userModel.findAndCountAll();
+
+    return {
+      users: users.rows,
+      count: users.count,
+    };
   }
 }

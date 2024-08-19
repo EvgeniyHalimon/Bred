@@ -18,7 +18,7 @@ import { SignInDto, CreateUserDto } from 'src/user/dto';
 import { SignInResponseDto, SignUpResponseDto } from './dto';
 
 @Controller('auth')
-@ApiTags('auth')
+@ApiTags('Auth')
 export class AuthController {
   constructor(private authService: AuthService) {}
 

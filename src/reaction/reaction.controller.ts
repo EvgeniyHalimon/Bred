@@ -30,7 +30,7 @@ import { ReactionOrderByEnum } from './reaction.types';
 import { ApiQueriesFromDto } from 'src/shared/decorators';
 
 @Controller('reactions')
-@ApiTags('reactions')
+@ApiTags('Reactions')
 export class ReactionsController {
   constructor(private reactionsService: ReactionsService) {}
 

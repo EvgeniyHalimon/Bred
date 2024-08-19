@@ -96,7 +96,6 @@ export class ArticlesService {
     });
     return {
       articles: result.rows,
-
       count: result.count,
     };
   }

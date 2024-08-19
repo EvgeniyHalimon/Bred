@@ -30,7 +30,7 @@ import { CommentOrderByEnum } from './comment.types';
 import { ApiQueriesFromDto } from 'src/shared/decorators';
 
 @Controller('comments')
-@ApiTags('comment')
+@ApiTags('Comments')
 export class CommentController {
   constructor(private commentService: CommentsService) {}
 

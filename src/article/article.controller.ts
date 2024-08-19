@@ -41,7 +41,7 @@ import { ArticleOrderByEnum } from './article.types';
 import { ApiQueriesFromDto } from 'src/shared/decorators';
 
 @Controller('articles')
-@ApiTags('articles')
+@ApiTags('Articles')
 export class ArticlesController {
   constructor(private articlesService: ArticlesService) {}
 
