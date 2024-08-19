@@ -30,6 +30,7 @@ import {
   DeletedArticleResponseDto,
   UpdatedArticleResponseDto,
   GetByIdArticleResponseDto,
+  GetAllArticlesResponseDto,
 } from './dto';
 
 // types
@@ -70,6 +71,14 @@ export class ArticlesController {
     description: 'When we received the article by id',
     type: GetByIdArticleResponseDto,
   })
+  @ApiNotFoundResponse({
+    example: {
+      message: 'Article not found',
+      error: 'Not Found',
+      statusCode: HttpStatus.NOT_FOUND,
+    },
+    description: 'When article is not present in database',
+  })
   @Get('/:id')
   async getById(@Param('id') id: string) {
     const articleId = id;
@@ -77,6 +86,11 @@ export class ArticlesController {
     return { article };
   }
 
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'When we received the article by id',
+    type: GetAllArticlesResponseDto,
+  })
   @Get('/')
   @ApiQueriesFromDto(GetAllQueryArticlesDto, ArticleOrderByEnum)
   async getAll(@Query() query: GetAllQueryArticlesDto) {
@@ -108,8 +122,9 @@ export class ArticlesController {
   async patchById(
     @Req() request: ICustomRequest,
     @Body() patchArticleDto: PatchArticleDto,
+    @Param('id') id: string,
   ) {
-    const articleId = request.params.id;
+    const articleId = id;
     const userId = request.user.id;
     const updatedArticle = await this.articlesService.patchById({
       articleId,
@@ -153,8 +168,8 @@ export class ArticlesController {
     },
   })
   @Delete('/:id')
-  async deleteById(@Req() request: ICustomRequest) {
-    const articleId = request.params.id;
+  async deleteById(@Req() request: ICustomRequest, @Param('id') id: string) {
+    const articleId = id;
     const userId = request.user.id;
     await this.articlesService.deleteById({ articleId, userId });
     return { message: 'Article deleted successfully' };

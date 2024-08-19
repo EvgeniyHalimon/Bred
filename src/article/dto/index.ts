@@ -5,3 +5,4 @@ export * from './create-article-response.dto';
 export * from './patch-article-response.dto';
 export * from './delete-article-response.dto';
 export * from './getById-article-response.dto';
+export * from './getAll-articles-response.dto';

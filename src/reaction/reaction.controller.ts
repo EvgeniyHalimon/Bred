@@ -9,8 +9,6 @@ import {
   Req,
   Param,
   Query,
-  UsePipes,
-  ValidationPipe,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 
@@ -37,7 +35,6 @@ export class ReactionsController {
   constructor(private reactionsService: ReactionsService) {}
 
   @Post('/')
-  @UsePipes(new ValidationPipe({ transform: true, whitelist: true }))
   create(
     @Req() request: ICustomRequest,
     @Body() createReactionDto: CreateReactionDto,
