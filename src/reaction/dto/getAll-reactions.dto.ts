@@ -1,5 +1,5 @@
 // library
-import { IsNumber, IsOptional, IsUUID } from 'class-validator';
+import { IsString, IsOptional, IsUUID } from 'class-validator';
 
 // types
 import { OrderType } from 'src/shared/types';
@@ -14,11 +14,11 @@ export class GetAllQueryReactionsDto {
   @IsOptional()
   readonly articleId?: string;
 
-  @IsNumber()
+  @IsString()
   @IsOptional()
   readonly page?: number;
 
-  @IsNumber()
+  @IsString()
   @IsOptional()
   readonly limit?: number;
 

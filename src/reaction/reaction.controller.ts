@@ -4,13 +4,19 @@ import {
   Controller,
   Post,
   Delete,
-  Put,
   Get,
   Req,
   Param,
   Query,
+  Patch,
+  HttpStatus,
 } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import {
+  ApiBadRequestResponse,
+  ApiNotFoundResponse,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 
 //service
 import { ReactionsService } from './reaction.service';
@@ -18,7 +24,10 @@ import { ReactionsService } from './reaction.service';
 // dto's
 import {
   CreateReactionDto,
+  DeleteReactionResponseDto,
   GetAllQueryReactionsDto,
+  GetByIdReactionResponseDto,
+  PatchReactionResponseDto,
   UpdateReactionDto,
 } from './dto';
 
@@ -43,6 +52,35 @@ export class ReactionsController {
     return this.reactionsService.create({ userId, createReactionDto });
   }
 
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'User successfully logged in.',
+    type: DeleteReactionResponseDto,
+  })
+  @ApiNotFoundResponse({
+    example: {
+      message: 'Reaction not found',
+      error: 'Not Found',
+      statusCode: HttpStatus.NOT_FOUND,
+    },
+    description: 'When reaction is not present in database',
+  })
+  @ApiNotFoundResponse({
+    example: {
+      message: 'You are not author of this reaction',
+      error: 'Not Found',
+      statusCode: HttpStatus.NOT_FOUND,
+    },
+    description: 'When user is not author of this reaction',
+  })
+  @ApiBadRequestResponse({
+    description: 'When delete was not successful',
+    example: {
+      message: 'Something went wrong while deleting the reactions',
+      error: 'Bad Request',
+      statusCode: HttpStatus.BAD_REQUEST,
+    },
+  })
   @Delete('/:id')
   delete(@Req() request: ICustomRequest, @Param('id') id: string) {
     const userId = request.user.id;
@@ -50,7 +88,28 @@ export class ReactionsController {
     return this.reactionsService.delete({ userId, reactionId });
   }
 
-  @Put('/:id')
+  @ApiNotFoundResponse({
+    example: {
+      message: 'Reaction not found',
+      error: 'Not Found',
+      statusCode: HttpStatus.NOT_FOUND,
+    },
+    description: 'When reaction is not found',
+  })
+  @ApiNotFoundResponse({
+    description: 'When user is not author of reaction',
+    example: {
+      message: 'You are not author of this reaction',
+      error: 'Bad Request',
+      statusCode: HttpStatus.BAD_REQUEST,
+    },
+  })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'When reaction updated',
+    type: PatchReactionResponseDto,
+  })
+  @Patch('/:id')
   update(
     @Req() request: ICustomRequest,
     @Param('id') id: string,
@@ -71,6 +130,19 @@ export class ReactionsController {
     return this.reactionsService.findAll({ query });
   }
 
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Represents reaction with author of this reaction',
+    type: GetByIdReactionResponseDto,
+  })
+  @ApiNotFoundResponse({
+    example: {
+      message: 'Reaction not found',
+      error: 'Not Found',
+      statusCode: HttpStatus.NOT_FOUND,
+    },
+    description: 'When reaction is not present in database',
+  })
   @Get('/:id')
   get(@Param('id') id: string) {
     const reactionId = id;
