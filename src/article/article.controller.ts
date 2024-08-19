@@ -68,7 +68,7 @@ export class ArticlesController {
   async getById(@Param('id') id: string) {
     const articleId = id;
     const article = await this.articlesService.getById({ articleId });
-    return { data: { article } };
+    return { article };
   }
 
   @Get('/')

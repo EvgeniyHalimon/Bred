@@ -19,7 +19,6 @@ import {
 
 // types
 import { IArticle } from './article.types';
-import { IPaginationResponse } from 'src/shared/types';
 import Reaction from 'src/reaction/reaction.schema';
 import Comment from 'src/comment/comment.schema';
 
@@ -85,11 +84,7 @@ export class ArticlesService {
     }
   }
 
-  async findAll({
-    query,
-  }: {
-    query: GetAllQueryArticlesDto;
-  }): Promise<IPaginationResponse<IArticle[]>> {
+  async findAll({ query }: { query: GetAllQueryArticlesDto }) {
     const result = await this.articleModel.findAndCountAll({
       where: query.toWhereOption(),
       ...query.toPaginationOptions(),
@@ -108,9 +103,8 @@ export class ArticlesService {
       ],
     });
     return {
-      data: {
-        articles: result.rows,
-      },
+      articles: result.rows,
+
       count: result.count,
     };
   }
