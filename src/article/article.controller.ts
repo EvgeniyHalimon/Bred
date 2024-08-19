@@ -29,6 +29,7 @@ import {
   CreateArticleResponseDto,
   DeletedArticleResponseDto,
   UpdatedArticleResponseDto,
+  GetByIdArticleResponseDto,
 } from './dto';
 
 // types
@@ -64,6 +65,11 @@ export class ArticlesController {
     };
   }
 
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'When we received the article by id',
+    type: GetByIdArticleResponseDto,
+  })
   @Get('/:id')
   async getById(@Param('id') id: string) {
     const articleId = id;
