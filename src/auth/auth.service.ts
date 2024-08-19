@@ -41,10 +41,6 @@ export class AuthService {
       const createdUser = await this.userModel.create(userAttributes);
       return createdUser;
     } catch (err) {
-      console.log(
-        '🚀 ~ file: auth.service.ts:29 ~ AuthService ~ signUp ~ err:',
-        err,
-      );
       throw err;
     }
   }
@@ -74,7 +70,6 @@ export class AuthService {
         };
       }
     } catch (err) {
-      console.log('🚀 ~ file: auth.service.ts:58 ~ AuthService ~ err:', err);
       throw err;
     }
   }

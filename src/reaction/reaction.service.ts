@@ -67,10 +67,6 @@ export class ReactionsService {
 
       return reaction;
     } catch (error) {
-      console.log(
-        '🚀 ~ file: reactions.service.ts:46 ~ ReactionsService ~ error:',
-        error,
-      );
       throw error;
     }
   }
@@ -105,10 +101,6 @@ export class ReactionsService {
       }
       return deletedReaction;
     } catch (error) {
-      console.log(
-        '🚀 ~ file: reactions.service.ts:85 ~ ReactionsService ~ delete ~ error:',
-        error,
-      );
       throw error;
     }
   }
@@ -161,10 +153,6 @@ export class ReactionsService {
 
       return article;
     } catch (error) {
-      console.log(
-        '🚀 ~ file: reactions.service.ts:131 ~ ReactionsService ~ get ~ error:',
-        error,
-      );
       throw error;
     }
   }

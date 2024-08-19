@@ -40,10 +40,6 @@ export class ArticlesService {
       };
       return await this.articleModel.create(article);
     } catch (err) {
-      console.log(
-        '🚀 ~ file: articles.service.ts:33 ~ ArticlesService ~ create ~ err:',
-        err,
-      );
       throw err;
     }
   }
@@ -76,10 +72,6 @@ export class ArticlesService {
 
       return article;
     } catch (err) {
-      console.log(
-        '🚀 ~ file: article.service.ts:66 ~ ArticlesService ~ err:',
-        err,
-      );
       throw err;
     }
   }
@@ -141,10 +133,6 @@ export class ArticlesService {
 
       return updatedArticle;
     } catch (err) {
-      console.log(
-        '🚀 ~ file: article.service.ts:125 ~ ArticlesService ~ err:',
-        err,
-      );
       throw err;
     }
   }
@@ -184,10 +172,6 @@ export class ArticlesService {
         );
       }
     } catch (err) {
-      console.log(
-        '🚀 ~ file: article.service.ts:159 ~ ArticlesService ~ err:',
-        err,
-      );
       throw err;
     }
   }

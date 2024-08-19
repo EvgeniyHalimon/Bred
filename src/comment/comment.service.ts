@@ -37,10 +37,6 @@ export class CommentsService {
       const createdComment = await this.commentModel.create(comment);
       return createdComment;
     } catch (err) {
-      console.log(
-        '🚀 ~ file: comment.service.ts:32 ~ CommentsService ~ create ~ err:',
-        err,
-      );
       throw err;
     }
   }
