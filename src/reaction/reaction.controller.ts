@@ -26,6 +26,7 @@ import {
   CreateReactionDto,
   DeleteReactionResponseDto,
   GetAllQueryReactionsDto,
+  GetAllReactionsResponseDto,
   GetByIdReactionResponseDto,
   PatchReactionResponseDto,
   PostReactionResponseDto,
@@ -188,6 +189,11 @@ export class ReactionsController {
     });
   }
 
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Represents array of reactions',
+    type: GetAllReactionsResponseDto,
+  })
   @Get('/')
   @ApiQueriesFromDto(GetAllQueryReactionsDto, ReactionOrderByEnum)
   getAll(@Query() query: GetAllQueryReactionsDto) {

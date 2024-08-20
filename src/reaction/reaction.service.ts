@@ -163,7 +163,10 @@ export class ReactionsService {
       ...query.toPaginationOptions(),
       include: [{ model: User, as: 'user' }],
     });
-    return reactions;
+    return {
+      reactions: reactions.rows,
+      count: reactions.count,
+    };
   }
 
   async findOne({ whereCondition }: { whereCondition: Partial<IReactions> }) {

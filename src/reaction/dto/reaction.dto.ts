@@ -30,7 +30,9 @@ export class ReactionDto {
     example: '6660ff57-3c9e-4dd0-b4ca-a5cc098b514f',
     type: String,
     nullable: true,
-    description: 'Represents id of the article associated with the reaction',
+    description:
+      'Represents id of the article associated with the reaction. If id present then the commentId cannot be used',
+    required: false,
   })
   articleId: string | null;
 
@@ -38,7 +40,9 @@ export class ReactionDto {
     example: null,
     type: String,
     nullable: true,
-    description: 'Represents id of the comment associated with the reaction',
+    description:
+      'Represents id of the comment associated with the reaction. If id present then the articleId cannot be used',
+    required: false,
   })
   commentId: string | null;
 
