@@ -6,6 +6,9 @@ import {
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 
+// library
+import { InjectPinoLogger, PinoLogger } from 'nestjs-pino';
+
 // service
 import { CommentsService } from 'src/comment/comment.service';
 import { ArticlesService } from 'src/article/article.service';
@@ -33,6 +36,8 @@ export class ReactionsService {
     @InjectModel(Reaction) private reactionModel: typeof Reaction,
     private commentService: CommentsService,
     private articleService: ArticlesService,
+    @InjectPinoLogger(ReactionsService.name)
+    private readonly logger: PinoLogger,
   ) {}
 
   async create({
@@ -67,6 +72,7 @@ export class ReactionsService {
 
       return reaction;
     } catch (error) {
+      this.logger.error('create method', error);
       throw error;
     }
   }
@@ -91,7 +97,7 @@ export class ReactionsService {
 
       const deletedReaction = await this.reactionModel.destroy({
         where: {
-          id: reactionId,
+          id: 'reactionId',
         },
       });
       if (!deletedReaction) {
@@ -101,6 +107,7 @@ export class ReactionsService {
       }
       return deletedReaction;
     } catch (error) {
+      this.logger.error(error);
       throw error;
     }
   }

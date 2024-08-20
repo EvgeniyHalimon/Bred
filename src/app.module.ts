@@ -8,6 +8,7 @@ import { config } from './config';
 // library
 import { Dialect } from 'sequelize';
 import { join } from 'path';
+import { LoggerModule } from 'nestjs-pino';
 
 // modules
 import { UsersModule } from './user/user.module';
@@ -28,6 +29,22 @@ import { AuthModule } from './auth/auth.module';
       autoLoadModels: true,
       synchronize: true,
       models: [join(__dirname, '**', '*.schema.{ts,js}')],
+    }),
+    LoggerModule.forRoot({
+      pinoHttp: {
+        level: 'debug',
+        transport: {
+          target: 'pino-pretty',
+          options: {
+            colorize: true,
+            translateTime: 'SYS:standard',
+            levelFirst: true,
+            hideObject: false,
+            errorLikeObjectKeys: ['err', 'error'],
+            errorProps: 'message,stack,code',
+          },
+        },
+      },
     }),
     UsersModule,
     CommentsModule,

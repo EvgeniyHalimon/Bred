@@ -1,6 +1,7 @@
 // libraries
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { Logger } from 'nestjs-pino';
 
 // module
 import { AppModule } from './app.module';
@@ -12,8 +13,8 @@ import { config } from './config';
 import { CustomValidationPipe } from './shared/CustomValidationPipe';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
-
+  const app = await NestFactory.create(AppModule, { bufferLogs: true });
+  app.useLogger(app.get(Logger));
   app.useGlobalPipes(
     new CustomValidationPipe({
       whitelist: true,
