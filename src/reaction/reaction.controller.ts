@@ -95,22 +95,6 @@ export class ReactionsController {
     return this.reactionsService.delete({ userId, reactionId });
   }
 
-  @ApiNotFoundResponse({
-    example: {
-      message: 'Reaction not found',
-      error: 'Not Found',
-      statusCode: HttpStatus.NOT_FOUND,
-    },
-    description: 'When reaction is not found',
-  })
-  @ApiNotFoundResponse({
-    description: 'When user is not author of reaction',
-    example: {
-      message: 'You are not author of this reaction',
-      error: 'Bad Request',
-      statusCode: HttpStatus.NOT_FOUND,
-    },
-  })
   @ApiBadRequestResponse({
     description: 'When commentId or articleId is not present in request body',
     example: {
@@ -137,14 +121,6 @@ export class ReactionsController {
       statusCode: HttpStatus.BAD_REQUEST,
     },
   })
-  @ApiNotFoundResponse({
-    description: 'Comment not found',
-    example: {
-      message: 'When comment that you want to react not found',
-      error: 'Bad Request',
-      statusCode: HttpStatus.NOT_FOUND,
-    },
-  })
   @ApiBadRequestResponse({
     description: 'When you already reacted to this comment',
     example: {
@@ -153,20 +129,44 @@ export class ReactionsController {
       statusCode: HttpStatus.BAD_REQUEST,
     },
   })
-  @ApiNotFoundResponse({
-    description: 'Article not found',
-    example: {
-      message: 'When article that you want to react not found',
-      error: 'Bad Request',
-      statusCode: HttpStatus.NOT_FOUND,
-    },
-  })
   @ApiBadRequestResponse({
     description: 'When you already reacted to this article',
     example: {
       message: 'You have already reacted to this article',
       error: 'Bad Request',
       statusCode: HttpStatus.BAD_REQUEST,
+    },
+  })
+  @ApiNotFoundResponse({
+    example: {
+      message: 'Reaction not found',
+      error: 'Not Found',
+      statusCode: HttpStatus.NOT_FOUND,
+    },
+    description: 'When reaction is not found',
+  })
+  @ApiNotFoundResponse({
+    description: 'When user is not author of reaction',
+    example: {
+      message: 'You are not author of this reaction',
+      error: 'Bad Request',
+      statusCode: HttpStatus.NOT_FOUND,
+    },
+  })
+  @ApiNotFoundResponse({
+    description: 'Comment not found',
+    example: {
+      message: 'When comment that you want to react not found',
+      error: 'Bad Request',
+      statusCode: HttpStatus.NOT_FOUND,
+    },
+  })
+  @ApiNotFoundResponse({
+    description: 'Article not found',
+    example: {
+      message: 'When article that you want to react not found',
+      error: 'Bad Request',
+      statusCode: HttpStatus.NOT_FOUND,
     },
   })
   @ApiResponse({

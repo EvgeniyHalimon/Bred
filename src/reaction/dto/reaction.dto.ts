@@ -49,7 +49,8 @@ export class ReactionDto {
   @ApiProperty({
     example: 'upvote',
     type: String,
-    description: 'Represents the type of reaction (e.g., upvote, downvote)',
+    description:
+      'Represents the type of reaction (e.g., upvote, downvote, like, dislike)',
   })
   reactionType: string;
 
