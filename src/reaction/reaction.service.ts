@@ -185,7 +185,7 @@ export class ReactionsService {
   }) {
     if (!commentId && !articleId) {
       throw new BadRequestException(
-        'Either commentId or articleId must be provided.',
+        'Either commentId or articleId must be provided',
       );
     }
 
@@ -205,43 +205,39 @@ export class ReactionsService {
     reactionType: ReactionTypeEnum,
   ) {
     if (commentId && this.getCommentCondition({ sourceType, reactionType })) {
-      throw new BadRequestException('Wrong reaction types for comment.');
+      throw new BadRequestException('Wrong reaction types for comment');
     }
 
     if (articleId && this.getArticleCondition({ sourceType, reactionType })) {
-      throw new BadRequestException('Wrong reaction types for article.');
+      throw new BadRequestException('Wrong reaction types for article');
     }
   }
 
   private async validateArticleReaction(articleId: string, userId: string) {
     const article = await this.articleService.findOne({ articleId });
     if (!article) {
-      throw new NotFoundException('Article not found.');
+      throw new NotFoundException('Article not found');
     }
 
     const reaction = await this.findOne({
       whereCondition: { userId, articleId },
     });
     if (reaction) {
-      throw new BadRequestException(
-        'You have already reacted to this article.',
-      );
+      throw new BadRequestException('You have already reacted to this article');
     }
   }
 
   private async validateCommentReaction(commentId: string, userId: string) {
     const comment = await this.commentService.findOne({ commentId });
     if (!comment) {
-      throw new NotFoundException('Comment not found.');
+      throw new NotFoundException('Comment not found');
     }
 
     const reaction = await this.findOne({
       whereCondition: { userId, commentId },
     });
     if (reaction) {
-      throw new BadRequestException(
-        'You have already reacted to this comment.',
-      );
+      throw new BadRequestException('You have already reacted to this comment');
     }
   }
 
