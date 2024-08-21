@@ -29,16 +29,12 @@ export class CommentsService {
     userId: string;
     createReactionDto: CreateCommentDto;
   }): Promise<Comment> {
-    try {
-      const comment = {
-        ...createReactionDto,
-        authorId: userId,
-      };
-      const createdComment = await this.commentModel.create(comment);
-      return createdComment;
-    } catch (err) {
-      throw err;
-    }
+    const comment = {
+      ...createReactionDto,
+      authorId: userId,
+    };
+    const createdComment = await this.commentModel.create(comment);
+    return createdComment;
   }
 
   async update({

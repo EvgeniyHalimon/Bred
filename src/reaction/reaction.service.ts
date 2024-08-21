@@ -6,9 +6,6 @@ import {
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 
-// library
-import { InjectPinoLogger, PinoLogger } from 'nestjs-pino';
-
 // service
 import { CommentsService } from 'src/comment/comment.service';
 import { ArticlesService } from 'src/article/article.service';
@@ -36,8 +33,6 @@ export class ReactionsService {
     @InjectModel(Reaction) private reactionModel: typeof Reaction,
     private commentService: CommentsService,
     private articleService: ArticlesService,
-    @InjectPinoLogger(ReactionsService.name)
-    private readonly logger: PinoLogger,
   ) {}
 
   async create({
@@ -47,69 +42,59 @@ export class ReactionsService {
     userId: string;
     createReactionDto: CreateReactionDto;
   }): Promise<IReactions | undefined> {
-    try {
-      const { sourceType, articleId, commentId, reactionType } =
-        createReactionDto;
+    const { sourceType, articleId, commentId, reactionType } =
+      createReactionDto;
 
-      await this.checks({
-        commentId,
-        articleId,
-        userId,
-        sourceType,
-        reactionType,
-      });
+    await this.checks({
+      commentId,
+      articleId,
+      userId,
+      sourceType,
+      reactionType,
+    });
 
-      const reaction = await this.reactionModel.create({
-        userId,
-        ...createReactionDto,
-      });
+    const reaction = await this.reactionModel.create({
+      userId,
+      ...createReactionDto,
+    });
 
-      if (!reaction) {
-        throw new BadRequestException(
-          `Something went wrong while making ${sourceType}`,
-        );
-      }
-
-      return reaction;
-    } catch (error) {
-      this.logger.error('create method', error);
-      throw error;
+    if (!reaction) {
+      throw new BadRequestException(
+        `Something went wrong while making ${sourceType}`,
+      );
     }
+
+    return reaction;
   }
 
   async delete({ userId, reactionId }: { userId: string; reactionId: string }) {
-    try {
-      const reaction = await this.findOne({
-        whereCondition: { id: reactionId },
-      });
+    const reaction = await this.findOne({
+      whereCondition: { id: reactionId },
+    });
 
-      if (!reaction) {
-        throw new NotFoundException('Reaction not found');
-      }
-
-      const reactionAuthor = await this.findOne({ whereCondition: { userId } });
-
-      if (!reactionAuthor) {
-        throw new NotFoundException(
-          `You are not author of this ${reaction.reactionType}`,
-        );
-      }
-
-      const deletedReaction = await this.reactionModel.destroy({
-        where: {
-          id: reactionId,
-        },
-      });
-      if (!deletedReaction) {
-        throw new BadRequestException(
-          `Something went wrong while deleting the ${reaction.reactionType}`,
-        );
-      }
-      return deletedReaction;
-    } catch (error) {
-      this.logger.error(error);
-      throw error;
+    if (!reaction) {
+      throw new NotFoundException('Reaction not found');
     }
+
+    const reactionAuthor = await this.findOne({ whereCondition: { userId } });
+
+    if (!reactionAuthor) {
+      throw new NotFoundException(
+        `You are not author of this ${reaction.reactionType}`,
+      );
+    }
+
+    const deletedReaction = await this.reactionModel.destroy({
+      where: {
+        id: 'reactionId',
+      },
+    });
+    if (!deletedReaction) {
+      throw new BadRequestException(
+        `Something went wrong while deleting the ${reaction.reactionType}`,
+      );
+    }
+    return deletedReaction;
   }
 
   async update({
@@ -143,25 +128,21 @@ export class ReactionsService {
   }
 
   async getById({ reactionId }: { reactionId: string }) {
-    try {
-      const article = await this.reactionModel.findOne({
-        where: { id: reactionId },
-        include: [
-          {
-            model: User,
-            as: 'user',
-          },
-        ],
-      });
+    const article = await this.reactionModel.findOne({
+      where: { id: reactionId },
+      include: [
+        {
+          model: User,
+          as: 'user',
+        },
+      ],
+    });
 
-      if (!article) {
-        throw new NotFoundException('Reaction not found');
-      }
-
-      return article;
-    } catch (error) {
-      throw error;
+    if (!article) {
+      throw new NotFoundException('Reaction not found');
     }
+
+    return article;
   }
 
   async findAll({ query }: { query: GetAllQueryReactionsDto }) {
