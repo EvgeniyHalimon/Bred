@@ -24,58 +24,45 @@ export class AuthService {
   ) {}
 
   async signUp(signUpDto: CreateUserDto): Promise<User> {
-    try {
-      const user = await this.userModel.scope('withPassword').findOne({
-        where: { email: signUpDto.email },
-      });
+    const user = await this.userModel.scope('withPassword').findOne({
+      where: { email: signUpDto.email },
+    });
 
-      if (user) {
-        throw new BadRequestException('User already exists');
-      }
-
-      const userAttributes = {
-        ...signUpDto,
-        password: await hashPassword(signUpDto.password),
-      };
-
-      const createdUser = await this.userModel.create(userAttributes);
-      return createdUser;
-    } catch (err) {
-      console.log(
-        '🚀 ~ file: auth.service.ts:29 ~ AuthService ~ signUp ~ err:',
-        err,
-      );
-      throw err;
+    if (user) {
+      throw new BadRequestException('User already exists');
     }
+
+    const userAttributes = {
+      ...signUpDto,
+      password: await hashPassword(signUpDto.password),
+    };
+
+    const createdUser = await this.userModel.create(userAttributes);
+    return createdUser;
   }
 
   async signIn(
     signInDto: SignInDto,
   ): Promise<{ accessToken: string; refreshToken: string } | undefined> {
-    try {
-      const { password } = signInDto;
+    const { password } = signInDto;
 
-      const user = await this.userModel.scope('withPassword').findOne({
-        where: { email: signInDto.email },
-      });
+    const user = await this.userModel.scope('withPassword').findOne({
+      where: { email: signInDto.email },
+    });
 
-      if (!user) {
-        throw new NotFoundException('User not found');
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    if (user) {
+      const match = await verifyPassword(password, user.password);
+      if (!match) {
+        throw new BadRequestException('Wrong password');
       }
-
-      if (user) {
-        const match = await verifyPassword(password, user.password);
-        if (!match) {
-          throw new BadRequestException('Wrong password');
-        }
-        return {
-          accessToken: await this.jwtService.signAsync(user.dataValues),
-          refreshToken: await this.jwtService.signAsync(user.dataValues),
-        };
-      }
-    } catch (err) {
-      console.log('🚀 ~ file: auth.service.ts:58 ~ AuthService ~ err:', err);
-      throw err;
+      return {
+        accessToken: await this.jwtService.signAsync(user.dataValues),
+        refreshToken: await this.jwtService.signAsync(user.dataValues),
+      };
     }
   }
 }

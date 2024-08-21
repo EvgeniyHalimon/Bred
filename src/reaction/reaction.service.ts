@@ -42,75 +42,59 @@ export class ReactionsService {
     userId: string;
     createReactionDto: CreateReactionDto;
   }): Promise<IReactions | undefined> {
-    try {
-      const { sourceType, articleId, commentId, reactionType } =
-        createReactionDto;
+    const { sourceType, articleId, commentId, reactionType } =
+      createReactionDto;
 
-      await this.checks({
-        commentId,
-        articleId,
-        userId,
-        sourceType,
-        reactionType,
-      });
+    await this.checks({
+      commentId,
+      articleId,
+      userId,
+      sourceType,
+      reactionType,
+    });
 
-      const reaction = await this.reactionModel.create({
-        userId,
-        ...createReactionDto,
-      });
+    const reaction = await this.reactionModel.create({
+      userId,
+      ...createReactionDto,
+    });
 
-      if (!reaction) {
-        throw new BadRequestException(
-          `Something went wrong while making ${sourceType}`,
-        );
-      }
-
-      return reaction;
-    } catch (error) {
-      console.log(
-        '🚀 ~ file: reactions.service.ts:46 ~ ReactionsService ~ error:',
-        error,
+    if (!reaction) {
+      throw new BadRequestException(
+        `Something went wrong while making ${sourceType}`,
       );
-      throw error;
     }
+
+    return reaction;
   }
 
   async delete({ userId, reactionId }: { userId: string; reactionId: string }) {
-    try {
-      const reaction = await this.findOne({
-        whereCondition: { id: reactionId },
-      });
+    const reaction = await this.findOne({
+      whereCondition: { id: reactionId },
+    });
 
-      if (!reaction) {
-        throw new NotFoundException('Reaction not found');
-      }
-
-      const reactionAuthor = await this.findOne({ whereCondition: { userId } });
-
-      if (!reactionAuthor) {
-        throw new NotFoundException(
-          `You are not author of this ${reaction.reactionType}`,
-        );
-      }
-
-      const deletedReaction = await this.reactionModel.destroy({
-        where: {
-          id: reactionId,
-        },
-      });
-      if (!deletedReaction) {
-        throw new BadRequestException(
-          `Something went wrong while deleting the ${reaction.reactionType}`,
-        );
-      }
-      return deletedReaction;
-    } catch (error) {
-      console.log(
-        '🚀 ~ file: reactions.service.ts:85 ~ ReactionsService ~ delete ~ error:',
-        error,
-      );
-      throw error;
+    if (!reaction) {
+      throw new NotFoundException('Reaction not found');
     }
+
+    const reactionAuthor = await this.findOne({ whereCondition: { userId } });
+
+    if (!reactionAuthor) {
+      throw new NotFoundException(
+        `You are not author of this ${reaction.reactionType}`,
+      );
+    }
+
+    const deletedReaction = await this.reactionModel.destroy({
+      where: {
+        id: reactionId,
+      },
+    });
+    if (!deletedReaction) {
+      throw new BadRequestException(
+        `Something went wrong while deleting the ${reaction.reactionType}`,
+      );
+    }
+    return deletedReaction;
   }
 
   async update({
@@ -144,29 +128,21 @@ export class ReactionsService {
   }
 
   async getById({ reactionId }: { reactionId: string }) {
-    try {
-      const article = await this.reactionModel.findOne({
-        where: { id: reactionId },
-        include: [
-          {
-            model: User,
-            as: 'user',
-          },
-        ],
-      });
+    const article = await this.reactionModel.findOne({
+      where: { id: reactionId },
+      include: [
+        {
+          model: User,
+          as: 'user',
+        },
+      ],
+    });
 
-      if (!article) {
-        throw new NotFoundException('Reaction not found');
-      }
-
-      return article;
-    } catch (error) {
-      console.log(
-        '🚀 ~ file: reactions.service.ts:131 ~ ReactionsService ~ get ~ error:',
-        error,
-      );
-      throw error;
+    if (!article) {
+      throw new NotFoundException('Reaction not found');
     }
+
+    return article;
   }
 
   async findAll({ query }: { query: GetAllQueryReactionsDto }) {
@@ -175,7 +151,10 @@ export class ReactionsService {
       ...query.toPaginationOptions(),
       include: [{ model: User, as: 'user' }],
     });
-    return reactions;
+    return {
+      reactions: reactions.rows,
+      count: reactions.count,
+    };
   }
 
   async findOne({ whereCondition }: { whereCondition: Partial<IReactions> }) {
@@ -197,7 +176,7 @@ export class ReactionsService {
   }) {
     if (!commentId && !articleId) {
       throw new BadRequestException(
-        'Either commentId or articleId must be provided.',
+        'Either commentId or articleId must be provided',
       );
     }
 
@@ -217,43 +196,39 @@ export class ReactionsService {
     reactionType: ReactionTypeEnum,
   ) {
     if (commentId && this.getCommentCondition({ sourceType, reactionType })) {
-      throw new BadRequestException('Wrong reaction types for comment.');
+      throw new BadRequestException('Wrong reaction types for comment');
     }
 
     if (articleId && this.getArticleCondition({ sourceType, reactionType })) {
-      throw new BadRequestException('Wrong reaction types for article.');
+      throw new BadRequestException('Wrong reaction types for article');
     }
   }
 
   private async validateArticleReaction(articleId: string, userId: string) {
     const article = await this.articleService.findOne({ articleId });
     if (!article) {
-      throw new NotFoundException('Article not found.');
+      throw new NotFoundException('Article not found');
     }
 
     const reaction = await this.findOne({
       whereCondition: { userId, articleId },
     });
     if (reaction) {
-      throw new BadRequestException(
-        'You have already reacted to this article.',
-      );
+      throw new BadRequestException('You have already reacted to this article');
     }
   }
 
   private async validateCommentReaction(commentId: string, userId: string) {
     const comment = await this.commentService.findOne({ commentId });
     if (!comment) {
-      throw new NotFoundException('Comment not found.');
+      throw new NotFoundException('Comment not found');
     }
 
     const reaction = await this.findOne({
       whereCondition: { userId, commentId },
     });
     if (reaction) {
-      throw new BadRequestException(
-        'You have already reacted to this comment.',
-      );
+      throw new BadRequestException('You have already reacted to this comment');
     }
   }
 

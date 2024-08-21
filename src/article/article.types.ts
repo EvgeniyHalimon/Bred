@@ -11,6 +11,16 @@ export interface IArticle {
   updatedAt: Date;
 }
 
+export enum ArticleOrderByEnum {
+  id = 'id',
+  title = 'title',
+  rating = 'rating',
+  authorId = 'authorId',
+  text = 'text',
+  createdAt = 'createdAt',
+  updatedAt = 'updatedAt',
+}
+
 export interface IQueryFindAllArticles {
   title?: string;
   offset: number;
