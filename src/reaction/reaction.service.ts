@@ -86,7 +86,7 @@ export class ReactionsService {
 
     const deletedReaction = await this.reactionModel.destroy({
       where: {
-        id: 'reactionId',
+        id: reactionId,
       },
     });
     if (!deletedReaction) {
