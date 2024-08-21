@@ -6,13 +6,15 @@ import { IComment } from '../comment.types';
 import { OrderType } from 'src/shared/types';
 
 export class GetAllQueryCommentsDto {
-  @IsOptional()
   @IsString()
+  @IsOptional()
   readonly text?: string;
 
+  @IsString()
   @IsOptional()
   readonly page?: number;
 
+  @IsString()
   @IsOptional()
   readonly limit?: number;
 

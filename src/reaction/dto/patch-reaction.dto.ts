@@ -6,7 +6,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import { ReactionType, SourceType } from '../reaction.types';
 import { ReactionTypeEnum, SourceTypeEnum } from '../reaction.constants';
 
-export class CreateReactionDto {
+export class UpdateReactionDto {
   @IsOptional()
   @IsUUID(4)
   @ApiProperty({

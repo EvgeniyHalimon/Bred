@@ -19,7 +19,6 @@ import {
 
 // types
 import { IArticle } from './article.types';
-import { IPaginationResponse } from 'src/shared/types';
 import Reaction from 'src/reaction/reaction.schema';
 import Comment from 'src/comment/comment.schema';
 
@@ -34,19 +33,11 @@ export class ArticlesService {
     userId: string;
     createArticleDto: CreateArticleDto;
   }): Promise<IArticle> {
-    try {
-      const article = {
-        ...createArticleDto,
-        authorId: userId,
-      };
-      return await this.articleModel.create(article);
-    } catch (err) {
-      console.log(
-        '🚀 ~ file: articles.service.ts:33 ~ ArticlesService ~ create ~ err:',
-        err,
-      );
-      throw err;
-    }
+    const article = {
+      ...createArticleDto,
+      authorId: userId,
+    };
+    return await this.articleModel.create(article);
   }
 
   async getById({
@@ -54,42 +45,30 @@ export class ArticlesService {
   }: {
     articleId: string;
   }): Promise<IArticle | undefined> {
-    try {
-      const article = await this.articleModel.findOne({
-        where: { id: articleId },
-        include: [
-          { model: User, as: 'author' },
-          {
-            model: Reaction,
-            as: 'reactions',
-            include: [{ model: User, as: 'user' }],
-          },
-          {
-            model: Comment,
-            as: 'comments',
-            include: [{ model: User, as: 'author' }],
-          },
-        ],
-      });
-      if (!article) {
-        throw new NotFoundException('Article not found');
-      }
-
-      return article;
-    } catch (err) {
-      console.log(
-        '🚀 ~ file: article.service.ts:66 ~ ArticlesService ~ err:',
-        err,
-      );
-      throw err;
+    const article = await this.articleModel.findOne({
+      where: { id: articleId },
+      include: [
+        { model: User, as: 'author' },
+        {
+          model: Reaction,
+          as: 'reactions',
+          include: [{ model: User, as: 'user' }],
+        },
+        {
+          model: Comment,
+          as: 'comments',
+          include: [{ model: User, as: 'author' }],
+        },
+      ],
+    });
+    if (!article) {
+      throw new NotFoundException('Article not found');
     }
+
+    return article;
   }
 
-  async findAll({
-    query,
-  }: {
-    query: GetAllQueryArticlesDto;
-  }): Promise<IPaginationResponse<IArticle[]>> {
+  async findAll({ query }: { query: GetAllQueryArticlesDto }) {
     const result = await this.articleModel.findAndCountAll({
       where: query.toWhereOption(),
       ...query.toPaginationOptions(),
@@ -108,9 +87,7 @@ export class ArticlesService {
       ],
     });
     return {
-      data: {
-        articles: result.rows,
-      },
+      articles: result.rows,
       count: result.count,
     };
   }
@@ -124,35 +101,27 @@ export class ArticlesService {
     userId: string;
     patchArticleDto: PatchArticleDto;
   }): Promise<IArticle | undefined> {
-    try {
-      const article = await this.articleModel.findOne({
-        where: { id: articleId },
-      });
+    const article = await this.articleModel.findOne({
+      where: { id: articleId },
+    });
 
-      if (!article) {
-        throw new NotFoundException('Article not found');
-      }
-
-      const articleAuthor = await this.articleModel.findOne({
-        where: { id: articleId, authorId: userId },
-      });
-
-      if (!articleAuthor) {
-        throw new NotFoundException('You are not author of this article');
-      }
-
-      article.set(patchArticleDto);
-
-      const updatedArticle = await article.save();
-
-      return updatedArticle;
-    } catch (err) {
-      console.log(
-        '🚀 ~ file: article.service.ts:125 ~ ArticlesService ~ err:',
-        err,
-      );
-      throw err;
+    if (!article) {
+      throw new NotFoundException('Article not found');
     }
+
+    const articleAuthor = await this.articleModel.findOne({
+      where: { id: articleId, authorId: userId },
+    });
+
+    if (!articleAuthor) {
+      throw new NotFoundException('You are not author of this article');
+    }
+
+    article.set(patchArticleDto);
+
+    const updatedArticle = await article.save();
+
+    return updatedArticle;
   }
 
   async deleteById({
@@ -162,39 +131,31 @@ export class ArticlesService {
     userId: string;
     articleId: string;
   }) {
-    try {
-      const article = await this.articleModel.findOne({
-        where: { id: articleId },
-      });
+    const article = await this.articleModel.findOne({
+      where: { id: articleId },
+    });
 
-      if (!article) {
-        throw new NotFoundException('Article not found');
-      }
+    if (!article) {
+      throw new NotFoundException('Article not found');
+    }
 
-      const articleAuthor = await this.articleModel.findOne({
-        where: { id: articleId, authorId: userId },
-      });
+    const articleAuthor = await this.articleModel.findOne({
+      where: { id: articleId, authorId: userId },
+    });
 
-      if (!articleAuthor) {
-        throw new NotFoundException('You are not author of this article');
-      }
+    if (!articleAuthor) {
+      throw new NotFoundException('You are not author of this article');
+    }
 
-      const deletedArticle = await this.articleModel.destroy({
-        where: {
-          id: articleId,
-        },
-      });
-      if (deletedArticle === 0) {
-        throw new BadRequestException(
-          'Something went wrong while deleting the article',
-        );
-      }
-    } catch (err) {
-      console.log(
-        '🚀 ~ file: article.service.ts:159 ~ ArticlesService ~ err:',
-        err,
+    const deletedArticle = await this.articleModel.destroy({
+      where: {
+        id: articleId,
+      },
+    });
+    if (deletedArticle === 0) {
+      throw new BadRequestException(
+        'Something went wrong while deleting the article',
       );
-      throw err;
     }
   }
   async findOne({ articleId }: { articleId: string }) {

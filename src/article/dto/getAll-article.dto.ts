@@ -6,9 +6,11 @@ import { OrderType } from 'src/shared/types';
 import { IArticle } from '../article.types';
 
 export class GetAllQueryArticlesDto {
+  @IsString()
   @IsOptional()
   readonly page?: number;
 
+  @IsString()
   @IsOptional()
   readonly limit?: number;
 
@@ -18,8 +20,8 @@ export class GetAllQueryArticlesDto {
   @IsOptional()
   readonly orderBy?: keyof IArticle;
 
-  @IsOptional()
   @IsString()
+  @IsOptional()
   readonly title?: string;
 
   toWhereOption() {

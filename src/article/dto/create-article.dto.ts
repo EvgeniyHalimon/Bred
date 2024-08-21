@@ -1,5 +1,6 @@
 // library
 import { IsString } from 'class-validator';
+import { ApiProperty } from '@nestjs/swagger';
 
 // custom decorators
 import {
@@ -20,6 +21,13 @@ export class CreateArticleDto {
     max: articlesFieldLengths.title.max,
     property: 'Title',
   })
+  @ApiProperty({
+    description: 'Title of article',
+    minLength: articlesFieldLengths.title.min,
+    maxLength: articlesFieldLengths.title.max,
+    type: String,
+    example: 'Big Boss',
+  })
   readonly title: string;
 
   @IsString()
@@ -30,6 +38,13 @@ export class CreateArticleDto {
   @MaxLengthWithMessage({
     max: articlesFieldLengths.text.max,
     property: 'Text',
+  })
+  @ApiProperty({
+    description: 'Text content of article',
+    minLength: articlesFieldLengths.text.min,
+    maxLength: articlesFieldLengths.text.max,
+    type: String,
+    example: 'Man who sold the world',
   })
   readonly text: string;
 }

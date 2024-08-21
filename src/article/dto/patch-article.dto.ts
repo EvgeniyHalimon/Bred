@@ -1,5 +1,6 @@
 // library
 import { IsOptional, IsString } from 'class-validator';
+import { ApiProperty } from '@nestjs/swagger';
 
 // custom decorators
 import {
@@ -21,6 +22,14 @@ export class PatchArticleDto {
     property: 'Title',
   })
   @IsOptional()
+  @ApiProperty({
+    description: 'Title of article',
+    minLength: articlesFieldLengths.title.min,
+    maxLength: articlesFieldLengths.title.max,
+    required: false,
+    type: String,
+    example: 'Big Boss',
+  })
   readonly title: string;
 
   @IsString()
@@ -33,5 +42,13 @@ export class PatchArticleDto {
     property: 'Text',
   })
   @IsOptional()
+  @ApiProperty({
+    description: 'Text content of article',
+    minLength: articlesFieldLengths.text.min,
+    maxLength: articlesFieldLengths.text.max,
+    required: false,
+    type: String,
+    example: 'Man who sold the world',
+  })
   readonly text: string;
 }
