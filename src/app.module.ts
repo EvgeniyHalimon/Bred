@@ -19,7 +19,7 @@ import { ReactionsModule } from './reaction/reaction.module';
 import { AuthModule } from './auth/auth.module';
 
 // exception filter
-import { HttpExceptionFilter } from './http-exception.filter';
+import { FileValidationExceptionFilter, HttpExceptionFilter } from './filters';
 
 @Module({
   imports: [
@@ -60,6 +60,10 @@ import { HttpExceptionFilter } from './http-exception.filter';
     {
       provide: APP_FILTER,
       useClass: HttpExceptionFilter,
+    },
+    {
+      provide: APP_FILTER,
+      useClass: FileValidationExceptionFilter,
     },
   ],
 })

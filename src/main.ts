@@ -13,7 +13,7 @@ import { config } from './config';
 import { CustomValidationPipe } from './shared/CustomValidationPipe';
 
 // exception filter
-import { HttpExceptionFilter } from './http-exception.filter';
+import { HttpExceptionFilter } from './filters/http-exception.filter';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, { bufferLogs: true });

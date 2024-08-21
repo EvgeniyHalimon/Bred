@@ -17,4 +17,18 @@ export class UsersService {
       count: users.count,
     };
   }
+
+  async patch({
+    updateUserDto,
+    file,
+  }: {
+    updateUserDto: any;
+    file: Express.Multer.File;
+  }) {
+    console.log('🚀 ~ file: user.service.ts:28 ~ UsersService ~ file:', file);
+    console.log(
+      '🚀 ~ file: user.service.ts:22 ~ UsersService ~ updateUserDto:',
+      updateUserDto,
+    );
+  }
 }

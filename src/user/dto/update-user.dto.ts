@@ -11,7 +11,7 @@ import {
   MinLengthWithMessage,
 } from 'src/shared/decorators';
 
-export class CreateUserDto {
+export class UpdateUserDto {
   @IsString()
   @IsNotEmpty({ message: '$property must be not empty' })
   @MaxLengthWithMessage({
