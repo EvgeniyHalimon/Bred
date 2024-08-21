@@ -43,6 +43,12 @@ export class UsersController {
           new MaxFileSizeValidator({ maxSize: 2 * 1024 * 1024 }),
           new FileTypeValidator({ fileType: /\.(jpg|jpeg|png|webp)$/ }),
         ],
+        exceptionFactory: errors => {
+          console.log(
+            '🚀 ~ file: user.controller.ts:47 ~ UsersController ~ errors:',
+            errors,
+          );
+        },
       }),
     )
     file: Express.Multer.File,
