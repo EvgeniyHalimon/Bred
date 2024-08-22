@@ -7,6 +7,8 @@ import User from './user.schema';
 
 // dto
 import { UpdateUserDto } from './dto';
+import { hashPassword } from 'src/auth/utils/passwordUtils';
+import { IUser } from './user.types';
 
 @Injectable()
 export class UsersService {
@@ -30,21 +32,31 @@ export class UsersService {
     file: string | undefined;
     userId: string;
   }) {
-    console.log('🚀 ~ file: user.service.ts:33 ~ UsersService ~ file:', file);
-    const user = await this.findOne({ userId });
+    const user = await this.findOne({ id: userId });
 
     if (!user) {
       throw new BadRequestException('User not found');
     }
 
-    user.set({ ...updateUserDto, photo: file });
+    if (updateUserDto.email) {
+      const searchedUser = await this.findOne({ email: updateUserDto.email });
+      if (searchedUser) {
+        throw new BadRequestException('This email is taken');
+      }
+    }
 
-    const updatedArticle = await user.save();
+    user.set({
+      ...updateUserDto,
+      password: await hashPassword(updateUserDto.password),
+      photo: file,
+    });
 
-    return updatedArticle;
+    const updatedUser = await user.save();
+
+    return updatedUser;
   }
 
-  findOne({ userId }: { userId: string }) {
-    return this.userModel.findOne({ where: { id: userId } });
+  findOne(user: Partial<IUser>) {
+    return this.userModel.findOne({ where: user });
   }
 }

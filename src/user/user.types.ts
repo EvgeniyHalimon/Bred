@@ -20,7 +20,10 @@ export interface IUser {
   updatedAt: Date;
 }
 
-export type UserRole = UserRolesEnum.USER | UserRolesEnum.ADMIN;
+export type UserRole =
+  | UserRolesEnum.USER
+  | UserRolesEnum.ADMIN
+  | UserRolesEnum.SUPER_ADMIN;
 
 export interface CustomFileTypeValidatorOptions {
   fileType: string | RegExp;
