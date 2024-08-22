@@ -13,7 +13,7 @@ export interface IUser {
   password: string;
   bio: string;
   role: UserRole;
-  photo?: Buffer;
+  photo?: string;
   articles?: IArticle[];
   comments?: IComment[];
   createdAt: Date;

@@ -62,7 +62,7 @@ export default class User extends Model<
   role: UserRolesEnum;
 
   @Column({ type: DataType.BLOB, allowNull: true })
-  photo: Buffer;
+  photo: string;
 
   @CreatedAt
   @Column

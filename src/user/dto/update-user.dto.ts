@@ -1,5 +1,5 @@
 // libraries
-import { IsEmail, IsNotEmpty, IsString } from 'class-validator';
+import { IsEmail, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
 // constants
@@ -18,6 +18,7 @@ export class UpdateUserDto {
     max: userFieldLengths.firstName.max,
     property: 'First name',
   })
+  @IsOptional()
   @ApiProperty({
     type: String,
     description: 'First name of user',
@@ -32,6 +33,7 @@ export class UpdateUserDto {
     max: userFieldLengths.lastName.max,
     property: 'Last name',
   })
+  @IsOptional()
   @ApiProperty({
     type: String,
     description: 'Last name of user',
@@ -41,6 +43,7 @@ export class UpdateUserDto {
   readonly lastName: string;
 
   @IsEmail()
+  @IsOptional()
   @ApiProperty({
     type: String,
     description: 'Email of user',
@@ -54,6 +57,7 @@ export class UpdateUserDto {
     min: userFieldLengths.password.min,
     property: 'Password',
   })
+  @IsOptional()
   @ApiProperty({
     type: String,
     description: 'Password of user',
@@ -69,6 +73,7 @@ export class UpdateUserDto {
     max: userFieldLengths.bio.max,
     property: 'Bio',
   })
+  @IsOptional()
   @ApiProperty({
     type: String,
     description: 'Bio of user',

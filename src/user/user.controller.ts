@@ -19,7 +19,7 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { UsersService } from './user.service';
 
 // dto
-import { GetAllUsersResponseDto } from './dto';
+import { GetAllUsersResponseDto, UpdateUserDto } from './dto';
 import { ICustomRequest } from 'src/shared';
 import { CustomFileTypeValidator } from './file.validator';
 
@@ -41,17 +41,17 @@ export class UsersController {
   @UseInterceptors(FileInterceptor('file'))
   @Patch('/')
   patch(
-    @Body() updateUserDto: any,
+    @Body() updateUserDto: UpdateUserDto,
     @UploadedFile(
       new ParseFilePipe({
         fileIsRequired: false,
         validators: [
           new MaxFileSizeValidator({
-            maxSize: 1 * 1024 * 1024,
+            maxSize: 0.5 * 1024 * 1024,
             message: size => `File should be ${size / 1024 / 1024}mb or less`,
           }),
           new CustomFileTypeValidator({
-            fileType: /\.(jpg|jpeg|png|webp)$/,
+            fileType: /^(image\/jpg|image\/jpeg|image\/png|image\/webp)$/,
             message: 'Only jpg, jpeg, png, webp files are allowed',
           }),
         ],
@@ -63,17 +63,12 @@ export class UsersController {
     file: Express.Multer.File,
     @Req() req: ICustomRequest,
   ) {
-    console.log(
-      '🚀 ~ file: user.controller.ts:59 ~ UsersController ~ req:',
-      req,
-    );
-    console.log(
-      '🚀 ~ file: user.controller.ts:38 ~ UsersController ~ file:',
-      file,
-    );
-    console.log(
-      '🚀 ~ file: user.controller.ts:38 ~ UsersController ~ updateUserDto:',
+    const userId = req.user.id;
+    const photo = file && file.buffer.toString('base64');
+    return this.usersService.patch({
       updateUserDto,
-    );
+      file: photo,
+      userId,
+    });
   }
 }
