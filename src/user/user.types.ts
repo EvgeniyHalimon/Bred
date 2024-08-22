@@ -21,3 +21,8 @@ export interface IUser {
 }
 
 export type UserRole = UserRolesEnum.USER | UserRolesEnum.ADMIN;
+
+export interface CustomFileTypeValidatorOptions {
+  fileType: string | RegExp;
+  message?: string;
+}
