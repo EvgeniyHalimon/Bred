@@ -1,31 +1,34 @@
 import { Test } from '@nestjs/testing';
 import { UsersController } from './user.controller';
 import { UsersService } from './user.service';
+import { SequelizeModule } from '@nestjs/sequelize';
+import User from './user.schema';
 
 describe('UsersController', () => {
   let usersController: UsersController;
-
-  const mockUsersService = {
-    findAll: jest.fn(),
-  };
+  let usersService: UsersService;
 
   beforeEach(async () => {
     const moduleRef = await Test.createTestingModule({
-      controllers: [UsersController],
-      providers: [
-        {
-          provide: UsersService,
-          useValue: mockUsersService,
-        },
+      imports: [
+        SequelizeModule.forRoot({
+          dialect: 'mysql',
+          storage: ':memory:',
+        }),
+        SequelizeModule.forFeature([User]),
       ],
+      controllers: [UsersController],
+      providers: [UsersService],
+      exports: [UsersService],
     }).compile();
 
+    usersService = moduleRef.get<UsersService>(UsersService);
     usersController = moduleRef.get<UsersController>(UsersController);
   });
 
   describe('findAll', () => {
     it('should return an array of users', async () => {
-      /*       const result = {
+      const result = {
         users: [
           {
             id: 'string',
@@ -44,27 +47,13 @@ describe('UsersController', () => {
           },
         ] as any,
         count: 1,
-      }; */
-      /* jest
+      };
+
+      jest
         .spyOn(usersService, 'findAll')
         .mockImplementation(async () => result);
 
-      expect(await usersController.findAll()).toBe(result); */
-
-      await usersController.findAll();
-      expect(mockUsersService.findAll).toHaveBeenCalledTimes(1);
+      expect(await usersController.findAll()).toBe(result);
     });
   });
 });
-
-/* 
-
-const mockCatsService = {
-  findAll: () => {
-    return {
-        value
-    }
-  }
-}
-
-*/

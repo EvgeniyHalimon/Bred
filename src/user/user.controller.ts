@@ -64,7 +64,7 @@ export class UsersController {
     @Req() req: ICustomRequest,
   ) {
     const userId = req.user.id;
-    const photo = file && file.buffer.toString('base64url');
+    const photo = file?.buffer?.toString('base64url');
     return this.usersService.patch({
       updateUserDto,
       file: photo,

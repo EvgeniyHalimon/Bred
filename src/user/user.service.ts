@@ -1,5 +1,9 @@
 // nest
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 
 // schema
@@ -35,7 +39,7 @@ export class UsersService {
     const user = await this.findOne({ id: userId });
 
     if (!user) {
-      throw new BadRequestException('User not found');
+      throw new NotFoundException('User not found');
     }
 
     if (updateUserDto.email) {
