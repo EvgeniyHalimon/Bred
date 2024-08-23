@@ -45,9 +45,12 @@ export class UsersService {
       }
     }
 
+    if (updateUserDto.password) {
+      updateUserDto.password = await hashPassword(updateUserDto.password);
+    }
+
     user.set({
       ...updateUserDto,
-      password: await hashPassword(updateUserDto.password),
       photo: file,
     });
 

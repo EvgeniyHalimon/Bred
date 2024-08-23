@@ -65,7 +65,7 @@ export class UpdateUserDto {
     minLength: userFieldLengths.password.min,
     example: 'qwertyui12345678',
   })
-  readonly password: string;
+  password: string;
 
   @IsString()
   @MinLengthWithMessage({ min: userFieldLengths.bio.min, property: 'Bio' })
