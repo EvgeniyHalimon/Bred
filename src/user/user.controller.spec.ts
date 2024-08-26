@@ -3,12 +3,8 @@ import { UsersController } from './user.controller';
 import { UsersService } from './user.service';
 import { UpdateUserDto } from './dto';
 import { ICustomRequest } from 'src/shared';
-import {
-  ParseFilePipe,
-  MaxFileSizeValidator,
-  BadRequestException,
-} from '@nestjs/common';
-import { CustomFileTypeValidator } from './file.validator';
+import { ParseFilePipe, BadRequestException } from '@nestjs/common';
+import { fileValidationPipe } from './file-validation.pipe';
 
 describe('UsersController', () => {
   let usersController: UsersController;
@@ -156,22 +152,7 @@ describe('File validation', () => {
   let parseFilePipe: ParseFilePipe;
 
   beforeEach(() => {
-    parseFilePipe = new ParseFilePipe({
-      fileIsRequired: false,
-      validators: [
-        new MaxFileSizeValidator({
-          maxSize: 0.5 * 1024 * 1024,
-          message: size => `File should be ${size / 1024 / 1024}mb or less`,
-        }),
-        new CustomFileTypeValidator({
-          fileType: /^(image\/jpg|image\/jpeg|image\/png|image\/webp)$/,
-          message: 'Only jpg, jpeg, png, webp files are allowed',
-        }),
-      ],
-      exceptionFactory: error => {
-        throw new BadRequestException(error);
-      },
-    });
+    parseFilePipe = fileValidationPipe;
   });
 
   it('should throw BadRequestException for invalid file type', async () => {

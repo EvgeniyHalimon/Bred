@@ -1,12 +1,9 @@
 // nest
 import {
-  BadRequestException,
   Body,
   Controller,
   Get,
   HttpStatus,
-  MaxFileSizeValidator,
-  ParseFilePipe,
   Patch,
   Req,
   UploadedFile,
@@ -21,7 +18,7 @@ import { UsersService } from './user.service';
 // dto
 import { GetAllUsersResponseDto, UpdateUserDto } from './dto';
 import { ICustomRequest } from 'src/shared';
-import { CustomFileTypeValidator } from './file.validator';
+import { fileValidationPipe } from './file-validation.pipe';
 
 @Controller('users')
 @ApiTags('Users')
@@ -42,24 +39,7 @@ export class UsersController {
   @Patch('/')
   patch(
     @Body() updateUserDto: UpdateUserDto,
-    @UploadedFile(
-      new ParseFilePipe({
-        fileIsRequired: false,
-        validators: [
-          new MaxFileSizeValidator({
-            maxSize: 0.5 * 1024 * 1024,
-            message: size => `File should be ${size / 1024 / 1024}mb or less`,
-          }),
-          new CustomFileTypeValidator({
-            fileType: /^(image\/jpg|image\/jpeg|image\/png|image\/webp)$/,
-            message: 'Only jpg, jpeg, png, webp files are allowed',
-          }),
-        ],
-        exceptionFactory: error => {
-          throw new BadRequestException(error);
-        },
-      }),
-    )
+    @UploadedFile(fileValidationPipe)
     file: Express.Multer.File,
     @Req() req: ICustomRequest,
   ) {
