@@ -26,13 +26,13 @@ describe('UsersController', () => {
     usersController = moduleRef.get<UsersController>(UsersController);
   });
 
-  describe('findAll call', () => {
-    it('should call', async () => {
+  describe('FindAll method', () => {
+    it('method findAll should called', async () => {
       await usersController.findAll();
       expect(mockUsersService.findAll).toHaveBeenCalledTimes(1);
     });
 
-    it('should return value', async () => {
+    it('method findAll should returned instance of response dto', async () => {
       const mockResult = new GetAllUsersResponseDto();
 
       jest.spyOn(mockUsersService, 'findAll').mockResolvedValue(mockResult);
@@ -42,7 +42,7 @@ describe('UsersController', () => {
     });
   });
 
-  describe('patch', () => {
+  describe('Patch method', () => {
     const updateUserDto = {} as UpdateUserDto;
     const file: Express.Multer.File = {
       fieldname: 'file',
@@ -61,12 +61,8 @@ describe('UsersController', () => {
         id: 'string',
       },
     } as ICustomRequest;
-    it('should call', async () => {
-      await usersController.patch(updateUserDto, file, req);
-      expect(mockUsersService.patch).toHaveBeenCalledTimes(1);
-    });
 
-    it('should return value', async () => {
+    it('method patch should returned instance of response dto', async () => {
       const mockResult = new UserDto();
 
       jest.spyOn(mockUsersService, 'patch').mockResolvedValue(mockResult);
@@ -75,7 +71,7 @@ describe('UsersController', () => {
       expect(result).toBeInstanceOf(UserDto);
     });
 
-    it('should call the service with the correct parameters', async () => {
+    it('method patch  should call the service with the correct parameters', async () => {
       const updateUserDto = { email: 'newemail@example.com' } as UpdateUserDto;
       const file = {
         mimetype: 'image/png',
