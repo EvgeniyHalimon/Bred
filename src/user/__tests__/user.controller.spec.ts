@@ -26,8 +26,12 @@ describe('UsersController', () => {
     usersController = moduleRef.get<UsersController>(UsersController);
   });
 
+  it('should be defined', () => {
+    expect(usersController).toBeDefined();
+  });
+
   describe('FindAll method', () => {
-    it('method findAll should called', async () => {
+    it('method findAll must be called', async () => {
       await usersController.findAll();
       expect(mockUsersService.findAll).toHaveBeenCalledTimes(1);
     });
@@ -71,7 +75,7 @@ describe('UsersController', () => {
       expect(result).toBeInstanceOf(UserDto);
     });
 
-    it('method patch  should call the service with the correct parameters', async () => {
+    it('method patch must be called the service with the correct parameters', async () => {
       const updateUserDto = { email: 'newemail@example.com' } as UpdateUserDto;
       const file = {
         mimetype: 'image/png',
