@@ -2,8 +2,8 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { BadRequestException, NotFoundException } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import { getModelToken } from '@nestjs/sequelize';
-import User from './user.schema';
-import { UsersService } from './user.service';
+import User from '../user.schema';
+import { UsersService } from '../user.service';
 
 import * as passwordUtils from 'src/auth/utils/passwordUtils';
 
