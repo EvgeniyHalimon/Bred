@@ -42,13 +42,7 @@ describe('UsersService', () => {
   });
 
   describe('UsersService findAll method', () => {
-    it('method findAll must be called', async () => {
-      await userService.findAll();
-      expect(mockUserModel.findAndCountAll).toHaveBeenCalledTimes(1);
-      expect(mockUserModel.findAndCountAll).toHaveBeenCalledTimes(1);
-    });
-
-    /* it('should return users and count', async () => {
+    it('should return users and count', async () => {
       const result = {
         rows: [
           {
@@ -75,12 +69,13 @@ describe('UsersService', () => {
         .mockResolvedValue(result as any);
 
       const users = await userService.findAll();
-
+      console.log(users);
+      expect(mockUserModel.findAndCountAll).toHaveBeenCalledTimes(1);
       expect(users).toEqual({
         users: result.rows,
         count: result.count,
       });
-    }); */
+    });
   });
 
   describe('UsersService patch method', () => {
