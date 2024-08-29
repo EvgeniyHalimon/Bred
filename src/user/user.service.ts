@@ -32,7 +32,7 @@ export class UsersService {
     file,
     userId,
   }: {
-    updateUserDto: UpdateUserDto;
+    updateUserDto: Partial<UpdateUserDto>;
     file: string | undefined;
     userId: string;
   }) {

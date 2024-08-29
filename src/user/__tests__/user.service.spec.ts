@@ -22,7 +22,6 @@ describe('UsersService', () => {
           useValue: {
             findAndCountAll: jest.fn(),
             findOne: jest.fn(),
-            build: jest.fn(),
             save: jest.fn(),
           },
         },
@@ -69,7 +68,6 @@ describe('UsersService', () => {
         .mockResolvedValue(result as any);
 
       const users = await userService.findAll();
-      console.log(users);
       expect(mockUserModel.findAndCountAll).toHaveBeenCalledTimes(1);
       expect(users).toEqual({
         users: result.rows,
@@ -79,24 +77,26 @@ describe('UsersService', () => {
   });
 
   describe('UsersService patch method', () => {
+    const updatedUser = {
+      id: '1',
+      firstName: 'string',
+      lastName: 'string',
+      email: 'string',
+      password: 'plain-text-password',
+      bio: 'string',
+      role: 'user',
+      createdAt: new Date('2024-08-14T08:40:32.000Z'),
+      updatedAt: new Date('2024-08-14T08:40:32.000Z'),
+      photo: 'string',
+      articles: [],
+      comments: [],
+      reactions: [],
+    };
+
     it('should successfully patch a user', async () => {
       const mockUser = {
         set: jest.fn(),
-        save: jest.fn().mockResolvedValue({
-          id: 'string',
-          firstName: 'string',
-          lastName: 'string',
-          email: 'string',
-          password: 'string',
-          bio: 'string',
-          role: 'user',
-          createdAt: new Date('2024-08-14T08:40:32.000Z'),
-          updatedAt: new Date('2024-08-14T08:40:32.000Z'),
-          photo: 'string',
-          articles: [],
-          comments: [],
-          reactions: [],
-        }),
+        save: jest.fn().mockReturnValue(updatedUser),
       };
 
       (mockUserModel.findOne as jest.Mock).mockResolvedValueOnce(mockUser);
@@ -106,40 +106,26 @@ describe('UsersService', () => {
 
       const updateUserDto = {
         email: 'new@example.com',
-        firstName: '',
-        lastName: '',
         password: 'plain-text-password',
-        bio: '',
       };
 
-      const result = await userService.patch({
+      await userService.patch({
         updateUserDto,
         file: undefined,
         userId: '1',
       });
 
-      const u = {
-        id: 'string',
-        firstName: 'string',
-        lastName: 'string',
-        email: 'string',
-        password: 'string',
-        bio: 'string',
-        role: 'user',
-        createdAt: new Date('2024-08-14T08:40:32.000Z'),
-        updatedAt: new Date('2024-08-14T08:40:32.000Z'),
-        photo: 'string',
-        articles: [],
-        comments: [],
-        reactions: [],
-      };
-
-      expect(result).toEqual(u);
+      expect(mockUserModel.findOne).toHaveBeenCalledTimes(2);
       expect(mockUser.set).toHaveBeenCalledWith({
         ...updateUserDto,
         password: 'hashed-password',
         photo: undefined,
       });
+      expect(mockUser.save).toHaveBeenCalledTimes(1);
+      expect(mockUser.save).toHaveBeenCalledWith();
+
+      const result = await mockUser.save();
+      expect(result).toEqual(updatedUser);
     });
 
     it('should throw NotFoundException if user not found', async () => {
@@ -156,7 +142,7 @@ describe('UsersService', () => {
           file: undefined,
           userId: '1',
         }),
-      ).rejects.toThrow(NotFoundException);
+      ).rejects.toThrow(new NotFoundException('User not found'));
     });
 
     it('should throw BadRequestException if email is taken', async () => {
@@ -179,7 +165,7 @@ describe('UsersService', () => {
           file: undefined,
           userId: '1',
         }),
-      ).rejects.toThrow(BadRequestException);
+      ).rejects.toThrow(new BadRequestException('This email is taken'));
     });
 
     it('should hash password if provided', async () => {
