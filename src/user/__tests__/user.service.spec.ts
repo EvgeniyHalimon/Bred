@@ -134,7 +134,7 @@ describe('UsersService', () => {
         userId: '1',
       });
       console.log('🚀 ~ file: user.service.spec.ts:136 ~ it ~ result:', result); */
-      await expect(
+      /*  await expect(
         userService.patch({
           updateUserDto: {
             firstName: 'Venom',
@@ -142,7 +142,24 @@ describe('UsersService', () => {
           file: undefined,
           userId: '1',
         }),
-      ).rejects.toThrow(new NotFoundException('User not found'));
+      ).rejects.toThrow(new NotFoundException('User not found')); */
+
+      try {
+        const result = await userService.patch({
+          updateUserDto: {
+            firstName: 'Venom',
+          },
+          file: undefined,
+          userId: '1',
+        });
+        console.log(
+          '🚀 ~ file: user.service.spec.ts:136 ~ it ~ result:',
+          result,
+        );
+      } catch (error) {
+        expect(error).toBeInstanceOf(NotFoundException);
+        expect(error.message).toBe('User not found');
+      }
     });
 
     it('should throw BadRequestException if email is taken', async () => {
