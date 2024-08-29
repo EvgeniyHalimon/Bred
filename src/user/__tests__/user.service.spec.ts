@@ -133,11 +133,7 @@ describe('UsersService', () => {
       await expect(
         userService.patch({
           updateUserDto: {
-            firstName: '',
-            lastName: '',
-            email: '',
-            password: '',
-            bio: '',
+            firstName: 'Venom',
           },
           file: undefined,
           userId: '1',
@@ -157,10 +153,6 @@ describe('UsersService', () => {
         userService.patch({
           updateUserDto: {
             email: 'taken@example.com',
-            firstName: '',
-            lastName: '',
-            password: '',
-            bio: '',
           },
           file: undefined,
           userId: '1',
@@ -171,52 +163,6 @@ describe('UsersService', () => {
     it('should hash password if provided', async () => {
       const mockUser = {
         set: jest.fn(),
-        save: jest.fn().mockResolvedValue({}),
-      };
-      (mockUserModel.findOne as jest.Mock).mockResolvedValue(mockUser);
-      jest.spyOn(bcrypt, 'hash' as any).mockResolvedValue('hashed-password');
-
-      const result = await userService.patch({
-        updateUserDto: {
-          password: 'plain-text-password',
-          firstName: '',
-          lastName: '',
-          email: '',
-          bio: '',
-        },
-        file: undefined,
-        userId: '1',
-      });
-
-      expect(result).toEqual({});
-      expect(mockUser.set).toHaveBeenCalledWith({
-        password: 'hashed-password',
-        firstName: '',
-        lastName: '',
-        email: '',
-        bio: '',
-        photo: undefined,
-      });
-    });
-
-    it('should hash password if provided', async () => {
-      const updatedUser = {
-        id: 'string',
-        firstName: 'string',
-        lastName: 'string',
-        email: 'string',
-        password: 'string',
-        bio: 'string',
-        role: 'user',
-        createdAt: new Date('2024-08-14T08:40:32.000Z'),
-        updatedAt: new Date('2024-08-14T08:40:32.000Z'),
-        photo: 'string',
-        articles: [],
-        comments: [],
-        reactions: [],
-      };
-      const mockUser = {
-        set: jest.fn(),
         save: jest.fn().mockResolvedValue(updatedUser),
       };
       (mockUserModel.findOne as jest.Mock).mockResolvedValue(mockUser);
@@ -225,10 +171,6 @@ describe('UsersService', () => {
       const result = await userService.patch({
         updateUserDto: {
           password: 'plain-text-password',
-          firstName: '',
-          lastName: '',
-          email: '',
-          bio: '',
         },
         file: undefined,
         userId: '1',
@@ -237,10 +179,6 @@ describe('UsersService', () => {
       expect(result).toEqual(updatedUser);
       expect(mockUser.set).toHaveBeenCalledWith({
         password: 'hashed-password',
-        firstName: '',
-        lastName: '',
-        email: '',
-        bio: '',
         photo: undefined,
       });
     });
