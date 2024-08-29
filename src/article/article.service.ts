@@ -86,10 +86,6 @@ export class ArticlesService {
         },
       ],
     });
-    console.log(
-      '🚀 ~ file: article.service.ts:89 ~ ArticlesService ~ findAll ~ result:',
-      result,
-    );
     return {
       articles: result.rows,
       count: result.count,

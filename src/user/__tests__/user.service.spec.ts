@@ -167,21 +167,20 @@ describe('UsersService', () => {
         set: jest.fn(),
         save: jest.fn().mockResolvedValue(updatedUser),
       };
-      const mockedFind = (mockUserModel.findOne as jest.Mock).mockResolvedValue(
+      (mockUserModel.findOne as jest.Mock).mockResolvedValue({
         updatedUser,
-      );
+        ...mockUser,
+      });
       const mockHashPassword = (
         passwordUtils.hashPassword as jest.Mock
       ).mockResolvedValue('hashed-password');
 
-      const b = await userService.patch({
+      await userService.patch({
         updateUserDto: { firstName: 'John' },
         file: undefined,
         userId: '1',
       });
-      console.log('🚀 ~ file: user.service.spec.ts:181 ~ it ~ b:', b);
 
-      await mockedFind();
       expect(mockUserModel.findOne).toHaveBeenCalledTimes(1);
       expect(mockHashPassword).toHaveBeenCalledTimes(0);
       expect(mockUser.set).toHaveBeenCalledWith({
