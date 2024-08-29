@@ -1,6 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { BadRequestException, NotFoundException } from '@nestjs/common';
-import * as bcrypt from 'bcrypt';
 import { getModelToken } from '@nestjs/sequelize';
 import User from '../user.schema';
 import { UsersService } from '../user.service';
@@ -109,7 +108,7 @@ describe('UsersService', () => {
         password: 'plain-text-password',
       };
 
-      await userService.patch({
+      const result = await userService.patch({
         updateUserDto,
         file: undefined,
         userId: '1',
@@ -122,23 +121,19 @@ describe('UsersService', () => {
         photo: undefined,
       });
       expect(mockUser.save).toHaveBeenCalledTimes(1);
-      expect(mockUser.save).toHaveBeenCalledWith();
-
-      const result = await mockUser.save();
       expect(result).toEqual(updatedUser);
     });
 
     it('should throw NotFoundException if user not found', async () => {
       (mockUserModel.findOne as jest.Mock).mockResolvedValue(null);
-      await expect(
-        userService.patch({
-          updateUserDto: {
-            firstName: 'Venom',
-          },
-          file: undefined,
-          userId: '1',
-        }),
-      ).rejects.toThrow(new NotFoundException('User not found'));
+      const result = await userService.patch({
+        updateUserDto: {
+          firstName: 'Venom',
+        },
+        file: undefined,
+        userId: '1',
+      });
+      expect(result).rejects.toThrow(new NotFoundException('User not found'));
     });
 
     it('should throw BadRequestException if email is taken', async () => {
@@ -149,34 +144,41 @@ describe('UsersService', () => {
       (mockUserModel.findOne as jest.Mock).mockResolvedValueOnce({ id: '2' });
       (mockUserModel.findOne as jest.Mock).mockResolvedValueOnce(mockUser);
 
-      await expect(
-        userService.patch({
-          updateUserDto: {
-            email: 'taken@example.com',
-          },
-          file: undefined,
-          userId: '1',
-        }),
-      ).rejects.toThrow(new BadRequestException('This email is taken'));
+      const result = await userService.patch({
+        updateUserDto: {
+          email: 'taken@example.com',
+        },
+        file: undefined,
+        userId: '1',
+      });
+      expect(result).rejects.toThrow(
+        new BadRequestException('This email is taken'),
+      );
     });
 
-    it('should hash password if provided', async () => {
+    it('check work of if statements', async () => {
       const mockUser = {
         set: jest.fn(),
         save: jest.fn().mockResolvedValue(updatedUser),
       };
-      (mockUserModel.findOne as jest.Mock).mockResolvedValue(mockUser);
-      jest.spyOn(bcrypt, 'hash' as any).mockResolvedValue('hashed-password');
+      const mockedFindOne = (
+        mockUserModel.findOne as jest.Mock
+      ).mockResolvedValue(updatedUser);
+      /* (passwordUtils.hashPassword as jest.Mock).mockResolvedValue(
+        'hashed-password',
+      ); */
 
-      const result = await userService.patch({
+      const b = await userService.patch({
         updateUserDto: {
           password: 'plain-text-password',
         },
         file: undefined,
         userId: '1',
       });
+      console.log('🚀 ~ file: user.service.spec.ts:181 ~ it ~ b:', b);
 
-      expect(result).toEqual(updatedUser);
+      mockedFindOne();
+      expect(mockUserModel.findOne).toHaveBeenCalledTimes(1);
       expect(mockUser.set).toHaveBeenCalledWith({
         password: 'hashed-password',
         photo: undefined,

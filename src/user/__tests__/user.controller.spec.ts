@@ -31,17 +31,13 @@ describe('UsersController', () => {
   });
 
   describe('FindAll method', () => {
-    it('method findAll must be called', async () => {
-      await usersController.findAll();
-      expect(mockUsersService.findAll).toHaveBeenCalledTimes(1);
-    });
-
-    it('method findAll should returned instance of response dto', async () => {
+    it('method findAll must be called and should returned instance of response dto', async () => {
       const mockResult = new GetAllUsersResponseDto();
 
       jest.spyOn(mockUsersService, 'findAll').mockResolvedValue(mockResult);
 
       const result = await usersController.findAll();
+      expect(mockUsersService.findAll).toHaveBeenCalledTimes(1);
       expect(result).toBeInstanceOf(GetAllUsersResponseDto);
     });
   });
