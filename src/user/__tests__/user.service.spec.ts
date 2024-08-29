@@ -126,14 +126,23 @@ describe('UsersService', () => {
 
     it('should throw NotFoundException if user not found', async () => {
       (mockUserModel.findOne as jest.Mock).mockResolvedValue(null);
-      const result = await userService.patch({
+      /* const result = await userService.patch({
         updateUserDto: {
           firstName: 'Venom',
         },
         file: undefined,
         userId: '1',
       });
-      expect(result).rejects.toThrow(new NotFoundException('User not found'));
+      console.log('🚀 ~ file: user.service.spec.ts:136 ~ it ~ result:', result); */
+      await expect(
+        userService.patch({
+          updateUserDto: {
+            firstName: 'Venom',
+          },
+          file: undefined,
+          userId: '1',
+        }),
+      ).rejects.toThrow(new NotFoundException('User not found'));
     });
 
     it('should throw BadRequestException if email is taken', async () => {
@@ -151,6 +160,7 @@ describe('UsersService', () => {
         file: undefined,
         userId: '1',
       });
+      console.log('🚀 ~ file: user.service.spec.ts:154 ~ it ~ result:', result);
       expect(result).rejects.toThrow(
         new BadRequestException('This email is taken'),
       );
@@ -161,24 +171,24 @@ describe('UsersService', () => {
         set: jest.fn(),
         save: jest.fn().mockResolvedValue(updatedUser),
       };
-      const mockedFindOne = (
-        mockUserModel.findOne as jest.Mock
-      ).mockResolvedValue(updatedUser);
-      /* (passwordUtils.hashPassword as jest.Mock).mockResolvedValue(
-        'hashed-password',
-      ); */
+      const mockedFind = (mockUserModel.findOne as jest.Mock).mockResolvedValue(
+        updatedUser,
+      );
+      const mockHashPassword = (
+        passwordUtils.hashPassword as jest.Mock
+      ).mockResolvedValue('hashed-password');
 
       const b = await userService.patch({
-        updateUserDto: {
-          password: 'plain-text-password',
-        },
+        updateUserDto: {},
         file: undefined,
         userId: '1',
       });
       console.log('🚀 ~ file: user.service.spec.ts:181 ~ it ~ b:', b);
 
-      mockedFindOne();
-      expect(mockUserModel.findOne).toHaveBeenCalledTimes(1);
+      await mockedFind();
+      await mockedFind();
+      expect(mockUserModel.findOne).toHaveBeenCalledTimes(2);
+      expect(mockHashPassword).toHaveBeenCalledTimes(0);
       expect(mockUser.set).toHaveBeenCalledWith({
         password: 'hashed-password',
         photo: undefined,
