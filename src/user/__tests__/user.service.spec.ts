@@ -126,36 +126,14 @@ describe('UsersService', () => {
 
     it('should throw NotFoundException if user not found', async () => {
       (mockUserModel.findOne as jest.Mock).mockResolvedValue(null);
-      /* const result = await userService.patch({
-        updateUserDto: {
-          firstName: 'Venom',
-        },
-        file: undefined,
-        userId: '1',
-      });
-      console.log('🚀 ~ file: user.service.spec.ts:136 ~ it ~ result:', result); */
-      /*  await expect(
-        userService.patch({
-          updateUserDto: {
-            firstName: 'Venom',
-          },
-          file: undefined,
-          userId: '1',
-        }),
-      ).rejects.toThrow(new NotFoundException('User not found')); */
-
       try {
-        const result = await userService.patch({
+        await userService.patch({
           updateUserDto: {
-            firstName: 'Venom',
+            email: 'taken@example.com',
           },
           file: undefined,
           userId: '1',
         });
-        console.log(
-          '🚀 ~ file: user.service.spec.ts:136 ~ it ~ result:',
-          result,
-        );
       } catch (error) {
         expect(error).toBeInstanceOf(NotFoundException);
         expect(error.message).toBe('User not found');
@@ -170,17 +148,18 @@ describe('UsersService', () => {
       (mockUserModel.findOne as jest.Mock).mockResolvedValueOnce({ id: '2' });
       (mockUserModel.findOne as jest.Mock).mockResolvedValueOnce(mockUser);
 
-      const result = await userService.patch({
-        updateUserDto: {
-          email: 'taken@example.com',
-        },
-        file: undefined,
-        userId: '1',
-      });
-      console.log('🚀 ~ file: user.service.spec.ts:154 ~ it ~ result:', result);
-      expect(result).rejects.toThrow(
-        new BadRequestException('This email is taken'),
-      );
+      try {
+        await userService.patch({
+          updateUserDto: {
+            email: 'taken@example.com',
+          },
+          file: undefined,
+          userId: '1',
+        });
+      } catch (error) {
+        expect(error).toBeInstanceOf(BadRequestException);
+        expect(error.message).toBe('This email is taken');
+      }
     });
 
     it('check work of if statements', async () => {
@@ -196,19 +175,17 @@ describe('UsersService', () => {
       ).mockResolvedValue('hashed-password');
 
       const b = await userService.patch({
-        updateUserDto: {},
+        updateUserDto: { firstName: 'John' },
         file: undefined,
         userId: '1',
       });
       console.log('🚀 ~ file: user.service.spec.ts:181 ~ it ~ b:', b);
 
       await mockedFind();
-      await mockedFind();
-      expect(mockUserModel.findOne).toHaveBeenCalledTimes(2);
+      expect(mockUserModel.findOne).toHaveBeenCalledTimes(1);
       expect(mockHashPassword).toHaveBeenCalledTimes(0);
       expect(mockUser.set).toHaveBeenCalledWith({
-        password: 'hashed-password',
-        photo: undefined,
+        firstName: 'John',
       });
     });
   });

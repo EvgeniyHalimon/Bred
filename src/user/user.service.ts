@@ -12,7 +12,7 @@ import User from './user.schema';
 // dto
 import { UpdateUserDto } from './dto';
 import { hashPassword } from 'src/auth/utils/passwordUtils';
-import { IUser } from './user.types';
+import { IUser, UpdateUserWithFile } from './user.types';
 
 @Injectable()
 export class UsersService {
@@ -53,10 +53,15 @@ export class UsersService {
       updateUserDto.password = await hashPassword(updateUserDto.password);
     }
 
-    user.set({
+    const updateObject: UpdateUserWithFile = {
       ...updateUserDto,
-      photo: file,
-    });
+    };
+
+    if (file) {
+      updateObject.file = file;
+    }
+
+    user.set(updateObject);
 
     const updatedUser = await user.save();
 

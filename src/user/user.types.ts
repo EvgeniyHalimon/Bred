@@ -4,6 +4,7 @@ import { IComment } from 'src/comment/comment.types';
 
 // constants
 import { UserRolesEnum } from './user.constants';
+import { UpdateUserDto } from './dto';
 
 export interface IUser {
   id: string;
@@ -28,4 +29,8 @@ export type UserRole =
 export interface CustomFileTypeValidatorOptions {
   fileType: string | RegExp;
   message?: string;
+}
+
+export interface UpdateUserWithFile extends Partial<UpdateUserDto> {
+  file?: string;
 }
