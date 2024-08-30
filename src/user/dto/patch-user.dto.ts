@@ -11,7 +11,10 @@ import {
   MinLengthWithMessage,
 } from 'src/shared/decorators';
 
-export class UpdateUserDto {
+// schema
+import User from '../user.schema';
+
+export class UpdateUserDto extends User {
   @IsString()
   @IsNotEmpty({ message: '$property must be not empty' })
   @MaxLengthWithMessage({

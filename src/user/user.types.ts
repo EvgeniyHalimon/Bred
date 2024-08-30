@@ -14,7 +14,7 @@ export interface IUser {
   password: string;
   bio: string;
   role: UserRole;
-  photo?: string;
+  photo: string | null;
   articles?: IArticle[];
   comments?: IComment[];
   createdAt: Date;
@@ -32,5 +32,5 @@ export interface CustomFileTypeValidatorOptions {
 }
 
 export interface UpdateUserWithFile extends Partial<UpdateUserDto> {
-  file?: string;
+  photo: string | null;
 }

@@ -1,6 +1,10 @@
+// library
 import { ApiProperty } from '@nestjs/swagger';
 
-export class DeletedCommentResponseDto {
+// schema
+import Comment from '../comment.schema';
+
+export class DeletedCommentResponseDto extends Comment {
   @ApiProperty({ example: 'Comment deleted successfully' })
   message: string;
 }

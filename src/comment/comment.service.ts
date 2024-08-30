@@ -14,6 +14,7 @@ import User from 'src/user/user.schema';
 import {
   CreateCommentDto,
   GetAllQueryCommentsDto,
+  PatchCommentResponseDto,
   UpdateCommentDto,
 } from './dto';
 import Reaction from 'src/reaction/reaction.schema';
@@ -37,7 +38,7 @@ export class CommentsService {
     return createdComment;
   }
 
-  async update({
+  async patch({
     userId,
     commentId,
     updateCommentDto,
@@ -45,7 +46,7 @@ export class CommentsService {
     userId: string;
     commentId: string;
     updateCommentDto: UpdateCommentDto;
-  }) {
+  }): Promise<PatchCommentResponseDto> {
     const comment = await this.commentModel.findOne({
       where: { id: commentId },
     });

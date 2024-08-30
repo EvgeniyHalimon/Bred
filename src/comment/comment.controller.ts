@@ -27,6 +27,7 @@ import {
   DeletedCommentResponseDto,
   GetAllCommentsResponseDto,
   GetAllQueryCommentsDto,
+  PatchCommentResponseDto,
   PostCommentResponseDto,
   UpdateCommentDto,
 } from './dto';
@@ -112,16 +113,16 @@ export class CommentController {
   @ApiResponse({
     status: HttpStatus.OK,
     description: 'When comment updated',
-    type: PostCommentResponseDto,
+    type: PatchCommentResponseDto,
   })
   @Patch('/:id')
-  update(
+  patch(
     @Req() request: ICustomRequest,
     @Param('id') id: string,
     @Body() updateCommentDto: UpdateCommentDto,
-  ) {
+  ): PatchCommentResponseDto {
     const userId = request.user.id;
-    return this.commentService.update({
+    return this.commentService.patch({
       userId,
       commentId: id,
       updateCommentDto,

@@ -35,7 +35,7 @@ export class UsersService {
     updateUserDto: Partial<UpdateUserDto>;
     file: string | undefined;
     userId: string;
-  }) {
+  }): Promise<UpdateUserDto> {
     const user = await this.findOne({ id: userId });
 
     if (!user) {
@@ -53,12 +53,12 @@ export class UsersService {
       updateUserDto.password = await hashPassword(updateUserDto.password);
     }
 
-    const updateObject: UpdateUserWithFile = {
+    const updateObject = {
       ...updateUserDto,
-    };
+    } as UpdateUserWithFile;
 
     if (file) {
-      updateObject.file = file;
+      updateObject.photo = file;
     }
 
     user.set(updateObject);
@@ -68,7 +68,7 @@ export class UsersService {
     return updatedUser;
   }
 
-  findOne(user: Partial<IUser>) {
+  findOne(user: Partial<IUser>): Promise<User | null> {
     return this.userModel.findOne({ where: user });
   }
 }
