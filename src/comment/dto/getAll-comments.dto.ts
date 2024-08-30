@@ -12,11 +12,11 @@ export class GetAllQueryCommentsDto {
 
   @IsString()
   @IsOptional()
-  readonly page?: number;
+  readonly page?: string;
 
   @IsString()
   @IsOptional()
-  readonly limit?: number;
+  readonly limit?: string;
 
   @IsOptional()
   readonly order?: OrderType;

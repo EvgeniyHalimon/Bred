@@ -88,7 +88,10 @@ export class CommentController {
     },
   })
   @Delete('/:id')
-  delete(@Req() request: ICustomRequest, @Param('id') id: string) {
+  delete(
+    @Req() request: ICustomRequest,
+    @Param('id') id: string,
+  ): { message: string } {
     const userId = request.user.id;
     this.commentService.deleteById({ userId, commentId: id });
     return { message: 'Comment deleted successfully' };
@@ -136,7 +139,7 @@ export class CommentController {
   })
   @Get('/')
   @ApiQueriesFromDto(GetAllQueryCommentsDto, CommentOrderByEnum)
-  getAll(@Query() query: GetAllQueryCommentsDto) {
+  findAll(@Query() query: GetAllQueryCommentsDto) {
     return this.commentService.findAll({ query });
   }
 }
