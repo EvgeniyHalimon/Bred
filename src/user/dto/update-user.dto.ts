@@ -1,5 +1,5 @@
 // libraries
-import { IsEmail, IsNotEmpty, IsString } from 'class-validator';
+import { IsEmail, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
 // constants
@@ -11,13 +11,14 @@ import {
   MinLengthWithMessage,
 } from 'src/shared/decorators';
 
-export class CreateUserDto {
+export class UpdateUserDto {
   @IsString()
   @IsNotEmpty({ message: '$property must be not empty' })
   @MaxLengthWithMessage({
     max: userFieldLengths.firstName.max,
     property: 'First name',
   })
+  @IsOptional()
   @ApiProperty({
     type: String,
     description: 'First name of user',
@@ -32,6 +33,7 @@ export class CreateUserDto {
     max: userFieldLengths.lastName.max,
     property: 'Last name',
   })
+  @IsOptional()
   @ApiProperty({
     type: String,
     description: 'Last name of user',
@@ -41,6 +43,7 @@ export class CreateUserDto {
   readonly lastName: string;
 
   @IsEmail()
+  @IsOptional()
   @ApiProperty({
     type: String,
     description: 'Email of user',
@@ -54,6 +57,7 @@ export class CreateUserDto {
     min: userFieldLengths.password.min,
     property: 'Password',
   })
+  @IsOptional()
   @ApiProperty({
     type: String,
     description: 'Password of user',
@@ -61,7 +65,7 @@ export class CreateUserDto {
     minLength: userFieldLengths.password.min,
     example: 'qwertyui12345678',
   })
-  readonly password: string;
+  password: string;
 
   @IsString()
   @MinLengthWithMessage({ min: userFieldLengths.bio.min, property: 'Bio' })
@@ -69,6 +73,7 @@ export class CreateUserDto {
     max: userFieldLengths.bio.max,
     property: 'Bio',
   })
+  @IsOptional()
   @ApiProperty({
     type: String,
     description: 'Bio of user',

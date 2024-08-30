@@ -1,12 +1,24 @@
 // nest
-import { Controller, Get, HttpStatus } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  HttpStatus,
+  Patch,
+  Req,
+  UploadedFile,
+  UseInterceptors,
+} from '@nestjs/common';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 // service
 import { UsersService } from './user.service';
 
 // dto
-import { GetAllUsersResponseDto } from './dto';
+import { GetAllUsersResponseDto, UpdateUserDto } from './dto';
+import { ICustomRequest } from 'src/shared';
+import { fileValidationPipe } from './file-validation.pipe';
 
 @Controller('users')
 @ApiTags('Users')
@@ -18,8 +30,25 @@ export class UsersController {
     description: 'Represents array of users',
     type: GetAllUsersResponseDto,
   })
-  @Get()
-  async findAll() {
+  @Get('/')
+  findAll() {
     return this.usersService.findAll();
+  }
+
+  @UseInterceptors(FileInterceptor('file'))
+  @Patch('/')
+  patch(
+    @Body() updateUserDto: UpdateUserDto,
+    @UploadedFile(fileValidationPipe)
+    file: Express.Multer.File,
+    @Req() req: ICustomRequest,
+  ) {
+    const userId = req.user.id;
+    const photo = file?.buffer?.toString('base64url');
+    return this.usersService.patch({
+      updateUserDto,
+      file: photo,
+      userId,
+    });
   }
 }

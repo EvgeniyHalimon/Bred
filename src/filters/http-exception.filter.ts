@@ -10,7 +10,7 @@ import { appendFileSync, existsSync, mkdirSync } from 'fs';
 import { join } from 'path';
 
 // types
-import { ICustomRequest, IError } from './shared';
+import { ICustomRequest, IError } from '../shared';
 
 @Catch(HttpException)
 export class HttpExceptionFilter implements ExceptionFilter {
