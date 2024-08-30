@@ -17,8 +17,13 @@ import { UsersService } from './user.service';
 
 // dto
 import { GetAllUsersResponseDto, PatchUserDto } from './dto';
-import { ICustomRequest } from 'src/shared';
+
+// validation
 import { fileValidationPipe } from './file-validation.pipe';
+
+// types
+import { ICustomRequest } from 'src/shared';
+import { IFindAllUsers } from './user.types';
 
 @Controller('users')
 @ApiTags('Users')
@@ -31,7 +36,7 @@ export class UsersController {
     type: GetAllUsersResponseDto,
   })
   @Get('/')
-  findAll() {
+  findAll(): Promise<IFindAllUsers> {
     return this.usersService.findAll();
   }
 
@@ -42,7 +47,7 @@ export class UsersController {
     @UploadedFile(fileValidationPipe)
     file: Express.Multer.File,
     @Req() req: ICustomRequest,
-  ) {
+  ): Promise<PatchUserDto> {
     const userId = req.user.id;
     const photo = file?.buffer?.toString('base64url');
     return this.usersService.patch({

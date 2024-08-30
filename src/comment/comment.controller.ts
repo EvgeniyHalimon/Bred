@@ -120,7 +120,7 @@ export class CommentController {
     @Req() request: ICustomRequest,
     @Param('id') id: string,
     @Body() updateCommentDto: UpdateCommentDto,
-  ): PatchCommentResponseDto {
+  ): Promise<PatchCommentResponseDto> {
     const userId = request.user.id;
     return this.commentService.patch({
       userId,
