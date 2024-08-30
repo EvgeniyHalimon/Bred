@@ -54,15 +54,17 @@ export class AuthService {
       throw new NotFoundException('User not found');
     }
 
-    if (user) {
-      const match = await verifyPassword(password, user.password);
-      if (!match) {
-        throw new BadRequestException('Wrong password');
-      }
-      return {
-        accessToken: await this.jwtService.signAsync(user.dataValues),
-        refreshToken: await this.jwtService.signAsync(user.dataValues),
-      };
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { photo, ...userWithoutPhoto } = user.dataValues;
+
+    const match = await verifyPassword(password, user.password);
+    if (!match) {
+      throw new BadRequestException('Wrong password');
     }
+
+    return {
+      accessToken: await this.jwtService.signAsync(userWithoutPhoto),
+      refreshToken: await this.jwtService.signAsync(userWithoutPhoto),
+    };
   }
 }

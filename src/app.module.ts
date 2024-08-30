@@ -19,7 +19,7 @@ import { ReactionsModule } from './reaction/reaction.module';
 import { AuthModule } from './auth/auth.module';
 
 // exception filter
-import { HttpExceptionFilter } from './http-exception.filter';
+import { HttpExceptionFilter } from './filters';
 
 @Module({
   imports: [

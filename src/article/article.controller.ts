@@ -94,7 +94,7 @@ export class ArticlesController {
   @Get('/')
   @ApiQueriesFromDto(GetAllQueryArticlesDto, ArticleOrderByEnum)
   async getAll(@Query() query: GetAllQueryArticlesDto) {
-    return this.articlesService.findAll({ query });
+    return await this.articlesService.findAll({ query });
   }
 
   @ApiNotFoundResponse({
