@@ -1,30 +1,37 @@
 import { Test } from '@nestjs/testing';
-import { UsersController } from 'src/user/user.controller';
-import { UsersService } from 'src/user/user.service';
+import { CommentController } from '../comment.controller';
+import { CommentsService } from '../comment.service';
 
-describe('UsersController', () => {
-  let usersController: UsersController;
+describe('CommentController', () => {
+  let commentController: CommentController;
 
-  const mockUsersService = {
+  const mockCommentsService = {
     findAll: jest.fn(),
     patch: jest.fn(),
+    deleteById: jest.fn(),
+    create: jest.fn(),
   };
 
   beforeEach(async () => {
     const moduleRef = await Test.createTestingModule({
-      controllers: [UsersController],
+      controllers: [CommentController],
       providers: [
         {
-          provide: UsersService,
-          useValue: mockUsersService,
+          provide: CommentsService,
+          useValue: mockCommentsService,
         },
       ],
     }).compile();
 
-    usersController = moduleRef.get<UsersController>(UsersController);
+    commentController = moduleRef.get<CommentController>(CommentController);
   });
 
   it('should be defined', () => {
-    expect(usersController).toBeDefined();
+    expect(commentController).toBeDefined();
   });
+
+  describe('Create method', () => {});
+  describe('Delete method', () => {});
+  describe('Patch method', () => {});
+  describe('GetAll method', () => {});
 });
