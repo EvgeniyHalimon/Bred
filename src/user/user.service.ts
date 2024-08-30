@@ -10,15 +10,15 @@ import { InjectModel } from '@nestjs/sequelize';
 import User from './user.schema';
 
 // dto
-import { UpdateUserDto } from './dto';
+import { PatchUserDto } from './dto';
 import { hashPassword } from 'src/auth/utils/passwordUtils';
-import { IUser, UpdateUserWithFile } from './user.types';
+import { IFindAllUsers, IUser, UpdateUserWithFile } from './user.types';
 
 @Injectable()
 export class UsersService {
   constructor(@InjectModel(User) private userModel: typeof User) {}
 
-  async findAll() {
+  async findAll(): Promise<IFindAllUsers> {
     const users = await this.userModel.findAndCountAll();
 
     return {
@@ -32,10 +32,10 @@ export class UsersService {
     file,
     userId,
   }: {
-    updateUserDto: Partial<UpdateUserDto>;
+    updateUserDto: Partial<PatchUserDto>;
     file: string | undefined;
     userId: string;
-  }): Promise<UpdateUserDto> {
+  }): Promise<PatchUserDto> {
     const user = await this.findOne({ id: userId });
 
     if (!user) {

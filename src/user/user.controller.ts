@@ -16,7 +16,7 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { UsersService } from './user.service';
 
 // dto
-import { GetAllUsersResponseDto, UpdateUserDto } from './dto';
+import { GetAllUsersResponseDto, PatchUserDto } from './dto';
 import { ICustomRequest } from 'src/shared';
 import { fileValidationPipe } from './file-validation.pipe';
 
@@ -38,7 +38,7 @@ export class UsersController {
   @UseInterceptors(FileInterceptor('file'))
   @Patch('/')
   patch(
-    @Body() updateUserDto: UpdateUserDto,
+    @Body() updateUserDto: PatchUserDto,
     @UploadedFile(fileValidationPipe)
     file: Express.Multer.File,
     @Req() req: ICustomRequest,

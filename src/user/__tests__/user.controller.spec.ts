@@ -1,7 +1,7 @@
 import { Test } from '@nestjs/testing';
 import { UsersController } from '../user.controller';
 import { UsersService } from '../user.service';
-import { GetAllUsersResponseDto, UpdateUserDto, UserDto } from '../dto';
+import { GetAllUsersResponseDto, PatchUserDto } from '../dto';
 import { ICustomRequest } from 'src/shared';
 
 describe('UsersController', () => {
@@ -43,7 +43,7 @@ describe('UsersController', () => {
   });
 
   describe('Patch method', () => {
-    const updateUserDto = {} as UpdateUserDto;
+    const updateUserDto = {} as PatchUserDto;
     const file: Express.Multer.File = {
       fieldname: 'file',
       originalname: 'test.png',
@@ -63,16 +63,16 @@ describe('UsersController', () => {
     } as ICustomRequest;
 
     it('method patch should returned instance of response dto', async () => {
-      const mockResult = new UserDto();
+      const mockResult = new PatchUserDto();
 
       jest.spyOn(mockUsersService, 'patch').mockResolvedValue(mockResult);
 
       const result = await usersController.patch(updateUserDto, file, req);
-      expect(result).toBeInstanceOf(UserDto);
+      expect(result).toBeInstanceOf(PatchUserDto);
     });
 
     it('method patch must be called the service with the correct parameters', async () => {
-      const updateUserDto = { email: 'newemail@example.com' } as UpdateUserDto;
+      const updateUserDto = { email: 'newemail@example.com' } as PatchUserDto;
       const file = {
         mimetype: 'image/png',
         buffer: Buffer.from('image data'),
