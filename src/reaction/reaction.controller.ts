@@ -38,7 +38,7 @@ import { ICustomRequest } from 'src/shared/types';
 import { ReactionOrderByEnum } from './reaction.types';
 
 // custom decorators
-import { ApiQueriesFromDto } from 'src/shared/decorators';
+import { ApiQueriesFromDto } from 'src/shared';
 
 @Controller('reactions')
 @ApiTags('Reactions')

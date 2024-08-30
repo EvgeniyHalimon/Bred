@@ -37,7 +37,7 @@ import { ICustomRequest } from 'src/shared/types';
 import { CommentOrderByEnum } from './comment.types';
 
 // custom decorator
-import { ApiQueriesFromDto } from 'src/shared/decorators';
+import { ApiQueriesFromDto } from 'src/shared';
 
 @Controller('comments')
 @ApiTags('Comments')

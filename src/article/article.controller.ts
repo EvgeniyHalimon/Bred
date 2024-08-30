@@ -34,11 +34,8 @@ import {
 } from './dto';
 
 // types
-import { ICustomRequest } from 'src/shared/types';
 import { ArticleOrderByEnum } from './article.types';
-
-// custom decorator
-import { ApiQueriesFromDto } from 'src/shared/decorators';
+import { ICustomRequest, ApiQueriesFromDto } from 'src/shared';
 
 @Controller('articles')
 @ApiTags('Articles')
