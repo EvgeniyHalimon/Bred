@@ -10,7 +10,7 @@ describe('CommentController', () => {
   const mockCommentsService = {
     findAll: jest.fn(),
     patch: jest.fn(),
-    deleteById: jest.fn(),
+    delete: jest.fn(),
     create: jest.fn(),
   };
 
@@ -44,7 +44,7 @@ describe('CommentController', () => {
   describe('Delete method', () => {
     it('Delete method must be called', async () => {
       const result = await commentController.delete(req, commentId);
-      expect(mockCommentsService.deleteById).toHaveBeenCalledWith({
+      expect(mockCommentsService.delete).toHaveBeenCalledWith({
         userId: req.user.id,
         commentId: commentId,
       });

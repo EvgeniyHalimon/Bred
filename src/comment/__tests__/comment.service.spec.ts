@@ -1,16 +1,22 @@
 import { getModelToken } from '@nestjs/sequelize';
 import { Test, TestingModule } from '@nestjs/testing';
-import { UsersService } from 'src/user/user.service';
 import { CommentsService } from '../comment.service';
+import Comment from '../comment.schema';
 
 describe('CommentsService', () => {
   let commentsService: CommentsService;
-  let mockCommentsModel: typeof Comment;
+  let mockCommentsModel: {
+    findOne: jest.Mock;
+    findAndCountAll: jest.Mock;
+    create: jest.Mock;
+    save: jest.Mock;
+    destroy: jest.Mock;
+  };
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
-        UsersService,
+        CommentsService,
         {
           provide: getModelToken(Comment),
           useValue: {
@@ -25,7 +31,7 @@ describe('CommentsService', () => {
     }).compile();
 
     commentsService = module.get<CommentsService>(CommentsService);
-    mockCommentsModel = module.get<typeof Comment>(getModelToken(Comment));
+    mockCommentsModel = module.get(getModelToken(Comment));
   });
 
   afterEach(() => {
@@ -36,13 +42,34 @@ describe('CommentsService', () => {
     expect(commentsService).toBeDefined();
   });
 
-  describe('Create method', async () => {});
+  /*   describe('CommentsService create method', async () => {});
 
-  describe('Patch method', async () => {});
+  describe('CommentsService patch method', async () => {});
 
-  describe('Delete method', async () => {});
+  describe('CommentsService delete method', async () => {});
 
-  describe('FindAll method', async () => {});
+  describe('CommentsService findAll method', async () => {}); */
 
-  describe('FindOne method', async () => {});
+  describe('CommentsService findOne method', () => {
+    it('should return a comment by id', async () => {
+      const mockComment = {
+        id: '1',
+        text: 'This is a comment',
+      };
+
+      (mockCommentsModel.findOne as jest.Mock).mockResolvedValue(mockComment);
+
+      const result = await commentsService.findOne({
+        commentId: mockComment.id,
+      });
+
+      expect(mockCommentsModel.findOne).toHaveBeenCalledWith({
+        where: { id: mockComment.id },
+      });
+
+      expect(result).toEqual(mockComment);
+    });
+
+    /*     it('should return', async () => {}); */
+  });
 });
