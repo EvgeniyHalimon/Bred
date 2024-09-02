@@ -24,11 +24,11 @@ export class GetAllQueryCommentsDto {
   @IsOptional()
   readonly orderBy?: keyof IComment;
 
-  toWhereCondition() {
+  toWhereCondition?() {
     return this.text ? { text: this.text } : {};
   }
 
-  toPaginationOptions() {
+  toPaginationOptions?() {
     return {
       limit: this.limit ? Number(this.limit) : 10,
       offset: this.page

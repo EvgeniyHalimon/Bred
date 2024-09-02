@@ -23,6 +23,7 @@ import { CommentsService } from './comment.service';
 
 // dto's
 import {
+  CommentDto,
   CreateCommentDto,
   DeletedCommentResponseDto,
   GetAllCommentsResponseDto,
@@ -53,7 +54,7 @@ export class CommentController {
   create(
     @Req() request: ICustomRequest,
     @Body() createReactionDto: CreateCommentDto,
-  ) {
+  ): Promise<CommentDto> {
     const userId = request.user.id;
     return this.commentService.create({ userId, createReactionDto });
   }
@@ -139,7 +140,9 @@ export class CommentController {
   })
   @Get('/')
   @ApiQueriesFromDto(GetAllQueryCommentsDto, CommentOrderByEnum)
-  findAll(@Query() query: GetAllQueryCommentsDto) {
+  findAll(
+    @Query() query: GetAllQueryCommentsDto,
+  ): Promise<GetAllCommentsResponseDto> {
     return this.commentService.findAll({ query });
   }
 }

@@ -12,7 +12,10 @@ import User from 'src/user/user.schema';
 
 // dto
 import {
+  CommentDto,
   CreateCommentDto,
+  DetailedCommentsDto,
+  GetAllCommentsResponseDto,
   GetAllQueryCommentsDto,
   PatchCommentResponseDto,
   UpdateCommentDto,
@@ -29,7 +32,7 @@ export class CommentsService {
   }: {
     userId: string;
     createReactionDto: CreateCommentDto;
-  }): Promise<Comment> {
+  }): Promise<CommentDto> {
     const comment = {
       ...createReactionDto,
       authorId: userId,
@@ -105,10 +108,14 @@ export class CommentsService {
     }
   }
 
-  async findAll({ query }: { query: GetAllQueryCommentsDto }) {
+  async findAll({
+    query,
+  }: {
+    query: GetAllQueryCommentsDto;
+  }): Promise<GetAllCommentsResponseDto> {
     const comments = await this.commentModel.findAndCountAll({
-      where: query.toWhereCondition(),
-      ...query.toPaginationOptions(),
+      where: query.toWhereCondition?.(),
+      ...query.toPaginationOptions?.(),
       include: [
         { model: User, as: 'author' },
         { model: Reaction, as: 'reactions' },
@@ -116,7 +123,7 @@ export class CommentsService {
     });
 
     return {
-      comments: comments.rows,
+      comments: comments.rows as unknown as DetailedCommentsDto[],
       count: comments.count,
     };
   }

@@ -4,7 +4,9 @@ import { IComment } from 'src/comment/comment.types';
 
 // constants
 import { UserRolesEnum } from './user.constants';
-import { PatchUserDto, UserDto } from './dto';
+
+// dto
+import { PatchUserDto } from './dto';
 
 export interface IUser {
   id: string;
@@ -33,9 +35,4 @@ export interface CustomFileTypeValidatorOptions {
 
 export interface UpdateUserWithFile extends Partial<PatchUserDto> {
   photo: string | null;
-}
-
-export interface IFindAllUsers {
-  users: UserDto[];
-  count: number;
 }

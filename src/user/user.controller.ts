@@ -23,7 +23,6 @@ import { fileValidationPipe } from './file-validation.pipe';
 
 // types
 import { ICustomRequest } from 'src/shared';
-import { IFindAllUsers } from './user.types';
 
 @Controller('users')
 @ApiTags('Users')
@@ -36,7 +35,7 @@ export class UsersController {
     type: GetAllUsersResponseDto,
   })
   @Get('/')
-  findAll(): Promise<IFindAllUsers> {
+  findAll(): Promise<GetAllUsersResponseDto> {
     return this.usersService.findAll();
   }
 

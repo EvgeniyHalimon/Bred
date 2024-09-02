@@ -82,9 +82,32 @@ describe('CommentController', () => {
   describe('FindAll method', () => {
     it('Method patch must be called and should return instance of response dto', async () => {
       const mockResult = new GetAllCommentsResponseDto();
-
       jest.spyOn(mockCommentsService, 'findAll').mockResolvedValue(mockResult);
+
+      const result = await commentController.findAll({
+        page: '1',
+      });
+      expect(result).toBeInstanceOf(GetAllCommentsResponseDto);
     });
-    it('Method getAll must be called with correct parameters', async () => {});
+
+    it('Method getAll must be called with correct parameters', async () => {
+      await commentController.findAll({
+        page: '1',
+        limit: '10',
+        text: 'Text',
+        order: 'ASC',
+        orderBy: 'createdAt',
+      });
+
+      expect(mockCommentsService.findAll).toHaveBeenCalledWith({
+        query: {
+          page: '1',
+          limit: '10',
+          text: 'Text',
+          order: 'ASC',
+          orderBy: 'createdAt',
+        },
+      });
+    });
   });
 });
