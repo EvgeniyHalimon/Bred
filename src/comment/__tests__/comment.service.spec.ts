@@ -1,30 +1,48 @@
-import { Test } from '@nestjs/testing';
-import { UsersController } from 'src/user/user.controller';
+import { getModelToken } from '@nestjs/sequelize';
+import { Test, TestingModule } from '@nestjs/testing';
 import { UsersService } from 'src/user/user.service';
+import { CommentsService } from '../comment.service';
 
-describe('UsersController', () => {
-  let usersController: UsersController;
-
-  const mockUsersService = {
-    findAll: jest.fn(),
-    patch: jest.fn(),
-  };
+describe('CommentsService', () => {
+  let commentsService: CommentsService;
+  let mockCommentsModel: typeof Comment;
 
   beforeEach(async () => {
-    const moduleRef = await Test.createTestingModule({
-      controllers: [UsersController],
+    const module: TestingModule = await Test.createTestingModule({
       providers: [
+        UsersService,
         {
-          provide: UsersService,
-          useValue: mockUsersService,
+          provide: getModelToken(Comment),
+          useValue: {
+            findAndCountAll: jest.fn(),
+            findOne: jest.fn(),
+            save: jest.fn(),
+            create: jest.fn(),
+            destroy: jest.fn(),
+          },
         },
       ],
     }).compile();
 
-    usersController = moduleRef.get<UsersController>(UsersController);
+    commentsService = module.get<CommentsService>(CommentsService);
+    mockCommentsModel = module.get<typeof Comment>(getModelToken(Comment));
+  });
+
+  afterEach(() => {
+    jest.clearAllMocks();
   });
 
   it('should be defined', () => {
-    expect(usersController).toBeDefined();
+    expect(commentsService).toBeDefined();
   });
+
+  describe('Create method', async () => {});
+
+  describe('Patch method', async () => {});
+
+  describe('Delete method', async () => {});
+
+  describe('FindAll method', async () => {});
+
+  describe('FindOne method', async () => {});
 });

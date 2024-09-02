@@ -94,7 +94,7 @@ export class CommentController {
     @Param('id') id: string,
   ): { message: string } {
     const userId = request.user.id;
-    this.commentService.deleteById({ userId, commentId: id });
+    this.commentService.delete({ userId, commentId: id });
     return { message: 'Comment deleted successfully' };
   }
 

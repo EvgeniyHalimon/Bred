@@ -73,13 +73,7 @@ export class CommentsService {
     return updatedArticle;
   }
 
-  async deleteById({
-    userId,
-    commentId,
-  }: {
-    userId: string;
-    commentId: string;
-  }) {
+  async delete({ userId, commentId }: { userId: string; commentId: string }) {
     const article = await this.commentModel.findOne({
       where: { id: commentId },
     });
