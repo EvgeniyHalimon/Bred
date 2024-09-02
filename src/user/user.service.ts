@@ -72,7 +72,7 @@ export class UsersService {
     return updatedUser;
   }
 
-  findOne(user: Partial<IUser>): Promise<User | null> {
-    return this.userModel.findOne({ where: user });
+  findOne(whereCondition: Partial<IUser>): Promise<User | null> {
+    return this.userModel.findOne({ where: whereCondition });
   }
 }

@@ -21,6 +21,7 @@ import {
   UpdateCommentDto,
 } from './dto';
 import Reaction from 'src/reaction/reaction.schema';
+import { IComment } from './comment.types';
 
 @Injectable()
 export class CommentsService {
@@ -122,11 +123,9 @@ export class CommentsService {
     };
   }
 
-  async findOne({ commentId }: { commentId: string }): Promise<Comment | null> {
+  async findOne(whereCondition: Partial<IComment>): Promise<Comment | null> {
     return this.commentModel.findOne({
-      where: {
-        id: commentId,
-      },
+      where: whereCondition,
     });
   }
 }

@@ -22,6 +22,7 @@ describe('UsersService', () => {
             findAndCountAll: jest.fn(),
             findOne: jest.fn(),
             save: jest.fn(),
+            set: jest.fn(),
           },
         },
       ],
