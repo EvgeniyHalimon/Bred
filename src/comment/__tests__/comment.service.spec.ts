@@ -44,6 +44,7 @@ describe('CommentsService', () => {
   it('should be defined', () => {
     expect(commentsService).toBeDefined();
   });
+
   const comment = {
     id: 'd561e01f-fdc4-4a3f-8ea2-af7ff9db6ed9',
     text: 'cool',
@@ -53,7 +54,9 @@ describe('CommentsService', () => {
     createdAt: '2024-09-02T12:09:07.258Z',
   };
 
-  describe('CommentsService create method', () => {});
+  describe('CommentsService create method', () => {
+    it('it create new comment', async () => {});
+  });
 
   describe('CommentsService patch method', () => {
     const updateCommentDto = {

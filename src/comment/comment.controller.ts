@@ -53,10 +53,10 @@ export class CommentController {
   @Post('/')
   create(
     @Req() request: ICustomRequest,
-    @Body() createReactionDto: CreateCommentDto,
+    @Body() createCommentDto: CreateCommentDto,
   ): Promise<CommentDto> {
     const userId = request.user.id;
-    return this.commentService.create({ userId, createReactionDto });
+    return this.commentService.create({ userId, createCommentDto });
   }
 
   @ApiResponse({

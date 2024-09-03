@@ -29,13 +29,13 @@ export class CommentsService {
 
   async create({
     userId,
-    createReactionDto,
+    createCommentDto,
   }: {
     userId: string;
-    createReactionDto: CreateCommentDto;
+    createCommentDto: CreateCommentDto;
   }): Promise<CommentDto> {
     const comment = {
-      ...createReactionDto,
+      ...createCommentDto,
       authorId: userId,
     };
     const createdComment = await this.commentModel.create(comment);
