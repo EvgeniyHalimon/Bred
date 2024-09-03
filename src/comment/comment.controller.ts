@@ -23,10 +23,12 @@ import { CommentsService } from './comment.service';
 
 // dto's
 import {
+  CommentDto,
   CreateCommentDto,
   DeletedCommentResponseDto,
   GetAllCommentsResponseDto,
   GetAllQueryCommentsDto,
+  PatchCommentResponseDto,
   PostCommentResponseDto,
   UpdateCommentDto,
 } from './dto';
@@ -36,7 +38,7 @@ import { ICustomRequest } from 'src/shared/types';
 import { CommentOrderByEnum } from './comment.types';
 
 // custom decorator
-import { ApiQueriesFromDto } from 'src/shared/decorators';
+import { ApiQueriesFromDto } from 'src/shared';
 
 @Controller('comments')
 @ApiTags('Comments')
@@ -51,10 +53,10 @@ export class CommentController {
   @Post('/')
   create(
     @Req() request: ICustomRequest,
-    @Body() createReactionDto: CreateCommentDto,
-  ) {
+    @Body() createCommentDto: CreateCommentDto,
+  ): Promise<CommentDto> {
     const userId = request.user.id;
-    return this.commentService.create({ userId, createReactionDto });
+    return this.commentService.create({ userId, createCommentDto });
   }
 
   @ApiResponse({
@@ -87,9 +89,12 @@ export class CommentController {
     },
   })
   @Delete('/:id')
-  delete(@Req() request: ICustomRequest, @Param('id') id: string) {
+  delete(
+    @Req() request: ICustomRequest,
+    @Param('id') id: string,
+  ): { message: string } {
     const userId = request.user.id;
-    this.commentService.deleteById({ userId, commentId: id });
+    this.commentService.delete({ userId, commentId: id });
     return { message: 'Comment deleted successfully' };
   }
 
@@ -112,16 +117,16 @@ export class CommentController {
   @ApiResponse({
     status: HttpStatus.OK,
     description: 'When comment updated',
-    type: PostCommentResponseDto,
+    type: PatchCommentResponseDto,
   })
   @Patch('/:id')
-  update(
+  patch(
     @Req() request: ICustomRequest,
     @Param('id') id: string,
     @Body() updateCommentDto: UpdateCommentDto,
-  ) {
+  ): Promise<PatchCommentResponseDto> {
     const userId = request.user.id;
-    return this.commentService.update({
+    return this.commentService.patch({
       userId,
       commentId: id,
       updateCommentDto,
@@ -135,7 +140,9 @@ export class CommentController {
   })
   @Get('/')
   @ApiQueriesFromDto(GetAllQueryCommentsDto, CommentOrderByEnum)
-  getAll(@Query() query: GetAllQueryCommentsDto) {
+  findAll(
+    @Query() query: GetAllQueryCommentsDto,
+  ): Promise<GetAllCommentsResponseDto> {
     return this.commentService.findAll({ query });
   }
 }

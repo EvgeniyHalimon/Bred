@@ -10,15 +10,19 @@ import { InjectModel } from '@nestjs/sequelize';
 import User from './user.schema';
 
 // dto
-import { UpdateUserDto } from './dto';
+import { GetAllUsersResponseDto, PatchUserDto } from './dto';
+
+// util
 import { hashPassword } from 'src/auth/utils/passwordUtils';
+
+// types
 import { IUser, UpdateUserWithFile } from './user.types';
 
 @Injectable()
 export class UsersService {
   constructor(@InjectModel(User) private userModel: typeof User) {}
 
-  async findAll() {
+  async findAll(): Promise<GetAllUsersResponseDto> {
     const users = await this.userModel.findAndCountAll();
 
     return {
@@ -32,10 +36,10 @@ export class UsersService {
     file,
     userId,
   }: {
-    updateUserDto: Partial<UpdateUserDto>;
+    updateUserDto: Partial<PatchUserDto>;
     file: string | undefined;
     userId: string;
-  }) {
+  }): Promise<PatchUserDto> {
     const user = await this.findOne({ id: userId });
 
     if (!user) {
@@ -53,12 +57,12 @@ export class UsersService {
       updateUserDto.password = await hashPassword(updateUserDto.password);
     }
 
-    const updateObject: UpdateUserWithFile = {
+    const updateObject = {
       ...updateUserDto,
-    };
+    } as UpdateUserWithFile;
 
     if (file) {
-      updateObject.file = file;
+      updateObject.photo = file;
     }
 
     user.set(updateObject);
@@ -68,7 +72,7 @@ export class UsersService {
     return updatedUser;
   }
 
-  findOne(user: Partial<IUser>) {
-    return this.userModel.findOne({ where: user });
+  findOne(whereCondition: Partial<IUser>): Promise<User | null> {
+    return this.userModel.findOne({ where: whereCondition });
   }
 }

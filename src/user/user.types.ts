@@ -4,7 +4,9 @@ import { IComment } from 'src/comment/comment.types';
 
 // constants
 import { UserRolesEnum } from './user.constants';
-import { UpdateUserDto } from './dto';
+
+// dto
+import { PatchUserDto } from './dto';
 
 export interface IUser {
   id: string;
@@ -14,7 +16,7 @@ export interface IUser {
   password: string;
   bio: string;
   role: UserRole;
-  photo?: string;
+  photo: string | null;
   articles?: IArticle[];
   comments?: IComment[];
   createdAt: Date;
@@ -31,6 +33,6 @@ export interface CustomFileTypeValidatorOptions {
   message?: string;
 }
 
-export interface UpdateUserWithFile extends Partial<UpdateUserDto> {
-  file?: string;
+export interface UpdateUserWithFile extends Partial<PatchUserDto> {
+  photo: string | null;
 }

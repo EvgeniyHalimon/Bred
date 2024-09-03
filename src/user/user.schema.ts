@@ -62,7 +62,7 @@ export default class User extends Model<
   role: UserRolesEnum;
 
   @Column({ type: DataType.TEXT, allowNull: true })
-  photo: string;
+  photo: string | null;
 
   @CreatedAt
   @Column

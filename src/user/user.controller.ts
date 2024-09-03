@@ -16,9 +16,13 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { UsersService } from './user.service';
 
 // dto
-import { GetAllUsersResponseDto, UpdateUserDto } from './dto';
-import { ICustomRequest } from 'src/shared';
+import { GetAllUsersResponseDto, PatchUserDto } from './dto';
+
+// validation
 import { fileValidationPipe } from './file-validation.pipe';
+
+// types
+import { ICustomRequest } from 'src/shared';
 
 @Controller('users')
 @ApiTags('Users')
@@ -31,18 +35,18 @@ export class UsersController {
     type: GetAllUsersResponseDto,
   })
   @Get('/')
-  findAll() {
+  findAll(): Promise<GetAllUsersResponseDto> {
     return this.usersService.findAll();
   }
 
   @UseInterceptors(FileInterceptor('file'))
   @Patch('/')
   patch(
-    @Body() updateUserDto: UpdateUserDto,
+    @Body() updateUserDto: PatchUserDto,
     @UploadedFile(fileValidationPipe)
     file: Express.Multer.File,
     @Req() req: ICustomRequest,
-  ) {
+  ): Promise<PatchUserDto> {
     const userId = req.user.id;
     const photo = file?.buffer?.toString('base64url');
     return this.usersService.patch({

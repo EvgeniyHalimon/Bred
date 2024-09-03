@@ -12,11 +12,16 @@ import User from 'src/user/user.schema';
 
 // dto
 import {
+  CommentDto,
   CreateCommentDto,
+  DetailedCommentsDto,
+  GetAllCommentsResponseDto,
   GetAllQueryCommentsDto,
+  PatchCommentResponseDto,
   UpdateCommentDto,
 } from './dto';
 import Reaction from 'src/reaction/reaction.schema';
+import { IComment } from './comment.types';
 
 @Injectable()
 export class CommentsService {
@@ -24,20 +29,20 @@ export class CommentsService {
 
   async create({
     userId,
-    createReactionDto,
+    createCommentDto,
   }: {
     userId: string;
-    createReactionDto: CreateCommentDto;
-  }): Promise<Comment> {
+    createCommentDto: CreateCommentDto;
+  }): Promise<CommentDto> {
     const comment = {
-      ...createReactionDto,
+      ...createCommentDto,
       authorId: userId,
     };
     const createdComment = await this.commentModel.create(comment);
     return createdComment;
   }
 
-  async update({
+  async patch({
     userId,
     commentId,
     updateCommentDto,
@@ -45,7 +50,7 @@ export class CommentsService {
     userId: string;
     commentId: string;
     updateCommentDto: UpdateCommentDto;
-  }) {
+  }): Promise<PatchCommentResponseDto> {
     const comment = await this.commentModel.findOne({
       where: { id: commentId },
     });
@@ -69,13 +74,7 @@ export class CommentsService {
     return updatedArticle;
   }
 
-  async deleteById({
-    userId,
-    commentId,
-  }: {
-    userId: string;
-    commentId: string;
-  }) {
+  async delete({ userId, commentId }: { userId: string; commentId: string }) {
     const article = await this.commentModel.findOne({
       where: { id: commentId },
     });
@@ -104,10 +103,14 @@ export class CommentsService {
     }
   }
 
-  async findAll({ query }: { query: GetAllQueryCommentsDto }) {
+  async findAll({
+    query,
+  }: {
+    query: GetAllQueryCommentsDto;
+  }): Promise<GetAllCommentsResponseDto> {
     const comments = await this.commentModel.findAndCountAll({
-      where: query.toWhereCondition(),
-      ...query.toPaginationOptions(),
+      where: query.toWhereCondition?.(),
+      ...query.toPaginationOptions?.(),
       include: [
         { model: User, as: 'author' },
         { model: Reaction, as: 'reactions' },
@@ -115,16 +118,14 @@ export class CommentsService {
     });
 
     return {
-      comments: comments.rows,
+      comments: comments.rows as unknown as DetailedCommentsDto[],
       count: comments.count,
     };
   }
 
-  async findOne({ commentId }: { commentId: string }): Promise<Comment | null> {
+  async findOne(whereCondition: Partial<IComment>): Promise<Comment | null> {
     return this.commentModel.findOne({
-      where: {
-        id: commentId,
-      },
+      where: whereCondition,
     });
   }
 }
