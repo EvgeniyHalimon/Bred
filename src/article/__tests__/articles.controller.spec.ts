@@ -42,7 +42,7 @@ describe('ArticlesController', () => {
   };
 
   describe('Create method', () => {
-    it('', async () => {
+    it('Create method must be called with correct parameters', async () => {
       await articlesController.create(req, createArticleDto);
       expect(mockArticlesService.create).toHaveBeenCalledWith({
         userId: '1',

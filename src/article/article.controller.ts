@@ -34,7 +34,7 @@ import {
 } from './dto';
 
 // types
-import { ArticleOrderByEnum } from './article.types';
+import { ArticleOrderByEnum, IArticleResponse } from './article.types';
 import {
   ICustomRequest,
   ApiQueriesFromDto,
@@ -55,7 +55,7 @@ export class ArticlesController {
   async create(
     @Req() request: ICustomRequest,
     @Body() createArticleDto: CreateArticleDto,
-  ) {
+  ): Promise<IArticleResponse> {
     const userId = request.user.id;
     const createdArticle = await this.articlesService.create({
       userId,
@@ -94,7 +94,9 @@ export class ArticlesController {
   })
   @Get('/')
   @ApiQueriesFromDto(GetAllQueryArticlesDto, ArticleOrderByEnum)
-  async findAll(@Query() query: GetAllQueryArticlesDto) {
+  async findAll(
+    @Query() query: GetAllQueryArticlesDto,
+  ): Promise<GetAllArticlesResponseDto> {
     return await this.articlesService.findAll({ query });
   }
 
@@ -124,7 +126,7 @@ export class ArticlesController {
     @Req() request: ICustomRequest,
     @Body() patchArticleDto: PatchArticleDto,
     @Param('id') id: string,
-  ) {
+  ): Promise<IArticleResponse> {
     const articleId = id;
     const userId = request.user.id;
     const updatedArticle = await this.articlesService.patch({
