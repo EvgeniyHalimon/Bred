@@ -12,11 +12,11 @@ export class GetAllQueryCommentsDto {
 
   @IsString()
   @IsOptional()
-  readonly page?: number;
+  readonly page?: string;
 
   @IsString()
   @IsOptional()
-  readonly limit?: number;
+  readonly limit?: string;
 
   @IsOptional()
   readonly order?: OrderType;
@@ -24,11 +24,11 @@ export class GetAllQueryCommentsDto {
   @IsOptional()
   readonly orderBy?: keyof IComment;
 
-  toWhereCondition() {
+  toWhereCondition?() {
     return this.text ? { text: this.text } : {};
   }
 
-  toPaginationOptions() {
+  toPaginationOptions?() {
     return {
       limit: this.limit ? Number(this.limit) : 10,
       offset: this.page

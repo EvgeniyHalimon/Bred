@@ -18,7 +18,7 @@ import Reaction from 'src/reaction/reaction.schema';
 import User from 'src/user/user.schema';
 
 // types
-import { PartialExcept } from 'src/shared/types';
+import { PartialExcept } from 'src/shared';
 import { IArticle } from './article.types';
 
 // constants

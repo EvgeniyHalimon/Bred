@@ -38,14 +38,14 @@ export class CommentDto {
     type: String,
     description: 'Represents the creation date of the comment',
   })
-  createdAt: string;
+  createdAt: Date;
 
   @ApiProperty({
     example: '2024-08-19T09:40:25.000Z',
     type: String,
     description: 'Represents the last update date of the comment',
   })
-  updatedAt: string;
+  updatedAt: Date;
 }
 
 export class CommentWithAuthor extends CommentDto {

@@ -219,7 +219,7 @@ export class ReactionsService {
   }
 
   private async validateCommentReaction(commentId: string, userId: string) {
-    const comment = await this.commentService.findOne({ commentId });
+    const comment = await this.commentService.findOne({ id: commentId });
     if (!comment) {
       throw new NotFoundException('Comment not found');
     }
