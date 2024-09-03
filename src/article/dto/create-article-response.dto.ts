@@ -42,7 +42,7 @@ export class ArticleDto {
     description: 'Represents date of update of the article author',
   })
   @ApiProperty()
-  createdAt: '2024-08-16T12:15:52.795Z';
+  createdAt: Date;
 
   @ApiProperty({
     example: '2024-08-16T12:15:52.795Z',
@@ -50,7 +50,7 @@ export class ArticleDto {
     description: 'Represents date of creation of the article author',
   })
   @ApiProperty()
-  updatedAt: '2024-08-16T12:15:52.795Z';
+  updatedAt: Date;
 }
 
 export class CreateArticleResponseDto {

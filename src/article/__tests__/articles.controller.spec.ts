@@ -1,6 +1,7 @@
 import { Test } from '@nestjs/testing';
 import { ArticlesController } from '../article.controller';
 import { ArticlesService } from '../article.service';
+import { ICustomRequest } from 'src/shared';
 
 describe('ArticlesController', () => {
   let articlesController: ArticlesController;
@@ -29,9 +30,32 @@ describe('ArticlesController', () => {
     expect(articlesController).toBeDefined();
   });
 
-  describe('Create method', () => {});
+  const req = {
+    user: {
+      id: '1',
+    },
+  } as ICustomRequest;
+
+  const createArticleDto = {
+    title: 'Text',
+    text: 'Title',
+  };
+
+  describe('Create method', () => {
+    it('', async () => {
+      await articlesController.create(req, createArticleDto);
+      expect(mockArticlesService.create).toHaveBeenCalledWith({
+        userId: '1',
+        createArticleDto,
+      });
+    });
+  });
+
   describe('Delete method', () => {});
+
   describe('Patch method', () => {});
+
   describe('GetById method', () => {});
+
   describe('FindAll method', () => {});
 });
