@@ -10,7 +10,12 @@ jest.mock('src/auth/utils/passwordUtils');
 
 describe('UsersService', () => {
   let userService: UsersService;
-  let mockUserModel: typeof User;
+  let mockUserModel: {
+    findOne: jest.Mock;
+    findAndCountAll: jest.Mock;
+    save: jest.Mock;
+    set: jest.Mock;
+  };
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -29,7 +34,7 @@ describe('UsersService', () => {
     }).compile();
 
     userService = module.get<UsersService>(UsersService);
-    mockUserModel = module.get<typeof User>(getModelToken(User));
+    mockUserModel = module.get(getModelToken(User));
   });
 
   afterEach(() => {
@@ -99,7 +104,7 @@ describe('UsersService', () => {
         save: jest.fn().mockReturnValue(updatedUser),
       };
 
-      (mockUserModel.findOne as jest.Mock).mockResolvedValueOnce(mockUser);
+      mockUserModel.findOne.mockResolvedValueOnce(mockUser);
       (passwordUtils.hashPassword as jest.Mock).mockResolvedValue(
         'hashed-password',
       );
@@ -126,7 +131,7 @@ describe('UsersService', () => {
     });
 
     it('should throw NotFoundException if user not found', async () => {
-      (mockUserModel.findOne as jest.Mock).mockResolvedValue(null);
+      mockUserModel.findOne.mockResolvedValue(null);
       try {
         await userService.patch({
           updateUserDto: {
@@ -146,8 +151,8 @@ describe('UsersService', () => {
         set: jest.fn(),
         save: jest.fn(),
       };
-      (mockUserModel.findOne as jest.Mock).mockResolvedValueOnce({ id: '2' });
-      (mockUserModel.findOne as jest.Mock).mockResolvedValueOnce(mockUser);
+      mockUserModel.findOne.mockResolvedValueOnce({ id: '2' });
+      mockUserModel.findOne.mockResolvedValueOnce(mockUser);
 
       try {
         await userService.patch({
@@ -165,10 +170,10 @@ describe('UsersService', () => {
 
     it('check work of if statements', async () => {
       const mockUser = {
-        set: jest.fn(),
-        save: jest.fn().mockResolvedValue(updatedUser),
+        set: mockUserModel.set,
+        save: mockUserModel.save.mockResolvedValue(updatedUser),
       };
-      (mockUserModel.findOne as jest.Mock).mockResolvedValue({
+      mockUserModel.findOne.mockResolvedValue({
         updatedUser,
         ...mockUser,
       });
@@ -193,7 +198,7 @@ describe('UsersService', () => {
   describe('UsersService findOne method', () => {
     it('should return a user by ID', async () => {
       const mockUser = { id: '1', email: 'test@example.com' };
-      (mockUserModel.findOne as jest.Mock).mockResolvedValue(mockUser);
+      mockUserModel.findOne.mockResolvedValue(mockUser);
 
       const result = await userService.findOne({ id: '1' });
 
@@ -204,7 +209,7 @@ describe('UsersService', () => {
     });
 
     it('should return null if no user is found', async () => {
-      (mockUserModel.findOne as jest.Mock).mockResolvedValue(null);
+      mockUserModel.findOne.mockResolvedValue(null);
 
       const result = await userService.findOne({ id: '2' });
 

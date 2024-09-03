@@ -55,7 +55,22 @@ describe('CommentsService', () => {
   };
 
   describe('CommentsService create method', () => {
-    it('it create new comment', async () => {});
+    const createCommentDto = {
+      text: 'cool',
+      articleId: '6660ff57-3c9e-4dd0-b4ca-a5cc098b514f',
+    };
+    it('it create new comment', async () => {
+      mockCommentsModel.create.mockResolvedValue(comment);
+      const result = await commentsService.create({
+        userId: '6660ff57-3c9e-4dd0-b4ca-a5cc098b514f',
+        createCommentDto,
+      });
+      expect(mockCommentsModel.create).toHaveBeenCalledWith({
+        ...createCommentDto,
+        authorId: '6660ff57-3c9e-4dd0-b4ca-a5cc098b514f',
+      });
+      expect(result).toEqual(comment);
+    });
   });
 
   describe('CommentsService patch method', () => {
