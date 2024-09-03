@@ -90,7 +90,7 @@ export class ArticlesController {
   })
   @Get('/')
   @ApiQueriesFromDto(GetAllQueryArticlesDto, ArticleOrderByEnum)
-  async getAll(@Query() query: GetAllQueryArticlesDto) {
+  async findAll(@Query() query: GetAllQueryArticlesDto) {
     return await this.articlesService.findAll({ query });
   }
 
@@ -116,7 +116,7 @@ export class ArticlesController {
     type: UpdatedArticleResponseDto,
   })
   @Patch('/:id')
-  async patchById(
+  async patch(
     @Req() request: ICustomRequest,
     @Body() patchArticleDto: PatchArticleDto,
     @Param('id') id: string,
@@ -165,7 +165,7 @@ export class ArticlesController {
     },
   })
   @Delete('/:id')
-  async deleteById(@Req() request: ICustomRequest, @Param('id') id: string) {
+  async delete(@Req() request: ICustomRequest, @Param('id') id: string) {
     const articleId = id;
     const userId = request.user.id;
     await this.articlesService.deleteById({ articleId, userId });
