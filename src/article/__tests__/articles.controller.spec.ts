@@ -2,6 +2,7 @@ import { Test } from '@nestjs/testing';
 import { ArticlesController } from '../article.controller';
 import { ArticlesService } from '../article.service';
 import { ICustomRequest } from 'src/shared';
+import { ArticleDto, GetAllArticlesResponseDto } from '../dto';
 
 describe('ArticlesController', () => {
   let articlesController: ArticlesController;
@@ -75,9 +76,23 @@ describe('ArticlesController', () => {
   });
 
   describe('Patch method', () => {
-    /*  it('Method patch should returned instance of response dto', async () => {
-     
-    }); */
+    it('Method patch should return an instance of dto', async () => {
+      const mockArticle = new ArticleDto();
+      jest.spyOn(mockArticlesService, 'patch').mockResolvedValue(mockArticle);
+      const result = await articlesController.patch(
+        req,
+        patchArticleDto,
+        articleId,
+      );
+
+      expect(result).toEqual(
+        expect.objectContaining({
+          article: expect.any(ArticleDto),
+          message: expect.any(String),
+        }),
+      );
+      expect(result.article).toBeInstanceOf(ArticleDto);
+    });
 
     it('Method patch must be called with correct parameters', async () => {
       await articlesController.patch(req, patchArticleDto, articleId);
@@ -89,7 +104,43 @@ describe('ArticlesController', () => {
     });
   });
 
-  describe('GetById method', () => {});
+  describe('GetById method', () => {
+    it('Method get should return an instance of dto', async () => {
+      const mockResult = new ArticleDto();
+      jest.spyOn(mockArticlesService, 'getById').mockResolvedValue(mockResult);
+      const result = await articlesController.getById(articleId);
+      expect(result).toBeInstanceOf(ArticleDto);
+    });
 
-  describe('FindAll method', () => {});
+    it('Method get must be call with correct parameters', async () => {
+      await articlesController.getById(articleId);
+      expect(mockArticlesService.getById).toHaveBeenCalledWith({ articleId });
+    });
+  });
+
+  describe('FindAll method', () => {
+    it('Method findAll must be called and should return instance of response dto', async () => {
+      const mockResult = new GetAllArticlesResponseDto();
+      jest.spyOn(mockArticlesService, 'findAll').mockResolvedValue(mockResult);
+
+      const result = await articlesController.findAll({
+        page: '1',
+      });
+      expect(result).toBeInstanceOf(GetAllArticlesResponseDto);
+    });
+
+    it('Method findAll must be called with correct parameters', async () => {
+      await articlesController.findAll({
+        page: '1',
+        limit: '10',
+      });
+
+      expect(mockArticlesService.findAll).toHaveBeenCalledWith({
+        query: {
+          page: '1',
+          limit: '10',
+        },
+      });
+    });
+  });
 });

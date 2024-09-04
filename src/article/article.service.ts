@@ -76,8 +76,8 @@ export class ArticlesService {
     query: GetAllQueryArticlesDto;
   }): Promise<GetAllArticlesResponseDto> {
     const result = await this.articleModel.findAndCountAll({
-      where: query.toWhereOption(),
-      ...query.toPaginationOptions(),
+      where: query.toWhereOption?.(),
+      ...query.toPaginationOptions?.(),
       include: [
         { model: User, as: 'author' },
         {

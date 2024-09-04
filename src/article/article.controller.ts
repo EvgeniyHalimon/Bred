@@ -127,7 +127,7 @@ export class ArticlesController {
     @Req() request: ICustomRequest,
     @Body() patchArticleDto: PatchArticleDto,
     @Param('id') id: string,
-  ): Promise<IArticleResponse> {
+  ): Promise<PatchArticleResponseDto> {
     const articleId = id;
     const userId = request.user.id;
     const updatedArticle = await this.articlesService.patch({
