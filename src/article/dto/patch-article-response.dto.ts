@@ -4,7 +4,7 @@ import { ApiProperty } from '@nestjs/swagger';
 // dto
 import { ArticleDto } from '.';
 
-export class UpdatedArticleResponseDto {
+export class PatchArticleResponseDto {
   @ApiProperty({ type: ArticleDto })
   article: ArticleDto;
 

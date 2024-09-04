@@ -2,6 +2,7 @@ import { Test } from '@nestjs/testing';
 import { ArticlesController } from '../article.controller';
 import { ArticlesService } from '../article.service';
 import { ICustomRequest } from 'src/shared';
+import { IArticleResponse } from '../article.types';
 
 describe('ArticlesController', () => {
   let articlesController: ArticlesController;
@@ -41,6 +42,13 @@ describe('ArticlesController', () => {
     text: 'Title',
   };
 
+  const patchArticleDto = {
+    title: 'Text',
+    text: 'Text',
+  };
+
+  const articleId = 'articleId';
+
   describe('Create method', () => {
     it('Create method must be called with correct parameters', async () => {
       await articlesController.create(req, createArticleDto);
@@ -51,9 +59,36 @@ describe('ArticlesController', () => {
     });
   });
 
-  describe('Delete method', () => {});
+  describe('Delete method', () => {
+    it('Delete must be called', async () => {
+      const result = await articlesController.delete(req, articleId);
 
-  describe('Patch method', () => {});
+      expect(result).toEqual({ message: 'Article deleted successfully' });
+    });
+
+    it('Delete must be called with correct parameters', async () => {
+      await articlesController.delete(req, articleId);
+      expect(mockArticlesService.delete).toHaveBeenCalledWith({
+        userId: req.user.id,
+        articleId,
+      });
+    });
+  });
+
+  describe('Patch method', () => {
+    /*  it('Method patch should returned instance of response dto', async () => {
+     
+    }); */
+
+    it('Method patch must be called with correct parameters', async () => {
+      await articlesController.patch(req, patchArticleDto, articleId);
+      expect(mockArticlesService.patch).toHaveBeenCalledWith({
+        articleId,
+        userId: req.user.id,
+        patchArticleDto,
+      });
+    });
+  });
 
   describe('GetById method', () => {});
 

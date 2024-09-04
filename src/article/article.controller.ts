@@ -28,7 +28,7 @@ import {
   PatchArticleDto,
   CreateArticleResponseDto,
   DeletedArticleResponseDto,
-  UpdatedArticleResponseDto,
+  PatchArticleResponseDto,
   GetByIdArticleResponseDto,
   GetAllArticlesResponseDto,
 } from './dto';
@@ -119,7 +119,7 @@ export class ArticlesController {
   @ApiResponse({
     status: HttpStatus.OK,
     description: 'When article successfully updated',
-    type: UpdatedArticleResponseDto,
+    type: PatchArticleResponseDto,
   })
   @Patch('/:id')
   async patch(
