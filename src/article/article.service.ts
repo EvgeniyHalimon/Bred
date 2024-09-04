@@ -23,6 +23,7 @@ import {
 // types
 import Reaction from 'src/reaction/reaction.schema';
 import Comment from 'src/comment/comment.schema';
+import { IArticle } from './article.types';
 
 @Injectable()
 export class ArticlesService {
@@ -165,15 +166,9 @@ export class ArticlesService {
     }
   }
 
-  async findOne({
-    articleId,
-  }: {
-    articleId: string;
-  }): Promise<ArticleDto | null> {
+  async findOne(whereCondition: Partial<IArticle>): Promise<ArticleDto | null> {
     return this.articleModel.findOne({
-      where: {
-        id: articleId,
-      },
+      where: whereCondition,
     });
   }
 }

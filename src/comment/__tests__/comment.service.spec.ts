@@ -120,12 +120,15 @@ describe('CommentsService', () => {
   });
 
   describe('CommentsService delete method', () => {
-    it('should succesfully delete a comment', async () => {
-      mockCommentsModel.findOne.mockResolvedValue(comment);
-      await commentsService.delete({
+    const deleteComment = () => {
+      return commentsService.delete({
         userId: '1',
         commentId: '11',
       });
+    };
+    it('should successfully delete a comment', async () => {
+      mockCommentsModel.findOne.mockResolvedValue(comment);
+      await deleteComment();
       expect(mockCommentsModel.destroy).toHaveBeenCalledWith({
         where: { id: '11' },
       });
@@ -134,10 +137,7 @@ describe('CommentsService', () => {
     it('should throw NotFoundException if comment not found', async () => {
       mockCommentsModel.findOne.mockResolvedValue(null);
       try {
-        await commentsService.delete({
-          userId: '1',
-          commentId: '11',
-        });
+        await deleteComment();
       } catch (error) {
         expect(error).toBeInstanceOf(NotFoundException);
         expect(error.message).toBe('Comment not found');
@@ -148,10 +148,7 @@ describe('CommentsService', () => {
       mockCommentsModel.findOne.mockResolvedValueOnce(comment);
       mockCommentsModel.findOne.mockResolvedValueOnce(null);
       try {
-        await commentsService.delete({
-          userId: '1',
-          commentId: '11',
-        });
+        await deleteComment();
       } catch (error) {
         expect(error).toBeInstanceOf(NotFoundException);
         expect(error.message).toBe('You are not author of this comment');
@@ -161,10 +158,7 @@ describe('CommentsService', () => {
     it('should throw BadRequestException if comment not found', async () => {
       mockCommentsModel.findOne.mockResolvedValue(comment);
       try {
-        await commentsService.delete({
-          userId: '1',
-          commentId: '11',
-        });
+        await deleteComment();
         mockCommentsModel.destroy.mockResolvedValue(0);
       } catch (error) {
         expect(error).toBeInstanceOf(BadRequestException);

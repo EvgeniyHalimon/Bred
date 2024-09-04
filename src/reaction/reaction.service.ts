@@ -205,7 +205,7 @@ export class ReactionsService {
   }
 
   private async validateArticleReaction(articleId: string, userId: string) {
-    const article = await this.articleService.findOne({ articleId });
+    const article = await this.articleService.findOne({ id: articleId });
     if (!article) {
       throw new NotFoundException('Article not found');
     }
