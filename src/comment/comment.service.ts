@@ -18,7 +18,7 @@ import {
   GetAllCommentsResponseDto,
   GetAllQueryCommentsDto,
   PatchCommentResponseDto,
-  UpdateCommentDto,
+  PatchCommentDto,
 } from './dto';
 import Reaction from 'src/reaction/reaction.schema';
 import { IComment } from './comment.types';
@@ -49,7 +49,7 @@ export class CommentsService {
   }: {
     userId: string;
     commentId: string;
-    updateCommentDto: UpdateCommentDto;
+    updateCommentDto: PatchCommentDto;
   }): Promise<PatchCommentResponseDto> {
     const comment = await this.commentModel.findOne({
       where: { id: commentId },

@@ -77,13 +77,6 @@ describe('ArticlesService', () => {
     });
   });
 
-  describe('GetById method', () => {
-    it('', () => {});
-    it('', () => {});
-  });
-
-  describe('FindAll method', () => {});
-
   describe('Delete method', () => {
     const deleteArticle = () => {
       return articlesService.delete({ userId: '1', articleId: '11' });
@@ -132,11 +125,54 @@ describe('ArticlesService', () => {
   });
 
   describe('Patch method', () => {
-    it('should successfully patch a article', async () => {});
+    const patchArticleDto = {
+      title: 'Big boss',
+    };
 
-    it('should throw NotFoundException if article not found', async () => {});
+    const patchArticle = {
+      articleId: '1',
+      userId: '1',
+      patchArticleDto,
+    };
 
-    it('should throw NotFoundException if user are not author of this article', async () => {});
+    it('should successfully patch a article', async () => {
+      mockArticlesModel.findOne.mockResolvedValue({
+        save: mockArticlesModel.save.mockResolvedValue(article),
+        set: mockArticlesModel.set,
+      });
+
+      const result = await articlesService.patch({
+        userId: '1',
+        articleId: '1',
+        patchArticleDto,
+      });
+
+      expect(mockArticlesModel.findOne).toHaveBeenCalledTimes(2);
+      expect(mockArticlesModel.set).toHaveBeenCalledWith(patchArticleDto);
+      expect(mockArticlesModel.save).toHaveBeenCalledTimes(1);
+      expect(result).toEqual(article);
+    });
+
+    it('should throw NotFoundException if article not found', async () => {
+      mockArticlesModel.findOne.mockResolvedValue(null);
+      try {
+        await articlesService.patch(patchArticle);
+      } catch (error) {
+        expect(error).toBeInstanceOf(NotFoundException);
+        expect(error.message).toBe('Article not found');
+      }
+    });
+
+    it('should throw NotFoundException if user are not author of this article', async () => {
+      mockArticlesModel.findOne.mockResolvedValueOnce(patchArticle);
+      mockArticlesModel.findOne.mockResolvedValueOnce(null);
+      try {
+        await articlesService.patch(patchArticle);
+      } catch (error) {
+        expect(error).toBeInstanceOf(NotFoundException);
+        expect(error.message).toBe('You are not author of this article');
+      }
+    });
   });
 
   describe('ArticlesService findOne method', () => {
