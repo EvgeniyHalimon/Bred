@@ -2,7 +2,6 @@ import { Test } from '@nestjs/testing';
 import { ArticlesController } from '../article.controller';
 import { ArticlesService } from '../article.service';
 import { ICustomRequest } from 'src/shared';
-import { IArticleResponse } from '../article.types';
 
 describe('ArticlesController', () => {
   let articlesController: ArticlesController;

@@ -31,6 +31,7 @@ import {
   PatchArticleResponseDto,
   GetByIdArticleResponseDto,
   GetAllArticlesResponseDto,
+  ArticleDto,
 } from './dto';
 
 // types
@@ -81,7 +82,7 @@ export class ArticlesController {
     description: 'When article is not present in database',
   })
   @Get('/:id')
-  async getById(@Param('id') id: string) {
+  async getById(@Param('id') id: string): Promise<ArticleDto | undefined> {
     const articleId = id;
     const article = await this.articlesService.getById({ articleId });
     return article;
