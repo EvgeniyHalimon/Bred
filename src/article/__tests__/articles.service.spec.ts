@@ -7,7 +7,6 @@ import { BadRequestException, NotFoundException } from '@nestjs/common';
 import Reaction from 'src/reaction/reaction.schema';
 import User from 'src/user/user.schema';
 import Comment from 'src/comment/comment.schema';
-import { count } from 'console';
 
 describe('ArticlesService', () => {
   let articlesService: ArticlesService;
@@ -310,10 +309,22 @@ describe('ArticlesService', () => {
   });
 
   describe('FindAll method', () => {
-    const articles = {
+    const mockArticles = {
       rows: articleById,
       count: 1,
     };
-    it('should return articles and count', () => {});
+    it('should return articles and count', async () => {
+      mockArticlesModel.findAndCountAll.mockResolvedValue(mockArticles);
+      const articles = await articlesService.findAll({
+        query: {
+          page: '1',
+        },
+      });
+      expect(mockArticlesModel.findAndCountAll).toHaveBeenCalledTimes(1);
+      expect(articles).toEqual({
+        articles: mockArticles.rows,
+        count: mockArticles.count,
+      });
+    });
   });
 });
