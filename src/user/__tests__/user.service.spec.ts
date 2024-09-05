@@ -54,7 +54,6 @@ describe('UsersService', () => {
             firstName: 'string',
             lastName: 'string',
             email: 'string',
-            password: 'string',
             bio: 'string',
             role: 'user',
             createdAt: new Date('2024-08-14T08:40:32.000Z'),

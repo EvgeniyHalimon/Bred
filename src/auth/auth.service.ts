@@ -46,10 +46,10 @@ export class AuthService {
   }
 
   async signIn(signInDto: SignInDto): Promise<ISingInResponse | undefined> {
-    const { password } = signInDto;
+    const { password, email } = signInDto;
 
     const user = await this.userModel.scope('withPassword').findOne({
-      where: { email: signInDto.email },
+      where: { email },
     });
 
     if (!user) {
