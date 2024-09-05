@@ -23,8 +23,6 @@ export function ApiQueriesFromDto(dto: Type<any>, keysForOrderBy: any) {
       fieldType = 'enum';
     } else if (name === 'isString') {
       fieldType = String;
-    } else if (name === 'isNumber') {
-      fieldType = Number;
     } else if (name === 'isBoolean') {
       fieldType = Boolean;
     }

@@ -17,6 +17,9 @@ import { Public } from 'src/shared/public.decorator';
 import { SignInDto, CreateUserDto } from 'src/user/dto';
 import { SignInResponseDto, SignUpResponseDto } from './dto';
 
+// types
+import { ISingInResponse } from './auth.types';
+
 @Controller('auth')
 @ApiTags('Auth')
 export class AuthController {
@@ -46,7 +49,7 @@ export class AuthController {
     },
     description: "When user with current email doesn't exist on database",
   })
-  signIn(@Body() signInDTO: SignInDto) {
+  signIn(@Body() signInDTO: SignInDto): Promise<ISingInResponse | undefined> {
     return this.authService.signIn(signInDTO);
   }
 
@@ -66,7 +69,9 @@ export class AuthController {
       statusCode: HttpStatus.BAD_REQUEST,
     },
   })
-  signUp(@Body() signUpDTO: CreateUserDto) {
+  signUp(
+    @Body() signUpDTO: CreateUserDto,
+  ): Promise<SignUpResponseDto | undefined> {
     return this.authService.signUp(signUpDTO);
   }
 }
