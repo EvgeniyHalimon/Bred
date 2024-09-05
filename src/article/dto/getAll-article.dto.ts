@@ -8,11 +8,11 @@ import { IArticle } from '../article.types';
 export class GetAllQueryArticlesDto {
   @IsString()
   @IsOptional()
-  readonly page?: number;
+  readonly page?: string;
 
   @IsString()
   @IsOptional()
-  readonly limit?: number;
+  readonly limit?: string;
 
   @IsOptional()
   readonly order?: OrderType;
@@ -24,11 +24,11 @@ export class GetAllQueryArticlesDto {
   @IsOptional()
   readonly title?: string;
 
-  toWhereOption() {
+  toWhereOption?() {
     return this.title ? { title: this.title } : {};
   }
 
-  toPaginationOptions() {
+  toPaginationOptions?() {
     return {
       limit: this.limit ? Number(this.limit) : 10,
       offset: this.page

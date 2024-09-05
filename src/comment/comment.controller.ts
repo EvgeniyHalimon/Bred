@@ -30,7 +30,7 @@ import {
   GetAllQueryCommentsDto,
   PatchCommentResponseDto,
   PostCommentResponseDto,
-  UpdateCommentDto,
+  PatchCommentDto,
 } from './dto';
 
 // types
@@ -123,7 +123,7 @@ export class CommentController {
   patch(
     @Req() request: ICustomRequest,
     @Param('id') id: string,
-    @Body() updateCommentDto: UpdateCommentDto,
+    @Body() updateCommentDto: PatchCommentDto,
   ): Promise<PatchCommentResponseDto> {
     const userId = request.user.id;
     return this.commentService.patch({

@@ -28,14 +28,18 @@ import {
   PatchArticleDto,
   CreateArticleResponseDto,
   DeletedArticleResponseDto,
-  UpdatedArticleResponseDto,
-  GetByIdArticleResponseDto,
+  PatchArticleResponseDto,
   GetAllArticlesResponseDto,
+  DetailedArticleInfoDto,
 } from './dto';
 
 // types
-import { ArticleOrderByEnum } from './article.types';
-import { ICustomRequest, ApiQueriesFromDto } from 'src/shared';
+import { ArticleOrderByEnum, IArticleResponse } from './article.types';
+import {
+  ICustomRequest,
+  ApiQueriesFromDto,
+  ISimpleMessageResponse,
+} from 'src/shared';
 
 @Controller('articles')
 @ApiTags('Articles')
@@ -51,7 +55,7 @@ export class ArticlesController {
   async create(
     @Req() request: ICustomRequest,
     @Body() createArticleDto: CreateArticleDto,
-  ) {
+  ): Promise<IArticleResponse> {
     const userId = request.user.id;
     const createdArticle = await this.articlesService.create({
       userId,
@@ -66,7 +70,7 @@ export class ArticlesController {
   @ApiResponse({
     status: HttpStatus.OK,
     description: 'When we received the article by id',
-    type: GetByIdArticleResponseDto,
+    type: DetailedArticleInfoDto,
   })
   @ApiNotFoundResponse({
     example: {
@@ -77,10 +81,12 @@ export class ArticlesController {
     description: 'When article is not present in database',
   })
   @Get('/:id')
-  async getById(@Param('id') id: string) {
+  async getById(
+    @Param('id') id: string,
+  ): Promise<DetailedArticleInfoDto | undefined> {
     const articleId = id;
     const article = await this.articlesService.getById({ articleId });
-    return { article };
+    return article;
   }
 
   @ApiResponse({
@@ -90,7 +96,9 @@ export class ArticlesController {
   })
   @Get('/')
   @ApiQueriesFromDto(GetAllQueryArticlesDto, ArticleOrderByEnum)
-  async getAll(@Query() query: GetAllQueryArticlesDto) {
+  async findAll(
+    @Query() query: GetAllQueryArticlesDto,
+  ): Promise<GetAllArticlesResponseDto> {
     return await this.articlesService.findAll({ query });
   }
 
@@ -113,17 +121,17 @@ export class ArticlesController {
   @ApiResponse({
     status: HttpStatus.OK,
     description: 'When article successfully updated',
-    type: UpdatedArticleResponseDto,
+    type: PatchArticleResponseDto,
   })
   @Patch('/:id')
-  async patchById(
+  async patch(
     @Req() request: ICustomRequest,
     @Body() patchArticleDto: PatchArticleDto,
     @Param('id') id: string,
-  ) {
+  ): Promise<PatchArticleResponseDto> {
     const articleId = id;
     const userId = request.user.id;
-    const updatedArticle = await this.articlesService.patchById({
+    const updatedArticle = await this.articlesService.patch({
       articleId,
       userId,
       patchArticleDto,
@@ -165,10 +173,13 @@ export class ArticlesController {
     },
   })
   @Delete('/:id')
-  async deleteById(@Req() request: ICustomRequest, @Param('id') id: string) {
+  async delete(
+    @Req() request: ICustomRequest,
+    @Param('id') id: string,
+  ): Promise<ISimpleMessageResponse> {
     const articleId = id;
     const userId = request.user.id;
-    await this.articlesService.deleteById({ articleId, userId });
+    await this.articlesService.delete({ articleId, userId });
     return { message: 'Article deleted successfully' };
   }
 }

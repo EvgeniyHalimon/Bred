@@ -12,15 +12,18 @@ import User from 'src/user/user.schema';
 
 // dto's
 import {
+  ArticleDto,
   CreateArticleDto,
+  DetailedArticleInfoDto,
+  GetAllArticlesResponseDto,
   GetAllQueryArticlesDto,
   PatchArticleDto,
 } from './dto';
 
 // types
-import { IArticle } from './article.types';
 import Reaction from 'src/reaction/reaction.schema';
 import Comment from 'src/comment/comment.schema';
+import { IArticle } from './article.types';
 
 @Injectable()
 export class ArticlesService {
@@ -32,7 +35,7 @@ export class ArticlesService {
   }: {
     userId: string;
     createArticleDto: CreateArticleDto;
-  }): Promise<IArticle> {
+  }): Promise<ArticleDto> {
     const article = {
       ...createArticleDto,
       authorId: userId,
@@ -44,7 +47,7 @@ export class ArticlesService {
     articleId,
   }: {
     articleId: string;
-  }): Promise<IArticle | undefined> {
+  }): Promise<DetailedArticleInfoDto | undefined> {
     const article = await this.articleModel.findOne({
       where: { id: articleId },
       include: [
@@ -65,13 +68,17 @@ export class ArticlesService {
       throw new NotFoundException('Article not found');
     }
 
-    return article;
+    return article as unknown as DetailedArticleInfoDto;
   }
 
-  async findAll({ query }: { query: GetAllQueryArticlesDto }) {
+  async findAll({
+    query,
+  }: {
+    query: GetAllQueryArticlesDto;
+  }): Promise<GetAllArticlesResponseDto> {
     const result = await this.articleModel.findAndCountAll({
-      where: query.toWhereOption(),
-      ...query.toPaginationOptions(),
+      where: query.toWhereOption?.(),
+      ...query.toPaginationOptions?.(),
       include: [
         { model: User, as: 'author' },
         {
@@ -87,12 +94,12 @@ export class ArticlesService {
       ],
     });
     return {
-      articles: result.rows,
+      articles: result.rows as unknown as DetailedArticleInfoDto[],
       count: result.count,
     };
   }
 
-  async patchById({
+  async patch({
     articleId,
     userId,
     patchArticleDto,
@@ -100,7 +107,7 @@ export class ArticlesService {
     articleId: string;
     userId: string;
     patchArticleDto: PatchArticleDto;
-  }): Promise<IArticle | undefined> {
+  }): Promise<ArticleDto | undefined> {
     const article = await this.articleModel.findOne({
       where: { id: articleId },
     });
@@ -124,13 +131,13 @@ export class ArticlesService {
     return updatedArticle;
   }
 
-  async deleteById({
+  async delete({
     userId,
     articleId,
   }: {
     userId: string;
     articleId: string;
-  }) {
+  }): Promise<void> {
     const article = await this.articleModel.findOne({
       where: { id: articleId },
     });
@@ -158,11 +165,10 @@ export class ArticlesService {
       );
     }
   }
-  async findOne({ articleId }: { articleId: string }) {
+
+  async findOne(whereCondition: Partial<IArticle>): Promise<ArticleDto | null> {
     return this.articleModel.findOne({
-      where: {
-        id: articleId,
-      },
+      where: whereCondition,
     });
   }
 }
