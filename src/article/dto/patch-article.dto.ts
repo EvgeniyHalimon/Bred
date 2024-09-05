@@ -30,7 +30,7 @@ export class PatchArticleDto {
     type: String,
     example: 'Big Boss',
   })
-  readonly title: string;
+  readonly title?: string;
 
   @IsString()
   @MinLengthWithMessage({
@@ -50,5 +50,5 @@ export class PatchArticleDto {
     type: String,
     example: 'Man who sold the world',
   })
-  readonly text: string;
+  readonly text?: string;
 }

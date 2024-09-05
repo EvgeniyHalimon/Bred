@@ -11,7 +11,7 @@ import {
 // constants
 import { commentFieldLengths } from '../comment.constants';
 
-export class UpdateCommentDto {
+export class PatchCommentDto {
   @IsString()
   @MinLengthWithMessage({ min: commentFieldLengths.text.min, property: 'Text' })
   @MaxLengthWithMessage({ max: commentFieldLengths.text.max, property: 'Text' })

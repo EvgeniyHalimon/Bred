@@ -39,7 +39,20 @@ describe('CommentController', () => {
   } as ICustomRequest;
   const commentId = 'commentId';
 
-  describe('Create method', () => {});
+  const createCommentDto = {
+    articleId: '22',
+    text: 'Title',
+  };
+
+  describe('Create method', () => {
+    it('Create method must be called with correct parameters', async () => {
+      await commentController.create(req, createCommentDto);
+      expect(mockCommentsService.create).toHaveBeenCalledWith({
+        userId: '1',
+        createCommentDto,
+      });
+    });
+  });
 
   describe('Delete method', () => {
     it('Delete method must be called', async () => {
@@ -90,7 +103,7 @@ describe('CommentController', () => {
       expect(result).toBeInstanceOf(GetAllCommentsResponseDto);
     });
 
-    it('Method getAll must be called with correct parameters', async () => {
+    it('Method findAll must be called with correct parameters', async () => {
       await commentController.findAll({
         page: '1',
         limit: '10',
