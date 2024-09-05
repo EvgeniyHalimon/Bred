@@ -29,9 +29,8 @@ import {
   CreateArticleResponseDto,
   DeletedArticleResponseDto,
   PatchArticleResponseDto,
-  GetByIdArticleResponseDto,
   GetAllArticlesResponseDto,
-  ArticleDto,
+  DetailedArticleInfoDto,
 } from './dto';
 
 // types
@@ -71,7 +70,7 @@ export class ArticlesController {
   @ApiResponse({
     status: HttpStatus.OK,
     description: 'When we received the article by id',
-    type: GetByIdArticleResponseDto,
+    type: DetailedArticleInfoDto,
   })
   @ApiNotFoundResponse({
     example: {
@@ -82,7 +81,9 @@ export class ArticlesController {
     description: 'When article is not present in database',
   })
   @Get('/:id')
-  async getById(@Param('id') id: string): Promise<ArticleDto | undefined> {
+  async getById(
+    @Param('id') id: string,
+  ): Promise<DetailedArticleInfoDto | undefined> {
     const articleId = id;
     const article = await this.articlesService.getById({ articleId });
     return article;

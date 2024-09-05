@@ -47,7 +47,7 @@ export class ArticlesService {
     articleId,
   }: {
     articleId: string;
-  }): Promise<ArticleDto | undefined> {
+  }): Promise<DetailedArticleInfoDto | undefined> {
     const article = await this.articleModel.findOne({
       where: { id: articleId },
       include: [
@@ -68,7 +68,7 @@ export class ArticlesService {
       throw new NotFoundException('Article not found');
     }
 
-    return article;
+    return article as unknown as DetailedArticleInfoDto;
   }
 
   async findAll({

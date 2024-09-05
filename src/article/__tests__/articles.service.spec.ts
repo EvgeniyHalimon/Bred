@@ -4,6 +4,10 @@ import { ArticlesService } from '../article.service';
 import { getModelToken } from '@nestjs/sequelize';
 import Article from '../article.schema';
 import { BadRequestException, NotFoundException } from '@nestjs/common';
+import Reaction from 'src/reaction/reaction.schema';
+import User from 'src/user/user.schema';
+import Comment from 'src/comment/comment.schema';
+import { count } from 'console';
 
 describe('ArticlesService', () => {
   let articlesService: ArticlesService;
@@ -54,6 +58,71 @@ describe('ArticlesService', () => {
     text: 'Man who sold the world',
     createdAt: '2024-08-16T15:59:48.000Z',
     updatedAt: '2024-08-16T16:00:02.000Z',
+  };
+
+  const articleById = {
+    id: '6660ff57-3c9e-4dd0-b4ca-a5cc098b514f',
+    title: 'Big boss',
+    rating: 0,
+    authorId: 'd0601328-1486-434a-860e-75b843a682db',
+    text: 'Man who sold the world',
+    createdAt: '2024-08-16T15:59:48.000Z',
+    updatedAt: '2024-08-16T16:00:02.000Z',
+    author: {
+      id: 'd0601328-1486-434a-860e-75b843a682db',
+      firstName: 'string',
+      lastName: 'string',
+      email: 'q@email.com',
+      bio: 'Hello my name is Monti',
+      role: 'user',
+      photo: '',
+      createdAt: '2024-08-14T08:40:32.000Z',
+      updatedAt: '2024-08-23T11:50:47.000Z',
+    },
+    reactions: [
+      {
+        id: '9ee920f3-f3a3-4892-86a8-191f2c303614',
+        userId: 'd0601328-1486-434a-860e-75b843a682db',
+        sourceType: 'article',
+        articleId: '6660ff57-3c9e-4dd0-b4ca-a5cc098b514f',
+        commentId: null,
+        reactionType: 'upvote',
+        createdAt: '2024-08-19T09:40:15.000Z',
+        updatedAt: '2024-08-19T09:40:15.000Z',
+        user: {
+          id: 'd0601328-1486-434a-860e-75b843a682db',
+          firstName: 'string',
+          lastName: 'string',
+          email: 'q@email.com',
+          bio: 'Hello my name is Monti',
+          role: 'user',
+          photo: '',
+          createdAt: '2024-08-14T08:40:32.000Z',
+          updatedAt: '2024-08-23T11:50:47.000Z',
+        },
+      },
+    ],
+    comments: [
+      {
+        id: '7770ec1a-cdbf-47c1-85db-35fbfc55d6a3',
+        authorId: 'd0601328-1486-434a-860e-75b843a682db',
+        articleId: '6660ff57-3c9e-4dd0-b4ca-a5cc098b514f',
+        text: 'cool',
+        createdAt: '2024-08-19T09:40:25.000Z',
+        updatedAt: '2024-08-19T09:40:25.000Z',
+        author: {
+          id: 'd0601328-1486-434a-860e-75b843a682db',
+          firstName: 'string',
+          lastName: 'string',
+          email: 'q@email.com',
+          bio: 'Hello my name is Monti',
+          role: 'user',
+          photo: '',
+          createdAt: '2024-08-14T08:40:32.000Z',
+          updatedAt: '2024-08-23T11:50:47.000Z',
+        },
+      },
+    ],
   };
 
   describe('Create method', () => {
@@ -205,5 +274,46 @@ describe('ArticlesService', () => {
       });
       expect(result).toBeNull();
     });
+  });
+
+  describe('GetById method', () => {
+    it('should get article by id', async () => {
+      mockArticlesModel.findOne.mockResolvedValue(articleById);
+      await articlesService.getById({ articleId: '11' });
+      expect(mockArticlesModel.findOne).toHaveBeenCalledWith({
+        where: { id: '11' },
+        include: [
+          { model: User, as: 'author' },
+          {
+            model: Reaction,
+            as: 'reactions',
+            include: [{ model: User, as: 'user' }],
+          },
+          {
+            model: Comment,
+            as: 'comments',
+            include: [{ model: User, as: 'author' }],
+          },
+        ],
+      });
+    });
+
+    it('should throw NotFoundException if comment not found', async () => {
+      mockArticlesModel.findOne.mockResolvedValue(null);
+      try {
+        await articlesService.getById({ articleId: '11' });
+      } catch (error) {
+        expect(error).toBeInstanceOf(NotFoundException);
+        expect(error.message).toEqual('Article not found');
+      }
+    });
+  });
+
+  describe('FindAll method', () => {
+    const articles = {
+      rows: articleById,
+      count: 1,
+    };
+    it('should return articles and count', () => {});
   });
 });
