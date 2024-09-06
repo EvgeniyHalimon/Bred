@@ -15,6 +15,8 @@ import { CreateUserDto, SignInDto } from 'src/user/dto';
 
 // utils
 import { hashPassword, verifyPassword } from './utils/passwordUtils';
+import { SignUpResponseDto } from './dto';
+import { ISingInResponse } from './auth.types';
 
 @Injectable()
 export class AuthService {
@@ -23,7 +25,9 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
-  async signUp(signUpDto: CreateUserDto): Promise<User> {
+  async signUp(
+    signUpDto: CreateUserDto,
+  ): Promise<SignUpResponseDto | undefined> {
     const user = await this.userModel.scope('withPassword').findOne({
       where: { email: signUpDto.email },
     });
@@ -41,13 +45,11 @@ export class AuthService {
     return createdUser;
   }
 
-  async signIn(
-    signInDto: SignInDto,
-  ): Promise<{ accessToken: string; refreshToken: string } | undefined> {
-    const { password } = signInDto;
+  async signIn(signInDto: SignInDto): Promise<ISingInResponse | undefined> {
+    const { password, email } = signInDto;
 
     const user = await this.userModel.scope('withPassword').findOne({
-      where: { email: signInDto.email },
+      where: { email },
     });
 
     if (!user) {
@@ -63,6 +65,7 @@ export class AuthService {
     }
 
     return {
+      user,
       accessToken: await this.jwtService.signAsync(userWithoutPhoto),
       refreshToken: await this.jwtService.signAsync(userWithoutPhoto),
     };
