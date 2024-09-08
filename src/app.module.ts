@@ -12,10 +12,10 @@ import { join } from 'path';
 import { LoggerModule } from 'nestjs-pino';
 
 // modules
-import { UsersModule } from './user/user.module';
-import { CommentsModule } from './comment/comment.module';
-import { ArticlesModule } from './article/article.module';
-import { ReactionsModule } from './reaction/reaction.module';
+import { UsersModule } from './users/user.module';
+import { CommentsModule } from './comments/comment.module';
+import { ArticlesModule } from './articles/article.module';
+import { ReactionsModule } from './reactions/reaction.module';
 import { AuthModule } from './auth/auth.module';
 
 // exception filter

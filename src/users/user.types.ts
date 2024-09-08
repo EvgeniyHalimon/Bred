@@ -1,6 +1,6 @@
 // types
-import { IArticle } from 'src/article/article.types';
-import { IComment } from 'src/comment/comment.types';
+import { IArticle } from 'src/articles/article.types';
+import { IComment } from 'src/comments/comment.types';
 
 // constants
 import { UserRolesEnum } from './user.constants';

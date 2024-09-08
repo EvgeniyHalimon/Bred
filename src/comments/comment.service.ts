@@ -8,7 +8,7 @@ import { InjectModel } from '@nestjs/sequelize';
 
 // schemas
 import Comment from './comment.schema';
-import User from 'src/user/user.schema';
+import User from 'src/users/user.schema';
 
 // dto
 import {
@@ -20,7 +20,7 @@ import {
   PatchCommentResponseDto,
   PatchCommentDto,
 } from './dto';
-import Reaction from 'src/reaction/reaction.schema';
+import Reaction from 'src/reactions/reaction.schema';
 import { IComment } from './comment.types';
 
 @Injectable()

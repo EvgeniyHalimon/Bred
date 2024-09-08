@@ -3,8 +3,8 @@ import { Module } from '@nestjs/common';
 import { SequelizeModule } from '@nestjs/sequelize';
 
 // modules
-import { CommentsModule } from 'src/comment/comment.module';
-import { ArticlesModule } from 'src/article/article.module';
+import { CommentsModule } from 'src/comments/comment.module';
+import { ArticlesModule } from 'src/articles/article.module';
 
 // controller
 import { ReactionsController } from './reaction.controller';

@@ -2,7 +2,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 
 // dto
-import { UserDto } from 'src/user/dto';
+import { UserDto } from 'src/users/dto';
 
 export class CommentDto {
   @ApiProperty({

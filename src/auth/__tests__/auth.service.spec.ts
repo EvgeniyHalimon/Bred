@@ -1,7 +1,7 @@
 import { Test } from '@nestjs/testing';
 import { AuthService } from '../auth.service';
 import { getModelToken } from '@nestjs/sequelize';
-import User from 'src/user/user.schema';
+import User from 'src/users/user.schema';
 import { JwtService } from '@nestjs/jwt';
 import * as passwordUtils from 'src/auth/utils/passwordUtils';
 import { BadRequestException, NotFoundException } from '@nestjs/common';

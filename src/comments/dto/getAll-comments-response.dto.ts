@@ -2,8 +2,8 @@
 import { ApiProperty } from '@nestjs/swagger';
 
 // dtos
-import { ReactionDtoWithUser } from 'src/reaction/dto';
-import { UserDto } from 'src/user/dto';
+import { ReactionDtoWithUser } from 'src/reactions/dto';
+import { UserDto } from 'src/users/dto';
 import { CommentDto } from './comment.dto';
 
 export class DetailedCommentsDto extends CommentDto {

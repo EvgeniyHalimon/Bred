@@ -7,12 +7,12 @@ import {
 import { InjectModel } from '@nestjs/sequelize';
 
 // service
-import { CommentsService } from 'src/comment/comment.service';
-import { ArticlesService } from 'src/article/article.service';
+import { CommentsService } from 'src/comments/comment.service';
+import { ArticlesService } from 'src/articles/article.service';
 
 // schemas
 import Reaction from './reaction.schema';
-import User from 'src/user/user.schema';
+import User from 'src/users/user.schema';
 
 //dto's
 import {

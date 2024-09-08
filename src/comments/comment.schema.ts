@@ -14,12 +14,12 @@ import {
 import { v4 as uuidv4 } from 'uuid';
 
 // schemas
-import Reaction from 'src/reaction/reaction.schema';
-import User from 'src/user/user.schema';
-import Article from 'src/article/article.schema';
+import Reaction from 'src/reactions/reaction.schema';
+import User from 'src/users/user.schema';
+import Article from 'src/articles/article.schema';
 
 // types
-import { SourceTypeEnum } from 'src/reaction/reaction.constants';
+import { SourceTypeEnum } from 'src/reactions/reaction.constants';
 import { IComment } from './comment.types';
 import { PartialExcept } from 'src/shared/types';
 

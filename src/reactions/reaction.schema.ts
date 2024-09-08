@@ -12,9 +12,9 @@ import {
 import { v4 as uuidv4 } from 'uuid';
 
 // schemas
-import Article from 'src/article/article.schema';
-import User from 'src/user/user.schema';
-import Comment from 'src/comment/comment.schema';
+import Article from 'src/articles/article.schema';
+import User from 'src/users/user.schema';
+import Comment from 'src/comments/comment.schema';
 
 // types
 import { IReactions } from './reaction.types';

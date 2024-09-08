@@ -13,12 +13,12 @@ import {
 import { v4 as uuidv4 } from 'uuid';
 
 // schema
-import Article from 'src/article/article.schema';
-import Comment from 'src/comment/comment.schema';
-import Reaction from 'src/reaction/reaction.schema';
+import Article from 'src/articles/article.schema';
+import Comment from 'src/comments/comment.schema';
+import Reaction from 'src/reactions/reaction.schema';
 
 // types
-import { IUser } from 'src/user/user.types';
+import { IUser } from 'src/users/user.types';
 import { PartialExcept } from 'src/shared/types';
 
 // constants

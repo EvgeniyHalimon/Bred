@@ -8,7 +8,7 @@ import { APP_GUARD } from '@nestjs/core';
 import { config } from 'src/config';
 
 // module
-import { UsersModule } from 'src/user/user.module';
+import { UsersModule } from 'src/users/user.module';
 
 // controller
 import { AuthController } from './auth.controller';
@@ -17,7 +17,7 @@ import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 
 // schema
-import User from 'src/user/user.schema';
+import User from 'src/users/user.schema';
 
 // guard
 import { AuthGuard } from './guards/auth.guard';

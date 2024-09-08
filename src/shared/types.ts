@@ -3,7 +3,7 @@ import { Request } from 'express';
 import { Optional } from 'sequelize';
 
 // types
-import { IUser } from 'src/user/user.types';
+import { IUser } from 'src/users/user.types';
 
 export type PartialExcept<T, K extends keyof T> = Optional<T, K>;
 

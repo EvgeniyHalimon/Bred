@@ -14,7 +14,7 @@ import { AuthService } from './auth.service';
 import { Public } from 'src/shared/public.decorator';
 
 // dto's
-import { SignInDto, CreateUserDto } from 'src/user/dto';
+import { SignInDto, CreateUserDto } from 'src/users/dto';
 import { SignInResponseDto, SignUpResponseDto } from './dto';
 
 // types

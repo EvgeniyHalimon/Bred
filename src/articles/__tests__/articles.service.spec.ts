@@ -4,9 +4,9 @@ import { ArticlesService } from '../article.service';
 import { getModelToken } from '@nestjs/sequelize';
 import Article from '../article.schema';
 import { BadRequestException, NotFoundException } from '@nestjs/common';
-import Reaction from 'src/reaction/reaction.schema';
-import User from 'src/user/user.schema';
-import Comment from 'src/comment/comment.schema';
+import Reaction from 'src/reactions/reaction.schema';
+import User from 'src/users/user.schema';
+import Comment from 'src/comments/comment.schema';
 
 describe('ArticlesService', () => {
   let articlesService: ArticlesService;

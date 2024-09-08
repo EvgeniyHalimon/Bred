@@ -8,7 +8,7 @@ import { InjectModel } from '@nestjs/sequelize';
 
 // schemas
 import Article from './article.schema';
-import User from 'src/user/user.schema';
+import User from 'src/users/user.schema';
 
 // dto's
 import {
@@ -21,8 +21,8 @@ import {
 } from './dto';
 
 // types
-import Reaction from 'src/reaction/reaction.schema';
-import Comment from 'src/comment/comment.schema';
+import Reaction from 'src/reactions/reaction.schema';
+import Comment from 'src/comments/comment.schema';
 import { IArticle } from './article.types';
 
 @Injectable()
