@@ -48,7 +48,8 @@ export class UsersController {
     @Req() req: ICustomRequest,
   ): Promise<PatchUserDto> {
     const userId = req.user.id;
-    const photo = file?.buffer?.toString('base64url');
+    const base64 = file?.buffer?.toString('base64');
+    const photo = `data:${file.mimetype};base64,${base64}`;
     return this.usersService.patch({
       updateUserDto,
       file: photo,
