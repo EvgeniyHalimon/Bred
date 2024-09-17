@@ -8,6 +8,10 @@ import { IArticle } from '../article.types';
 export class GetAllQueryArticlesDto {
   @IsString()
   @IsOptional()
+  readonly authorId?: string;
+
+  @IsString()
+  @IsOptional()
   readonly page?: string;
 
   @IsString()
@@ -25,7 +29,13 @@ export class GetAllQueryArticlesDto {
   readonly title?: string;
 
   toWhereOption?() {
-    return this.title ? { title: this.title } : {};
+    return this.title && this.authorId
+      ? { title: this.title, authorId: this.authorId }
+      : this.authorId
+        ? { authorId: this.authorId }
+        : this.title
+          ? { title: this.title }
+          : {};
   }
 
   toPaginationOptions?() {

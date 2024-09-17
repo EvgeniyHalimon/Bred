@@ -64,8 +64,11 @@ export class AuthService {
       throw new BadRequestException('Wrong password');
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { password: p, ...userWithoutPassword } = user.dataValues;
+
     return {
-      user,
+      user: userWithoutPassword,
       accessToken: await this.jwtService.signAsync(userWithoutPhoto),
       refreshToken: await this.jwtService.signAsync(userWithoutPhoto),
     };

@@ -19,11 +19,6 @@ export class SignUpResponseDto {
   @ApiProperty({ example: 'w@email.com' })
   email: string;
 
-  @ApiProperty({
-    example: '$2b$10$2xAUaud8GzE2hPT4yhiMBuyJomd8zOu0e1dyxcAmCdbHI8pS3BULi',
-  })
-  password: string;
-
   @ApiProperty({ example: 'Hello my name is Monty' })
   bio: string;
 
