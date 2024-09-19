@@ -42,6 +42,14 @@ export class AuthGuard implements CanActivate {
 
     try {
       const isRefreshEndpoint = request.url === '/auth/refresh';
+      console.log(
+        '🚀 ~ file: auth.guard.ts:45 ~ AuthGuard ~ canActivate ~ request.url:',
+        request.url,
+      );
+      console.log(
+        '🚀 ~ file: auth.guard.ts:45 ~ AuthGuard ~ canActivate ~ isRefreshEndpoint:',
+        isRefreshEndpoint,
+      );
       const secret = isRefreshEndpoint
         ? (config.REFRESH_KEY as string)
         : config.SECRET;

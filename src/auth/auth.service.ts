@@ -81,9 +81,13 @@ export class AuthService {
     const user = await this.userModel.scope('withPassword').findOne({
       where: { id },
     });
-
-    if (user) {
-      return generateTokens(user);
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { photo, articles, comments, ...userWithoutPhoto } = user.dataValues;
+    if (userWithoutPhoto) {
+      return generateTokens(userWithoutPhoto);
     }
   }
 }

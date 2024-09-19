@@ -1,6 +1,6 @@
 import { config } from '../../config';
 import { IUser } from 'src/users/user.types';
-import jwt from 'jsonwebtoken';
+import * as jwt from 'jsonwebtoken';
 import { ITokens } from '../auth.types';
 
 export const generateTokens = (user: Partial<IUser>): ITokens => {

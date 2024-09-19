@@ -85,7 +85,12 @@ export class AuthController {
   }
 
   @Get('refresh')
+  @Public()
   refresh(@Req() req: ICustomRequest) {
+    console.log(
+      '🚀 ~ file: auth.controller.ts:90 ~ AuthController ~ refresh ~ req:',
+      req.user.id,
+    );
     return this.authService.refresh(req.user.id);
   }
 }
