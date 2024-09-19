@@ -1,5 +1,13 @@
 // nest
-import { Body, Controller, Post, HttpCode, HttpStatus } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Post,
+  HttpCode,
+  HttpStatus,
+  Get,
+  Req,
+} from '@nestjs/common';
 import {
   ApiBadRequestResponse,
   ApiNotFoundResponse,
@@ -19,6 +27,7 @@ import { SignInResponseDto, SignUpResponseDto } from './dto';
 
 // types
 import { ISingInResponse } from './auth.types';
+import { ICustomRequest } from 'src/shared';
 
 @Controller('auth')
 @ApiTags('Auth')
@@ -73,5 +82,10 @@ export class AuthController {
     @Body() signUpDTO: CreateUserDto,
   ): Promise<SignUpResponseDto | undefined> {
     return this.authService.signUp(signUpDTO);
+  }
+
+  @Get('refresh')
+  refresh(@Req() req: ICustomRequest) {
+    return this.authService.refresh(req.user.id);
   }
 }

@@ -1,7 +1,10 @@
 import { SignUpResponseDto } from './dto';
 
-export interface ISingInResponse {
-  user: SignUpResponseDto;
+export interface ITokens {
   accessToken: string;
   refreshToken: string;
+}
+
+export interface ISingInResponse extends ITokens {
+  user: SignUpResponseDto;
 }

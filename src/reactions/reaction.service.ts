@@ -150,6 +150,7 @@ export class ReactionsService {
       where: query.toWhereCondition(),
       ...query.toPaginationOptions(),
       include: [{ model: User, as: 'user' }],
+      distinct: true,
     });
     return {
       reactions: reactions.rows,

@@ -10,6 +10,9 @@ export const config = {
   PASSWORD: process.env.PASSWORD ?? '',
   DATABASE: process.env.DATABASE ?? '',
   SECRET: process.env.SECRET ?? '',
-  EXPIRES_IN: process.env.EXPIRES_IN ?? '1h',
+  EXPIRES_IN: process.env.EXPIRES_IN ?? '',
+  EXPIRES_IN_REFRESH: process.env.EXPIRES_IN_REFRESH ?? '',
   DIALECT: process.env.DIALECT,
+  ACCESS_KEY: process.env.ACCESS_KEY,
+  REFRESH_KEY: process.env.REFRESH_KEY,
 };

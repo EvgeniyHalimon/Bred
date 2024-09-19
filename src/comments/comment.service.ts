@@ -115,6 +115,7 @@ export class CommentsService {
         { model: User, as: 'author' },
         { model: Reaction, as: 'reactions' },
       ],
+      distinct: true,
     });
 
     return {

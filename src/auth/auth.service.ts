@@ -16,7 +16,8 @@ import { CreateUserDto, SignInDto } from 'src/users/dto';
 // utils
 import { hashPassword, verifyPassword } from './utils/passwordUtils';
 import { SignUpResponseDto } from './dto';
-import { ISingInResponse } from './auth.types';
+import { ISingInResponse, ITokens } from './auth.types';
+import { generateTokens } from './utils/generateTokens';
 
 @Injectable()
 export class AuthService {
@@ -57,7 +58,7 @@ export class AuthService {
     }
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { photo, ...userWithoutPhoto } = user.dataValues;
+    const { photo, articles, comments, ...userWithoutPhoto } = user.dataValues;
 
     const match = await verifyPassword(password, user.password);
     if (!match) {
@@ -67,10 +68,22 @@ export class AuthService {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { password: p, ...userWithoutPassword } = user.dataValues;
 
+    const { accessToken, refreshToken } = generateTokens(userWithoutPhoto);
+
     return {
       user: userWithoutPassword,
-      accessToken: await this.jwtService.signAsync(userWithoutPhoto),
-      refreshToken: await this.jwtService.signAsync(userWithoutPhoto),
+      accessToken: accessToken,
+      refreshToken: refreshToken,
     };
+  }
+
+  async refresh(id: string): Promise<ITokens | void> {
+    const user = await this.userModel.scope('withPassword').findOne({
+      where: { id },
+    });
+
+    if (user) {
+      return generateTokens(user);
+    }
   }
 }
