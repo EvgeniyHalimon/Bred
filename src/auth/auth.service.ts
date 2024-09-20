@@ -12,12 +12,16 @@ import User from 'src/users/user.schema';
 
 // dto's
 import { CreateUserDto, SignInDto } from 'src/users/dto';
+import { SignUpResponseDto } from './dto';
 
 // utils
 import { hashPassword, verifyPassword } from './utils/passwordUtils';
-import { SignUpResponseDto } from './dto';
+
+// types
 import { ISingInResponse, ITokens } from './auth.types';
 import { IUser } from 'src/users/user.types';
+
+// config
 import { config } from '../config';
 
 @Injectable()

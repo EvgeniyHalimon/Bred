@@ -41,7 +41,7 @@ export class AuthGuard implements CanActivate {
     }
 
     try {
-      const isRefreshRoute = request.url === 'auth/refresh';
+      const isRefreshRoute = request.url === '/auth/refresh';
       const secret = isRefreshRoute
         ? config.SECRET_REFRESH
         : config.SECRET_ACCESS;
