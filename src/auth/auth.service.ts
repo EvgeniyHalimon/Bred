@@ -17,7 +17,8 @@ import { CreateUserDto, SignInDto } from 'src/users/dto';
 import { hashPassword, verifyPassword } from './utils/passwordUtils';
 import { SignUpResponseDto } from './dto';
 import { ISingInResponse, ITokens } from './auth.types';
-import { generateTokens } from './utils/generateTokens';
+import { IUser } from 'src/users/user.types';
+import { config } from '../config';
 
 @Injectable()
 export class AuthService {
@@ -68,7 +69,7 @@ export class AuthService {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { password: p, ...userWithoutPassword } = user.dataValues;
 
-    const { accessToken, refreshToken } = generateTokens(userWithoutPhoto);
+    const { accessToken, refreshToken } = this.generateTokens(userWithoutPhoto);
 
     return {
       user: userWithoutPassword,
@@ -87,7 +88,19 @@ export class AuthService {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { photo, articles, comments, ...userWithoutPhoto } = user.dataValues;
     if (userWithoutPhoto) {
-      return generateTokens(userWithoutPhoto);
+      return this.generateTokens(userWithoutPhoto);
     }
+  }
+
+  generateTokens(user: Partial<IUser>): ITokens {
+    const accessToken = this.jwtService.sign(user, {
+      secret: config.SECRET_ACCESS,
+      expiresIn: config.EXPIRES_IN,
+    });
+    const refreshToken = this.jwtService.sign(user, {
+      secret: config.SECRET_REFRESH,
+      expiresIn: config.EXPIRES_IN_REFRESH,
+    });
+    return { accessToken, refreshToken };
   }
 }

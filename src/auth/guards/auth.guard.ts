@@ -41,20 +41,12 @@ export class AuthGuard implements CanActivate {
     }
 
     try {
-      const isRefreshEndpoint = request.url === '/auth/refresh';
-      console.log(
-        '🚀 ~ file: auth.guard.ts:45 ~ AuthGuard ~ canActivate ~ request.url:',
-        request.url,
-      );
-      console.log(
-        '🚀 ~ file: auth.guard.ts:45 ~ AuthGuard ~ canActivate ~ isRefreshEndpoint:',
-        isRefreshEndpoint,
-      );
-      const secret = isRefreshEndpoint
-        ? (config.REFRESH_KEY as string)
-        : config.SECRET;
+      const isRefreshRoute = request.url === 'auth/refresh';
+      const secret = isRefreshRoute
+        ? config.SECRET_REFRESH
+        : config.SECRET_ACCESS;
 
-      const payload = await this.jwtService.verifyAsync(token, { secret });
+      const payload = await this.jwtService.verify(token, { secret });
       request['user'] = payload;
     } catch {
       throw new UnauthorizedException();

@@ -24,11 +24,7 @@ import { AuthGuard } from './guards/auth.guard';
 
 @Module({
   imports: [
-    JwtModule.register({
-      global: true,
-      secret: config.SECRET,
-      signOptions: { expiresIn: config.EXPIRES_IN },
-    }),
+    JwtModule.register({}),
     UsersModule,
     SequelizeModule.forFeature([User]),
   ],
