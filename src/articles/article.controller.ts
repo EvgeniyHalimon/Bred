@@ -56,9 +56,8 @@ export class ArticlesController {
     @Req() request: ICustomRequest,
     @Body() createArticleDto: CreateArticleDto,
   ): Promise<IArticleResponse> {
-    const userId = request.user.id;
     const createdArticle = await this.articlesService.create({
-      userId,
+      userId: request.user.id,
       createArticleDto,
     });
     return {
@@ -81,12 +80,8 @@ export class ArticlesController {
     description: 'When article is not present in database',
   })
   @Get('/:id')
-  async getById(
-    @Param('id') id: string,
-  ): Promise<DetailedArticleInfoDto | undefined> {
-    const articleId = id;
-    const article = await this.articlesService.getById({ articleId });
-    return article;
+  getById(@Param('id') id: string): Promise<DetailedArticleInfoDto | void> {
+    return this.articlesService.getById({ articleId: id });
   }
 
   @ApiResponse({
@@ -96,10 +91,10 @@ export class ArticlesController {
   })
   @Get('/')
   @ApiQueriesFromDto(GetAllQueryArticlesDto, ArticleOrderByEnum)
-  async findAll(
+  findAll(
     @Query() query: GetAllQueryArticlesDto,
   ): Promise<GetAllArticlesResponseDto> {
-    return await this.articlesService.findAll({ query });
+    return this.articlesService.findAll({ query });
   }
 
   @ApiNotFoundResponse({
@@ -129,11 +124,9 @@ export class ArticlesController {
     @Body() patchArticleDto: PatchArticleDto,
     @Param('id') id: string,
   ): Promise<PatchArticleResponseDto> {
-    const articleId = id;
-    const userId = request.user.id;
     const updatedArticle = await this.articlesService.patch({
-      articleId,
-      userId,
+      articleId: id,
+      userId: request.user.id,
       patchArticleDto,
     });
 
@@ -173,13 +166,14 @@ export class ArticlesController {
     },
   })
   @Delete('/:id')
-  async delete(
+  delete(
     @Req() request: ICustomRequest,
     @Param('id') id: string,
-  ): Promise<ISimpleMessageResponse> {
-    const articleId = id;
-    const userId = request.user.id;
-    await this.articlesService.delete({ articleId, userId });
+  ): ISimpleMessageResponse {
+    this.articlesService.delete({
+      articleId: id,
+      userId: request.user.id,
+    });
     return { message: 'Article deleted successfully' };
   }
 }

@@ -47,7 +47,7 @@ export class ArticlesService {
     articleId,
   }: {
     articleId: string;
-  }): Promise<DetailedArticleInfoDto | undefined> {
+  }): Promise<DetailedArticleInfoDto | void> {
     const article = await this.articleModel.findOne({
       where: { id: articleId },
       include: [

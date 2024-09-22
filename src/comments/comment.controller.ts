@@ -55,8 +55,10 @@ export class CommentController {
     @Req() request: ICustomRequest,
     @Body() createCommentDto: CreateCommentDto,
   ): Promise<CommentDto> {
-    const userId = request.user.id;
-    return this.commentService.create({ userId, createCommentDto });
+    return this.commentService.create({
+      userId: request.user.id,
+      createCommentDto,
+    });
   }
 
   @ApiResponse({
@@ -93,8 +95,7 @@ export class CommentController {
     @Req() request: ICustomRequest,
     @Param('id') id: string,
   ): { message: string } {
-    const userId = request.user.id;
-    this.commentService.delete({ userId, commentId: id });
+    this.commentService.delete({ userId: request.user.id, commentId: id });
     return { message: 'Comment deleted successfully' };
   }
 
@@ -125,9 +126,8 @@ export class CommentController {
     @Param('id') id: string,
     @Body() updateCommentDto: PatchCommentDto,
   ): Promise<PatchCommentResponseDto> {
-    const userId = request.user.id;
     return this.commentService.patch({
-      userId,
+      userId: request.user.id,
       commentId: id,
       updateCommentDto,
     });

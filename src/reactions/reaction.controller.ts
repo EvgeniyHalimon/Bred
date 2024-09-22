@@ -55,8 +55,10 @@ export class ReactionsController {
     @Req() request: ICustomRequest,
     @Body() createReactionDto: CreateReactionDto,
   ) {
-    const userId = request.user.id;
-    return this.reactionsService.create({ userId, createReactionDto });
+    return this.reactionsService.create({
+      userId: request.user.id,
+      createReactionDto,
+    });
   }
 
   @ApiResponse({
@@ -90,9 +92,10 @@ export class ReactionsController {
   })
   @Delete('/:id')
   delete(@Req() request: ICustomRequest, @Param('id') id: string) {
-    const userId = request.user.id;
-    const reactionId = id;
-    return this.reactionsService.delete({ userId, reactionId });
+    return this.reactionsService.delete({
+      userId: request.user.id,
+      reactionId: id,
+    });
   }
 
   @ApiBadRequestResponse({
@@ -180,11 +183,9 @@ export class ReactionsController {
     @Param('id') id: string,
     @Body() updateReactionDto: UpdateReactionDto,
   ) {
-    const reactionId = id;
-    const userId = request.user.id;
     return this.reactionsService.update({
-      userId,
-      reactionId,
+      userId: request.user.id,
+      reactionId: id,
       updateReactionDto,
     });
   }
@@ -215,7 +216,6 @@ export class ReactionsController {
   })
   @Get('/:id')
   get(@Param('id') id: string) {
-    const reactionId = id;
-    return this.reactionsService.getById({ reactionId });
+    return this.reactionsService.getById({ reactionId: id });
   }
 }

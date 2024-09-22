@@ -14,6 +14,4 @@ export const config = {
   EXPIRES_IN: process.env.EXPIRES_IN ?? '',
   EXPIRES_IN_REFRESH: process.env.EXPIRES_IN_REFRESH ?? '',
   DIALECT: process.env.DIALECT,
-  ACCESS_KEY: process.env.ACCESS_KEY,
-  REFRESH_KEY: process.env.REFRESH_KEY,
 };
