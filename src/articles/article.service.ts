@@ -25,22 +25,29 @@ import Reaction from 'src/reactions/reaction.schema';
 import Comment from 'src/comments/comment.schema';
 import { IArticle } from './article.types';
 
+// constants
+import { vocabulary } from 'src/shared';
+
+const {
+  article: { NOT_AUTHOR, NOT_FOUND },
+} = vocabulary;
+
 @Injectable()
 export class ArticlesService {
   constructor(@InjectModel(Article) private articleModel: typeof Article) {}
 
-  async create({
-    userId,
+  create({
+    authorId,
     createArticleDto,
   }: {
-    userId: string;
+    authorId: string;
     createArticleDto: CreateArticleDto;
   }): Promise<ArticleDto> {
     const article = {
       ...createArticleDto,
-      authorId: userId,
+      authorId,
     };
-    return await this.articleModel.create(article);
+    return this.articleModel.create(article);
   }
 
   async getById({
@@ -64,9 +71,6 @@ export class ArticlesService {
         },
       ],
     });
-    if (!article) {
-      throw new NotFoundException('Article not found');
-    }
 
     return article as unknown as DetailedArticleInfoDto;
   }
@@ -110,20 +114,16 @@ export class ArticlesService {
     userId: string;
     patchArticleDto: PatchArticleDto;
   }): Promise<ArticleDto | undefined> {
-    const article = await this.articleModel.findOne({
+    const article = (await this.articleModel.findOne({
       where: { id: articleId },
-    });
-
-    if (!article) {
-      throw new NotFoundException('Article not found');
-    }
+    })) as Article;
 
     const articleAuthor = await this.articleModel.findOne({
       where: { id: articleId, authorId: userId },
     });
 
     if (!articleAuthor) {
-      throw new NotFoundException('You are not author of this article');
+      throw new NotFoundException(NOT_AUTHOR);
     }
 
     article.set(patchArticleDto);
@@ -140,20 +140,16 @@ export class ArticlesService {
     userId: string;
     articleId: string;
   }): Promise<void> {
-    const article = await this.articleModel.findOne({
+    await this.articleModel.findOne({
       where: { id: articleId },
     });
-
-    if (!article) {
-      throw new NotFoundException('Article not found');
-    }
 
     const articleAuthor = await this.articleModel.findOne({
       where: { id: articleId, authorId: userId },
     });
 
     if (!articleAuthor) {
-      throw new NotFoundException('You are not author of this article');
+      throw new NotFoundException(NOT_AUTHOR);
     }
 
     const deletedArticle = await this.articleModel.destroy({
@@ -168,9 +164,15 @@ export class ArticlesService {
     }
   }
 
-  async findOne(whereCondition: Partial<IArticle>): Promise<ArticleDto | null> {
-    return this.articleModel.findOne({
+  async findOne(whereCondition: Partial<IArticle>): Promise<ArticleDto> {
+    const article = await this.articleModel.findOne({
       where: whereCondition,
     });
+
+    if (!article) {
+      throw new NotFoundException(NOT_FOUND);
+    }
+
+    return article;
   }
 }

@@ -39,7 +39,12 @@ import {
   ICustomRequest,
   ApiQueriesFromDto,
   ISimpleMessageResponse,
+  vocabulary,
 } from 'src/shared';
+
+const {
+  article: { NOT_AUTHOR, NOT_FOUND, SUCCESSFUL_DELETE },
+} = vocabulary;
 
 @Controller('articles')
 @ApiTags('Articles')
@@ -48,7 +53,7 @@ export class ArticlesController {
 
   @ApiResponse({
     status: HttpStatus.CREATED,
-    description: 'User successfully logged in.',
+    description: 'Article successfully created.',
     type: CreateArticleResponseDto,
   })
   @Post('/')
@@ -57,7 +62,7 @@ export class ArticlesController {
     @Body() createArticleDto: CreateArticleDto,
   ): Promise<IArticleResponse> {
     const createdArticle = await this.articlesService.create({
-      userId: request.user.id,
+      authorId: request.user.id,
       createArticleDto,
     });
     return {
@@ -73,7 +78,7 @@ export class ArticlesController {
   })
   @ApiNotFoundResponse({
     example: {
-      message: 'Article not found',
+      message: NOT_FOUND,
       error: 'Not Found',
       statusCode: HttpStatus.NOT_FOUND,
     },
@@ -99,7 +104,7 @@ export class ArticlesController {
 
   @ApiNotFoundResponse({
     example: {
-      message: 'Article not found',
+      message: NOT_FOUND,
       error: 'Not Found',
       statusCode: HttpStatus.NOT_FOUND,
     },
@@ -107,7 +112,7 @@ export class ArticlesController {
   })
   @ApiNotFoundResponse({
     example: {
-      message: 'You are not author of this article',
+      message: NOT_AUTHOR,
       error: 'Not Found',
       statusCode: HttpStatus.NOT_FOUND,
     },
@@ -143,7 +148,7 @@ export class ArticlesController {
   })
   @ApiNotFoundResponse({
     example: {
-      message: 'Article not found',
+      message: NOT_FOUND,
       error: 'Not Found',
       statusCode: HttpStatus.NOT_FOUND,
     },
@@ -151,7 +156,7 @@ export class ArticlesController {
   })
   @ApiNotFoundResponse({
     example: {
-      message: 'You are not author of this article',
+      message: NOT_AUTHOR,
       error: 'Not Found',
       statusCode: HttpStatus.NOT_FOUND,
     },
@@ -174,6 +179,6 @@ export class ArticlesController {
       articleId: id,
       userId: request.user.id,
     });
-    return { message: 'Article deleted successfully' };
+    return { message: SUCCESSFUL_DELETE };
   }
 }
