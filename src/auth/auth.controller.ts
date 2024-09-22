@@ -27,7 +27,12 @@ import { SignInResponseDto, SignUpResponseDto } from './dto';
 
 // types
 import { ISingInResponse } from './auth.types';
-import { ICustomRequest } from 'src/shared';
+import { ICustomRequest, vocabulary } from 'src/shared';
+
+const {
+  auth: { WRONG_PASSWORD },
+  users: { NOT_FOUND, ALREADY_EXISTS },
+} = vocabulary;
 
 @Controller('auth')
 @ApiTags('Auth')
@@ -44,7 +49,7 @@ export class AuthController {
   })
   @ApiBadRequestResponse({
     example: {
-      message: 'Wrong password',
+      message: WRONG_PASSWORD,
       error: 'Bad Request',
       statusCode: HttpStatus.BAD_REQUEST,
     },
@@ -52,7 +57,7 @@ export class AuthController {
   })
   @ApiNotFoundResponse({
     example: {
-      message: 'User not found',
+      message: NOT_FOUND,
       error: 'Not Found',
       statusCode: HttpStatus.NOT_FOUND,
     },
@@ -73,7 +78,7 @@ export class AuthController {
   @ApiBadRequestResponse({
     description: 'When user already exists',
     example: {
-      message: 'User already exists',
+      message: ALREADY_EXISTS,
       error: 'Bad Request',
       statusCode: HttpStatus.BAD_REQUEST,
     },

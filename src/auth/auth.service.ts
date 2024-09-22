@@ -24,6 +24,14 @@ import { IUser } from 'src/users/user.types';
 // config
 import { config } from '../config';
 
+// constants
+import { vocabulary } from 'src/shared';
+
+const {
+  auth: { WRONG_PASSWORD },
+  users: { NOT_FOUND, ALREADY_EXISTS },
+} = vocabulary;
+
 @Injectable()
 export class AuthService {
   constructor(
@@ -39,7 +47,7 @@ export class AuthService {
     });
 
     if (user) {
-      throw new BadRequestException('User already exists');
+      throw new BadRequestException(ALREADY_EXISTS);
     }
 
     const userAttributes = {
@@ -59,7 +67,7 @@ export class AuthService {
     });
 
     if (!user) {
-      throw new NotFoundException('User not found');
+      throw new NotFoundException(NOT_FOUND);
     }
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -67,7 +75,7 @@ export class AuthService {
 
     const match = await verifyPassword(password, user.password);
     if (!match) {
-      throw new BadRequestException('Wrong password');
+      throw new BadRequestException(WRONG_PASSWORD);
     }
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -87,7 +95,7 @@ export class AuthService {
       where: { id },
     });
     if (!user) {
-      throw new NotFoundException('User not found');
+      throw new NotFoundException(NOT_FOUND);
     }
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { photo, articles, comments, ...userWithoutPhoto } = user.dataValues;

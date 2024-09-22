@@ -5,6 +5,12 @@ import User from 'src/users/user.schema';
 import { JwtService } from '@nestjs/jwt';
 import * as passwordUtils from 'src/auth/utils/passwordUtils';
 import { BadRequestException, NotFoundException } from '@nestjs/common';
+import { vocabulary } from 'src/shared';
+
+const {
+  auth: { WRONG_PASSWORD },
+  users: { NOT_FOUND, ALREADY_EXISTS },
+} = vocabulary;
 
 describe('AuthService', () => {
   let authService: AuthService;
@@ -104,7 +110,7 @@ describe('AuthService', () => {
         await authService.signIn(signInDto);
       } catch (error) {
         expect(error).toBeInstanceOf(NotFoundException);
-        expect(error.message).toBe('User not found');
+        expect(error.message).toBe(NOT_FOUND);
       }
     });
 
@@ -117,7 +123,7 @@ describe('AuthService', () => {
         await authService.signIn(signUpDto);
       } catch (error) {
         expect(error).toBeInstanceOf(BadRequestException);
-        expect(error.message).toBe('Wrong password');
+        expect(error.message).toBe(WRONG_PASSWORD);
       }
     });
   });
@@ -147,7 +153,7 @@ describe('AuthService', () => {
         await authService.signUp(signUpDto);
       } catch (error) {
         expect(error).toBeInstanceOf(BadRequestException);
-        expect(error.message).toBe('User already exists');
+        expect(error.message).toBe(ALREADY_EXISTS);
       }
     });
   });
