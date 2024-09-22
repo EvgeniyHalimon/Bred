@@ -1,12 +1,16 @@
 import { Test } from '@nestjs/testing';
 import { ArticlesService } from '../article.service';
-
 import { getModelToken } from '@nestjs/sequelize';
 import Article from '../article.schema';
 import { BadRequestException, NotFoundException } from '@nestjs/common';
 import Reaction from 'src/reactions/reaction.schema';
 import User from 'src/users/user.schema';
 import Comment from 'src/comments/comment.schema';
+import { vocabulary } from 'src/shared';
+
+const {
+  article: { NOT_FOUND, NOT_AUTHOR },
+} = vocabulary;
 
 describe('ArticlesService', () => {
   let articlesService: ArticlesService;
@@ -126,7 +130,7 @@ describe('ArticlesService', () => {
 
   describe('Create method', () => {
     it('should be called with correct parameters', async () => {
-      await articlesService.create({ userId: '1', createArticleDto });
+      await articlesService.create({ authorId: '1', createArticleDto });
       expect(mockArticlesModel.create).toHaveBeenCalledWith({
         authorId: '1',
         ...createArticleDto,
@@ -137,7 +141,7 @@ describe('ArticlesService', () => {
       mockArticlesModel.create.mockResolvedValue(article);
 
       const result = await articlesService.create({
-        userId: '1',
+        authorId: '1',
         createArticleDto,
       });
 
@@ -163,7 +167,7 @@ describe('ArticlesService', () => {
         await deleteArticle();
       } catch (error) {
         expect(error).toBeInstanceOf(NotFoundException);
-        expect(error.message).toBe('Article not found');
+        expect(error.message).toBe(NOT_FOUND);
       }
     });
 
@@ -174,7 +178,7 @@ describe('ArticlesService', () => {
         await deleteArticle();
       } catch (error) {
         expect(error).toBeInstanceOf(NotFoundException);
-        expect(error.message).toBe('You are not author of this article');
+        expect(error.message).toBe(NOT_AUTHOR);
       }
     });
 
@@ -227,7 +231,7 @@ describe('ArticlesService', () => {
         await articlesService.patch(patchArticle);
       } catch (error) {
         expect(error).toBeInstanceOf(NotFoundException);
-        expect(error.message).toBe('Article not found');
+        expect(error.message).toBe(NOT_FOUND);
       }
     });
 
@@ -238,7 +242,7 @@ describe('ArticlesService', () => {
         await articlesService.patch(patchArticle);
       } catch (error) {
         expect(error).toBeInstanceOf(NotFoundException);
-        expect(error.message).toBe('You are not author of this article');
+        expect(error.message).toBe(NOT_AUTHOR);
       }
     });
   });
@@ -303,7 +307,7 @@ describe('ArticlesService', () => {
         await articlesService.getById({ articleId: '11' });
       } catch (error) {
         expect(error).toBeInstanceOf(NotFoundException);
-        expect(error.message).toEqual('Article not found');
+        expect(error.message).toEqual(NOT_FOUND);
       }
     });
   });

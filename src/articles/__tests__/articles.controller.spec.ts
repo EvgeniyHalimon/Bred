@@ -1,12 +1,16 @@
 import { Test } from '@nestjs/testing';
 import { ArticlesController } from '../article.controller';
 import { ArticlesService } from '../article.service';
-import { ICustomRequest } from 'src/shared';
+import { ICustomRequest, vocabulary } from 'src/shared';
 import {
   ArticleDto,
   DetailedArticleInfoDto,
   GetAllArticlesResponseDto,
 } from '../dto';
+
+const {
+  article: { SUCCESSFUL_DELETE },
+} = vocabulary;
 
 describe('ArticlesController', () => {
   let articlesController: ArticlesController;
@@ -67,7 +71,7 @@ describe('ArticlesController', () => {
     it('Delete must be called', async () => {
       const result = await articlesController.delete(req, articleId);
 
-      expect(result).toEqual({ message: 'Article deleted successfully' });
+      expect(result).toEqual({ message: SUCCESSFUL_DELETE });
     });
 
     it('Delete must be called with correct parameters', async () => {
