@@ -151,6 +151,6 @@ export class CommentController {
   findAll(
     @Query() query: GetAllQueryCommentsDto,
   ): Promise<GetAllCommentsResponseDto> {
-    return this.commentService.findAll({ query });
+    return this.commentService.findAll(query);
   }
 }

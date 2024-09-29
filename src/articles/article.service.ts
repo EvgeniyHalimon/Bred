@@ -13,6 +13,7 @@ import {
   DetailedArticleInfoDto,
   GetAllArticlesResponseDto,
   GetAllQueryArticlesDto,
+  GetByIdArticleResponseDto,
   PatchArticleDto,
 } from './dto';
 
@@ -50,7 +51,7 @@ export class ArticlesService {
     articleId,
   }: {
     articleId: string;
-  }): Promise<DetailedArticleInfoDto | void> {
+  }): Promise<GetByIdArticleResponseDto | null> {
     const article = await this.articleModel.findOne({
       where: { id: articleId },
       include: [
@@ -68,15 +69,14 @@ export class ArticlesService {
       ],
     });
 
-    return article as unknown as DetailedArticleInfoDto;
+    if (!article) return null;
+
+    return article as unknown as GetByIdArticleResponseDto;
   }
 
-  async findAll({
-    query,
-  }: {
-    query: GetAllQueryArticlesDto;
-  }): Promise<GetAllArticlesResponseDto> {
-    /* BUG with count  */
+  async findAll(
+    query: GetAllQueryArticlesDto,
+  ): Promise<GetAllArticlesResponseDto> {
     const result = await this.articleModel.findAndCountAll({
       where: query.toWhereOption?.(),
       ...query.toPaginationOptions?.(),
@@ -95,6 +95,7 @@ export class ArticlesService {
       ],
       distinct: true,
     });
+
     return {
       articles: result.rows as unknown as DetailedArticleInfoDto[],
       count: result.count,

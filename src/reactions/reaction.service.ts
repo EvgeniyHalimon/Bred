@@ -30,8 +30,6 @@ import { ReactionTypeEnum, SourceTypeEnum } from './reaction.constants';
 import { vocabulary } from 'src/shared';
 
 const {
-  comments: { COMMENT_NOT_FOUND },
-  article: { ARTICLE_NOT_FOUND },
   reactions: {
     REACTION_NOT_FOUND,
     NOT_AUTHOR_OF_REACTION,
@@ -159,7 +157,7 @@ export class ReactionsService {
     return article;
   }
 
-  async findAll({ query }: { query: GetAllQueryReactionsDto }) {
+  async findAll(query: GetAllQueryReactionsDto) {
     const reactions = await this.reactionModel.findAndCountAll({
       where: query.toWhereCondition(),
       ...query.toPaginationOptions(),
@@ -218,10 +216,7 @@ export class ReactionsService {
   }
 
   private async validateArticleReaction(articleId: string, userId: string) {
-    const article = await this.articleService.findOne({ id: articleId });
-    if (!article) {
-      throw new NotFoundException(ARTICLE_NOT_FOUND);
-    }
+    await this.articleService.findOne({ id: articleId });
 
     const reaction = await this.findOne({
       whereCondition: { userId, articleId },
@@ -232,10 +227,7 @@ export class ReactionsService {
   }
 
   private async validateCommentReaction(commentId: string, userId: string) {
-    const comment = await this.commentService.findOne({ id: commentId });
-    if (!comment) {
-      throw new NotFoundException(COMMENT_NOT_FOUND);
-    }
+    await this.commentService.findOne({ id: commentId });
 
     const reaction = await this.findOne({
       whereCondition: { userId, commentId },

@@ -103,11 +103,9 @@ export class CommentsService {
     return comment;
   }
 
-  async findAll({
-    query,
-  }: {
-    query: GetAllQueryCommentsDto;
-  }): Promise<GetAllCommentsResponseDto> {
+  async findAll(
+    query: GetAllQueryCommentsDto,
+  ): Promise<GetAllCommentsResponseDto> {
     const comments = await this.commentModel.findAndCountAll({
       where: query.toWhereCondition?.(),
       ...query.toPaginationOptions?.(),

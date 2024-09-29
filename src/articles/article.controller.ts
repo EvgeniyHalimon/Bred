@@ -30,7 +30,7 @@ import {
   DeletedArticleResponseDto,
   PatchArticleResponseDto,
   GetAllArticlesResponseDto,
-  DetailedArticleInfoDto,
+  GetByIdArticleResponseDto,
 } from './dto';
 
 // types
@@ -78,7 +78,7 @@ export class ArticlesController {
   @ApiResponse({
     status: HttpStatus.OK,
     description: 'When we received the article by id',
-    type: DetailedArticleInfoDto,
+    type: GetByIdArticleResponseDto,
   })
   @ApiNotFoundResponse({
     example: {
@@ -89,7 +89,7 @@ export class ArticlesController {
     description: 'When article is not present in database',
   })
   @Get('/:id')
-  getById(@Param('id') id: string): Promise<DetailedArticleInfoDto | void> {
+  getById(@Param('id') id: string): Promise<GetByIdArticleResponseDto | null> {
     return this.articlesService.getById({ articleId: id });
   }
 
@@ -103,7 +103,7 @@ export class ArticlesController {
   findAll(
     @Query() query: GetAllQueryArticlesDto,
   ): Promise<GetAllArticlesResponseDto> {
-    return this.articlesService.findAll({ query });
+    return this.articlesService.findAll(query);
   }
 
   @ApiNotFoundResponse({

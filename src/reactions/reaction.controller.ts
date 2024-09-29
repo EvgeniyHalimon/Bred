@@ -212,7 +212,7 @@ export class ReactionsController {
   @Get('/')
   @ApiQueriesFromDto(GetAllQueryReactionsDto, ReactionOrderByEnum)
   getAll(@Query() query: GetAllQueryReactionsDto) {
-    return this.reactionsService.findAll({ query });
+    return this.reactionsService.findAll(query);
   }
 
   @ApiResponse({
