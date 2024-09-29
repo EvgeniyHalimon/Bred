@@ -1,9 +1,5 @@
 // nest
-import {
-  BadRequestException,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 
 // schemas
@@ -29,7 +25,7 @@ import { IArticle } from './article.types';
 import { vocabulary } from 'src/shared';
 
 const {
-  article: { NOT_AUTHOR, NOT_FOUND },
+  article: { NOT_AUTHOR_OF_ARTICLE: NOT_AUTHOR, ARTICLE_NOT_FOUND: NOT_FOUND },
 } = vocabulary;
 
 @Injectable()
@@ -152,16 +148,11 @@ export class ArticlesService {
       throw new NotFoundException(NOT_AUTHOR);
     }
 
-    const deletedArticle = await this.articleModel.destroy({
+    await this.articleModel.destroy({
       where: {
         id: articleId,
       },
     });
-    if (deletedArticle === 0) {
-      throw new BadRequestException(
-        'Something went wrong while deleting the article',
-      );
-    }
   }
 
   async findOne(whereCondition: Partial<IArticle>): Promise<ArticleDto> {

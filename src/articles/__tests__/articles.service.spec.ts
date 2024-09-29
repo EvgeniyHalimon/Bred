@@ -9,7 +9,7 @@ import Comment from 'src/comments/comment.schema';
 import { vocabulary } from 'src/shared';
 
 const {
-  article: { NOT_FOUND, NOT_AUTHOR },
+  article: { ARTICLE_NOT_FOUND: NOT_FOUND, NOT_AUTHOR_OF_ARTICLE: NOT_AUTHOR },
 } = vocabulary;
 
 describe('ArticlesService', () => {

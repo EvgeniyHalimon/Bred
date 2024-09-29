@@ -43,7 +43,11 @@ import {
 } from 'src/shared';
 
 const {
-  article: { NOT_AUTHOR, NOT_FOUND, SUCCESSFUL_DELETE },
+  article: {
+    NOT_AUTHOR_OF_ARTICLE: NOT_AUTHOR,
+    ARTICLE_NOT_FOUND: NOT_FOUND,
+    SUCCESSFUL_DELETE_OF_ARTICLE: SUCCESSFUL_DELETE,
+  },
 } = vocabulary;
 
 @Controller('articles')

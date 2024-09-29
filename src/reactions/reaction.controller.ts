@@ -38,7 +38,21 @@ import { ICustomRequest } from 'src/shared/types';
 import { ReactionOrderByEnum } from './reaction.types';
 
 // custom decorators
-import { ApiQueriesFromDto } from 'src/shared';
+import { ApiQueriesFromDto, vocabulary } from 'src/shared';
+
+const {
+  comments: { COMMENT_NOT_FOUND },
+  article: { ARTICLE_NOT_FOUND },
+  reactions: {
+    REACTION_NOT_FOUND,
+    NOT_AUTHOR_OF_REACTION,
+    WRONG_REACTION_TYPE_FOR_COMMENT,
+    WRONG_REACTION_TYPE_FOR_ARTICLE,
+    ALREADY_REACTED_TO_ARTICLE,
+    ALREADY_REACTED_TO_COMMENT,
+    COMMENT_OR_ARTICLE_ID_REQUIRED,
+  },
+} = vocabulary;
 
 @Controller('reactions')
 @ApiTags('Reactions')
@@ -63,12 +77,12 @@ export class ReactionsController {
 
   @ApiResponse({
     status: HttpStatus.OK,
-    description: 'User successfully logged in',
+    description: 'User successfully deleted reaction',
     type: DeleteReactionResponseDto,
   })
   @ApiNotFoundResponse({
     example: {
-      message: 'Reaction not found',
+      message: REACTION_NOT_FOUND,
       error: 'Not Found',
       statusCode: HttpStatus.NOT_FOUND,
     },
@@ -76,7 +90,7 @@ export class ReactionsController {
   })
   @ApiNotFoundResponse({
     example: {
-      message: 'You are not author of this reaction',
+      message: NOT_AUTHOR_OF_REACTION,
       error: 'Not Found',
       statusCode: HttpStatus.NOT_FOUND,
     },
@@ -101,7 +115,7 @@ export class ReactionsController {
   @ApiBadRequestResponse({
     description: 'When commentId or articleId is not present in request body',
     example: {
-      message: 'Either commentId or articleId must be provided',
+      message: COMMENT_OR_ARTICLE_ID_REQUIRED,
       error: 'Bad Request',
       statusCode: HttpStatus.BAD_REQUEST,
     },
@@ -110,7 +124,7 @@ export class ReactionsController {
     description:
       'When you send wrong type of reaction for comment, for example upvote or downvote',
     example: {
-      message: 'Wrong reaction types for comment',
+      message: WRONG_REACTION_TYPE_FOR_COMMENT,
       error: 'Bad Request',
       statusCode: HttpStatus.BAD_REQUEST,
     },
@@ -119,7 +133,7 @@ export class ReactionsController {
     description:
       'When you send wrong type of reaction for article, for example like or dislike',
     example: {
-      message: 'Wrong reaction types for article',
+      message: WRONG_REACTION_TYPE_FOR_ARTICLE,
       error: 'Bad Request',
       statusCode: HttpStatus.BAD_REQUEST,
     },
@@ -127,7 +141,7 @@ export class ReactionsController {
   @ApiBadRequestResponse({
     description: 'When you already reacted to this comment',
     example: {
-      message: 'You have already reacted to this comment',
+      message: ALREADY_REACTED_TO_COMMENT,
       error: 'Bad Request',
       statusCode: HttpStatus.BAD_REQUEST,
     },
@@ -135,14 +149,14 @@ export class ReactionsController {
   @ApiBadRequestResponse({
     description: 'When you already reacted to this article',
     example: {
-      message: 'You have already reacted to this article',
+      message: ALREADY_REACTED_TO_ARTICLE,
       error: 'Bad Request',
       statusCode: HttpStatus.BAD_REQUEST,
     },
   })
   @ApiNotFoundResponse({
     example: {
-      message: 'Reaction not found',
+      message: REACTION_NOT_FOUND,
       error: 'Not Found',
       statusCode: HttpStatus.NOT_FOUND,
     },
@@ -151,23 +165,23 @@ export class ReactionsController {
   @ApiNotFoundResponse({
     description: 'When user is not author of reaction',
     example: {
-      message: 'You are not author of this reaction',
+      message: NOT_AUTHOR_OF_REACTION,
       error: 'Bad Request',
       statusCode: HttpStatus.NOT_FOUND,
     },
   })
   @ApiNotFoundResponse({
-    description: 'Comment not found',
+    description: COMMENT_NOT_FOUND,
     example: {
-      message: 'When comment that you want to react not found',
+      message: COMMENT_NOT_FOUND,
       error: 'Bad Request',
       statusCode: HttpStatus.NOT_FOUND,
     },
   })
   @ApiNotFoundResponse({
-    description: 'Article not found',
+    description: ARTICLE_NOT_FOUND,
     example: {
-      message: 'When article that you want to react not found',
+      message: ARTICLE_NOT_FOUND,
       error: 'Bad Request',
       statusCode: HttpStatus.NOT_FOUND,
     },
@@ -208,7 +222,7 @@ export class ReactionsController {
   })
   @ApiNotFoundResponse({
     example: {
-      message: 'Reaction not found',
+      message: REACTION_NOT_FOUND,
       error: 'Not Found',
       statusCode: HttpStatus.NOT_FOUND,
     },

@@ -38,7 +38,15 @@ import { ICustomRequest } from 'src/shared/types';
 import { CommentOrderByEnum } from './comment.types';
 
 // custom decorator
-import { ApiQueriesFromDto } from 'src/shared';
+import { ApiQueriesFromDto, vocabulary } from 'src/shared';
+
+const {
+  comments: {
+    COMMENT_NOT_FOUND,
+    NOT_AUTHOR_OF_COMMENT,
+    SUCCESSFUL_DELETE_OF_COMMENT,
+  },
+} = vocabulary;
 
 @Controller('comments')
 @ApiTags('Comments')
@@ -63,12 +71,12 @@ export class CommentController {
 
   @ApiResponse({
     status: HttpStatus.OK,
-    description: 'User successfully logged in.',
+    description: 'Comment successfully deleted',
     type: DeletedCommentResponseDto,
   })
   @ApiNotFoundResponse({
     example: {
-      message: 'Comment not found',
+      message: COMMENT_NOT_FOUND,
       error: 'Not Found',
       statusCode: HttpStatus.NOT_FOUND,
     },
@@ -76,7 +84,7 @@ export class CommentController {
   })
   @ApiNotFoundResponse({
     example: {
-      message: 'You are not author of this comment',
+      message: NOT_AUTHOR_OF_COMMENT,
       error: 'Not Found',
       statusCode: HttpStatus.NOT_FOUND,
     },
@@ -96,12 +104,12 @@ export class CommentController {
     @Param('id') id: string,
   ): { message: string } {
     this.commentService.delete({ userId: request.user.id, commentId: id });
-    return { message: 'Comment deleted successfully' };
+    return { message: SUCCESSFUL_DELETE_OF_COMMENT };
   }
 
   @ApiNotFoundResponse({
     example: {
-      message: 'Comment not found',
+      message: COMMENT_NOT_FOUND,
       error: 'Not Found',
       statusCode: HttpStatus.NOT_FOUND,
     },
@@ -110,7 +118,7 @@ export class CommentController {
   @ApiNotFoundResponse({
     description: 'When user is not author of comment',
     example: {
-      message: 'You are not author of this comment',
+      message: NOT_AUTHOR_OF_COMMENT,
       error: 'Bad Request',
       statusCode: HttpStatus.BAD_REQUEST,
     },

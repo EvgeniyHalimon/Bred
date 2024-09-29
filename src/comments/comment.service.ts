@@ -1,9 +1,5 @@
 // nest
-import {
-  BadRequestException,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 
 // schemas
@@ -22,6 +18,11 @@ import {
 } from './dto';
 import Reaction from 'src/reactions/reaction.schema';
 import { IComment } from './comment.types';
+import { vocabulary } from 'src/shared';
+
+const {
+  comments: { COMMENT_NOT_FOUND, NOT_AUTHOR_OF_COMMENT },
+} = vocabulary;
 
 @Injectable()
 export class CommentsService {
@@ -51,20 +52,16 @@ export class CommentsService {
     commentId: string;
     updateCommentDto: PatchCommentDto;
   }): Promise<PatchCommentResponseDto> {
-    const comment = await this.commentModel.findOne({
+    const comment = (await this.commentModel.findOne({
       where: { id: commentId },
-    });
-
-    if (!comment) {
-      throw new NotFoundException('Comment not found');
-    }
+    })) as Comment;
 
     const reactionAuthor = await this.commentModel.findOne({
       where: { id: commentId, authorId: userId },
     });
 
     if (!reactionAuthor) {
-      throw new NotFoundException(`You are not author of this comment`);
+      throw new NotFoundException(NOT_AUTHOR_OF_COMMENT);
     }
 
     comment.set(updateCommentDto);
@@ -75,32 +72,35 @@ export class CommentsService {
   }
 
   async delete({ userId, commentId }: { userId: string; commentId: string }) {
-    const article = await this.commentModel.findOne({
+    await this.commentModel.findOne({
       where: { id: commentId },
     });
-
-    if (!article) {
-      throw new NotFoundException('Comment not found');
-    }
 
     const articleAuthor = await this.commentModel.findOne({
       where: { id: commentId, authorId: userId },
     });
 
     if (!articleAuthor) {
-      throw new NotFoundException('You are not author of this comment');
+      throw new NotFoundException(NOT_AUTHOR_OF_COMMENT);
     }
 
-    const deletedComment = await this.commentModel.destroy({
+    await this.commentModel.destroy({
       where: {
         id: commentId,
       },
     });
-    if (deletedComment === 0) {
-      throw new BadRequestException(
-        'Something went wrong while deleting the comment',
-      );
+  }
+
+  async findOne(whereCondition: Partial<IComment>): Promise<CommentDto> {
+    const comment = await this.commentModel.findOne({
+      where: whereCondition,
+    });
+
+    if (!comment) {
+      throw new NotFoundException(COMMENT_NOT_FOUND);
     }
+
+    return comment;
   }
 
   async findAll({
@@ -122,11 +122,5 @@ export class CommentsService {
       comments: comments.rows as unknown as DetailedCommentsDto[],
       count: comments.count,
     };
-  }
-
-  async findOne(whereCondition: Partial<IComment>): Promise<Comment | null> {
-    return this.commentModel.findOne({
-      where: whereCondition,
-    });
   }
 }

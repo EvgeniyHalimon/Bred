@@ -26,6 +26,22 @@ import { IReactions } from './reaction.types';
 
 // constants
 import { ReactionTypeEnum, SourceTypeEnum } from './reaction.constants';
+// constants
+import { vocabulary } from 'src/shared';
+
+const {
+  comments: { COMMENT_NOT_FOUND },
+  article: { ARTICLE_NOT_FOUND },
+  reactions: {
+    REACTION_NOT_FOUND,
+    NOT_AUTHOR_OF_REACTION,
+    WRONG_REACTION_TYPE_FOR_COMMENT,
+    WRONG_REACTION_TYPE_FOR_ARTICLE,
+    ALREADY_REACTED_TO_ARTICLE,
+    ALREADY_REACTED_TO_COMMENT,
+    COMMENT_OR_ARTICLE_ID_REQUIRED,
+  },
+} = vocabulary;
 
 @Injectable()
 export class ReactionsService {
@@ -73,15 +89,13 @@ export class ReactionsService {
     });
 
     if (!reaction) {
-      throw new NotFoundException('Reaction not found');
+      throw new NotFoundException(REACTION_NOT_FOUND);
     }
 
     const reactionAuthor = await this.findOne({ whereCondition: { userId } });
 
     if (!reactionAuthor) {
-      throw new NotFoundException(
-        `You are not author of this ${reaction.reactionType}`,
-      );
+      throw new NotFoundException(NOT_AUTHOR_OF_REACTION);
     }
 
     const deletedReaction = await this.reactionModel.destroy({
@@ -111,13 +125,13 @@ export class ReactionsService {
     });
 
     if (!reaction) {
-      throw new NotFoundException('Reaction not found');
+      throw new NotFoundException(REACTION_NOT_FOUND);
     }
 
     const reactionAuthor = await this.findOne({ whereCondition: { userId } });
 
     if (!reactionAuthor) {
-      throw new NotFoundException(`You are not author of this reaction`);
+      throw new NotFoundException(NOT_AUTHOR_OF_REACTION);
     }
 
     reaction.set(updateReactionDto);
@@ -139,7 +153,7 @@ export class ReactionsService {
     });
 
     if (!article) {
-      throw new NotFoundException('Reaction not found');
+      throw new NotFoundException(REACTION_NOT_FOUND);
     }
 
     return article;
@@ -176,9 +190,7 @@ export class ReactionsService {
     reactionType: ReactionTypeEnum;
   }) {
     if (!commentId && !articleId) {
-      throw new BadRequestException(
-        'Either commentId or articleId must be provided',
-      );
+      throw new BadRequestException(COMMENT_OR_ARTICLE_ID_REQUIRED);
     }
 
     this.validateReactionType(commentId, articleId, sourceType, reactionType);
@@ -197,39 +209,39 @@ export class ReactionsService {
     reactionType: ReactionTypeEnum,
   ) {
     if (commentId && this.getCommentCondition({ sourceType, reactionType })) {
-      throw new BadRequestException('Wrong reaction types for comment');
+      throw new BadRequestException(WRONG_REACTION_TYPE_FOR_COMMENT);
     }
 
     if (articleId && this.getArticleCondition({ sourceType, reactionType })) {
-      throw new BadRequestException('Wrong reaction types for article');
+      throw new BadRequestException(WRONG_REACTION_TYPE_FOR_ARTICLE);
     }
   }
 
   private async validateArticleReaction(articleId: string, userId: string) {
     const article = await this.articleService.findOne({ id: articleId });
     if (!article) {
-      throw new NotFoundException('Article not found');
+      throw new NotFoundException(ARTICLE_NOT_FOUND);
     }
 
     const reaction = await this.findOne({
       whereCondition: { userId, articleId },
     });
     if (reaction) {
-      throw new BadRequestException('You have already reacted to this article');
+      throw new BadRequestException(ALREADY_REACTED_TO_ARTICLE);
     }
   }
 
   private async validateCommentReaction(commentId: string, userId: string) {
     const comment = await this.commentService.findOne({ id: commentId });
     if (!comment) {
-      throw new NotFoundException('Comment not found');
+      throw new NotFoundException(COMMENT_NOT_FOUND);
     }
 
     const reaction = await this.findOne({
       whereCondition: { userId, commentId },
     });
     if (reaction) {
-      throw new BadRequestException('You have already reacted to this comment');
+      throw new BadRequestException(ALREADY_REACTED_TO_COMMENT);
     }
   }
 

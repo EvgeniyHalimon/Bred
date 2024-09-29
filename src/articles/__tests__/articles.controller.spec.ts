@@ -9,7 +9,7 @@ import {
 } from '../dto';
 
 const {
-  article: { SUCCESSFUL_DELETE },
+  article: { SUCCESSFUL_DELETE_OF_ARTICLE: SUCCESSFUL_DELETE },
 } = vocabulary;
 
 describe('ArticlesController', () => {

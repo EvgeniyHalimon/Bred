@@ -3,6 +3,11 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { CommentsService } from '../comment.service';
 import Comment from '../comment.schema';
 import { BadRequestException, NotFoundException } from '@nestjs/common';
+import { vocabulary } from 'src/shared';
+
+const {
+  comments: { COMMENT_NOT_FOUND, NOT_AUTHOR_OF_COMMENT },
+} = vocabulary;
 
 describe('CommentsService', () => {
   let commentsService: CommentsService;
@@ -103,7 +108,7 @@ describe('CommentsService', () => {
         await commentsService.patch(updateComment);
       } catch (error) {
         expect(error).toBeInstanceOf(NotFoundException);
-        expect(error.message).toBe('Comment not found');
+        expect(error.message).toBe(COMMENT_NOT_FOUND);
       }
     });
 
@@ -114,7 +119,7 @@ describe('CommentsService', () => {
         await commentsService.patch(updateComment);
       } catch (error) {
         expect(error).toBeInstanceOf(NotFoundException);
-        expect(error.message).toBe('You are not author of this comment');
+        expect(error.message).toBe(NOT_AUTHOR_OF_COMMENT);
       }
     });
   });
@@ -140,7 +145,7 @@ describe('CommentsService', () => {
         await deleteComment();
       } catch (error) {
         expect(error).toBeInstanceOf(NotFoundException);
-        expect(error.message).toBe('Comment not found');
+        expect(error.message).toBe(COMMENT_NOT_FOUND);
       }
     });
 
@@ -151,7 +156,7 @@ describe('CommentsService', () => {
         await deleteComment();
       } catch (error) {
         expect(error).toBeInstanceOf(NotFoundException);
-        expect(error.message).toBe('You are not author of this comment');
+        expect(error.message).toBe(NOT_AUTHOR_OF_COMMENT);
       }
     });
 

@@ -1,8 +1,12 @@
 import { Test } from '@nestjs/testing';
 import { CommentController } from '../comment.controller';
 import { CommentsService } from '../comment.service';
-import { ICustomRequest } from 'src/shared';
+import { ICustomRequest, vocabulary } from 'src/shared';
 import { GetAllCommentsResponseDto, PatchCommentResponseDto } from '../dto';
+
+const {
+  comments: { SUCCESSFUL_DELETE_OF_COMMENT },
+} = vocabulary;
 
 describe('CommentController', () => {
   let commentController: CommentController;
@@ -62,7 +66,7 @@ describe('CommentController', () => {
         commentId: commentId,
       });
       expect(result).toEqual({
-        message: 'Comment deleted successfully',
+        message: SUCCESSFUL_DELETE_OF_COMMENT,
       });
     });
   });
