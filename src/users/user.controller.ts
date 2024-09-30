@@ -16,7 +16,7 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { UsersService } from './user.service';
 
 // dto
-import { GetAllUsersResponseDto, PatchUserDto } from './dto';
+import { GetAllUserPresenter, PatchUserDto, UserPresenter } from './dto';
 
 // validation
 import { fileValidationPipe } from './file-validation.pipe';
@@ -28,14 +28,14 @@ import { ICustomRequest } from 'src/shared';
 @ApiTags('Users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
-
+  /* MADE RESPONSES */
   @ApiResponse({
     status: HttpStatus.OK,
     description: 'Represents array of users',
-    type: GetAllUsersResponseDto,
+    type: GetAllUserPresenter,
   })
   @Get('/')
-  findAll(): Promise<GetAllUsersResponseDto> {
+  findAll(): Promise<GetAllUserPresenter> {
     return this.usersService.findAll();
   }
 
@@ -46,7 +46,7 @@ export class UsersController {
     @UploadedFile(fileValidationPipe)
     file: Express.Multer.File,
     @Req() req: ICustomRequest,
-  ): Promise<PatchUserDto> {
+  ): Promise<UserPresenter> {
     let photo;
     if (file) {
       const base64 = file?.buffer?.toString('base64');

@@ -10,7 +10,7 @@ import { InjectModel } from '@nestjs/sequelize';
 import User from './user.schema';
 
 // dto
-import { GetAllUsersResponseDto, PatchUserDto } from './dto';
+import { GetAllUserPresenter, PatchUserDto, UserPresenter } from './dto';
 
 // util
 import { hashPassword } from 'src/auth/utils/passwordUtils';
@@ -22,13 +22,10 @@ import { IUser, UpdateUserWithFile } from './user.types';
 export class UsersService {
   constructor(@InjectModel(User) private userModel: typeof User) {}
 
-  async findAll(): Promise<GetAllUsersResponseDto> {
+  async findAll(): Promise<GetAllUserPresenter> {
     const users = await this.userModel.findAndCountAll();
 
-    return {
-      users: users.rows,
-      count: users.count,
-    };
+    return new GetAllUserPresenter(users.rows, users.count);
   }
 
   async patch({
@@ -39,7 +36,7 @@ export class UsersService {
     updateUserDto: Partial<PatchUserDto>;
     file: string | undefined;
     userId: string;
-  }): Promise<PatchUserDto> {
+  }): Promise<UserPresenter> {
     const user = await this.findOne({ id: userId });
 
     if (!user) {

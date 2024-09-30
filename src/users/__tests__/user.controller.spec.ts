@@ -1,7 +1,7 @@
 import { Test } from '@nestjs/testing';
 import { UsersController } from '../user.controller';
 import { UsersService } from '../user.service';
-import { GetAllUsersResponseDto, PatchUserDto } from '../dto';
+import { GetAllUserPresenter, PatchUserDto } from '../dto';
 import { ICustomRequest } from 'src/shared';
 
 describe('UsersController', () => {
@@ -32,13 +32,13 @@ describe('UsersController', () => {
 
   describe('FindAll method', () => {
     it('method findAll must be called and should returned instance of response dto', async () => {
-      const mockResult = new GetAllUsersResponseDto();
+      const mockResult = new GetAllUserPresenter([], 1);
 
       jest.spyOn(mockUsersService, 'findAll').mockResolvedValue(mockResult);
 
       const result = await usersController.findAll();
       expect(mockUsersService.findAll).toHaveBeenCalledTimes(1);
-      expect(result).toBeInstanceOf(GetAllUsersResponseDto);
+      expect(result).toBeInstanceOf(GetAllUserPresenter);
     });
   });
 
