@@ -47,8 +47,11 @@ export class UsersController {
     file: Express.Multer.File,
     @Req() req: ICustomRequest,
   ): Promise<PatchUserDto> {
-    const base64 = file?.buffer?.toString('base64');
-    const photo = `data:${file.mimetype};base64,${base64}`;
+    let photo;
+    if (file) {
+      const base64 = file?.buffer?.toString('base64');
+      photo = `data:${file.mimetype};base64,${base64}`;
+    }
     return this.usersService.patch({
       updateUserDto,
       file: photo,
