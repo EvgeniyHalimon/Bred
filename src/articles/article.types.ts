@@ -1,6 +1,5 @@
 // types
 import { OrderType } from 'src/shared/types';
-import { ArticleDto } from './dto';
 
 export interface IArticle {
   id: string;
@@ -28,9 +27,4 @@ export interface IQueryFindAllArticles {
   limit: number;
   order: OrderType;
   orderBy: keyof IArticle;
-}
-
-export interface IArticleResponse {
-  article: ArticleDto | undefined;
-  message: string;
 }
