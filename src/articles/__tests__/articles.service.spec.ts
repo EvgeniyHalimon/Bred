@@ -320,9 +320,7 @@ describe('ArticlesService', () => {
     it('should return articles and count', async () => {
       mockArticlesModel.findAndCountAll.mockResolvedValue(mockArticles);
       const articles = await articlesService.findAll({
-        query: {
-          page: '1',
-        },
+        page: '1',
       });
       expect(mockArticlesModel.findAndCountAll).toHaveBeenCalledTimes(1);
       expect(articles).toEqual({

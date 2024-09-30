@@ -8,13 +8,12 @@ import User from 'src/users/user.schema';
 
 // dto's
 import {
-  ArticleDto,
+  DetailedArticlePresenter,
+  ArticlePresenter,
   CreateArticleDto,
-  DetailedArticleInfoDto,
-  GetAllArticlesResponseDto,
   GetAllQueryArticlesDto,
-  GetByIdArticleResponseDto,
   PatchArticleDto,
+  GetAllArticlesPresenter,
 } from './dto';
 
 // types
@@ -39,7 +38,7 @@ export class ArticlesService {
   }: {
     authorId: string;
     createArticleDto: CreateArticleDto;
-  }): Promise<ArticleDto> {
+  }): Promise<ArticlePresenter> {
     const article = {
       ...createArticleDto,
       authorId,
@@ -51,7 +50,7 @@ export class ArticlesService {
     articleId,
   }: {
     articleId: string;
-  }): Promise<GetByIdArticleResponseDto | null> {
+  }): Promise<DetailedArticlePresenter | null> {
     const article = await this.articleModel.findOne({
       where: { id: articleId },
       include: [
@@ -71,12 +70,12 @@ export class ArticlesService {
 
     if (!article) return null;
 
-    return article as unknown as GetByIdArticleResponseDto;
+    return new DetailedArticlePresenter(article);
   }
 
   async findAll(
     query: GetAllQueryArticlesDto,
-  ): Promise<GetAllArticlesResponseDto> {
+  ): Promise<GetAllArticlesPresenter> {
     const result = await this.articleModel.findAndCountAll({
       where: query.toWhereOption?.(),
       ...query.toPaginationOptions?.(),
@@ -96,10 +95,7 @@ export class ArticlesService {
       distinct: true,
     });
 
-    return {
-      articles: result.rows as unknown as DetailedArticleInfoDto[],
-      count: result.count,
-    };
+    return new GetAllArticlesPresenter(result.rows, result.count);
   }
 
   async patch({
@@ -110,7 +106,7 @@ export class ArticlesService {
     articleId: string;
     userId: string;
     patchArticleDto: PatchArticleDto;
-  }): Promise<ArticleDto | undefined> {
+  }): Promise<ArticlePresenter> {
     const article = (await this.articleModel.findOne({
       where: { id: articleId },
     })) as Article;
@@ -156,7 +152,7 @@ export class ArticlesService {
     });
   }
 
-  async findOne(whereCondition: Partial<IArticle>): Promise<ArticleDto> {
+  async findOne(whereCondition: Partial<IArticle>): Promise<ArticlePresenter> {
     const article = await this.articleModel.findOne({
       where: whereCondition,
     });

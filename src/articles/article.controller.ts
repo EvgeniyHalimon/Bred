@@ -26,21 +26,15 @@ import {
   GetAllQueryArticlesDto,
   CreateArticleDto,
   PatchArticleDto,
-  CreateArticleResponseDto,
-  DeletedArticleResponseDto,
-  PatchArticleResponseDto,
-  GetAllArticlesResponseDto,
-  GetByIdArticleResponseDto,
+  DeletedArticleDto,
+  DetailedArticlePresenter,
+  ArticlePresenter,
+  GetAllArticlesPresenter,
 } from './dto';
 
 // types
-import { ArticleOrderByEnum, IArticleResponse } from './article.types';
-import {
-  ICustomRequest,
-  ApiQueriesFromDto,
-  ISimpleMessageResponse,
-  vocabulary,
-} from 'src/shared';
+import { ArticleOrderByEnum } from './article.types';
+import { ICustomRequest, ApiQueriesFromDto, vocabulary } from 'src/shared';
 
 const {
   article: {
@@ -58,27 +52,23 @@ export class ArticlesController {
   @ApiResponse({
     status: HttpStatus.CREATED,
     description: 'Article successfully created.',
-    type: CreateArticleResponseDto,
+    type: ArticlePresenter,
   })
   @Post('/')
-  async create(
+  create(
     @Req() request: ICustomRequest,
     @Body() createArticleDto: CreateArticleDto,
-  ): Promise<IArticleResponse> {
-    const createdArticle = await this.articlesService.create({
+  ): Promise<ArticlePresenter> {
+    return this.articlesService.create({
       authorId: request.user.id,
       createArticleDto,
     });
-    return {
-      article: createdArticle,
-      message: `Article "${createArticleDto.title}" created successfully`,
-    };
   }
 
   @ApiResponse({
     status: HttpStatus.OK,
     description: 'When we received the article by id',
-    type: GetByIdArticleResponseDto,
+    type: DetailedArticlePresenter,
   })
   @ApiNotFoundResponse({
     example: {
@@ -89,20 +79,20 @@ export class ArticlesController {
     description: 'When article is not present in database',
   })
   @Get('/:id')
-  getById(@Param('id') id: string): Promise<GetByIdArticleResponseDto | null> {
+  getById(@Param('id') id: string): Promise<DetailedArticlePresenter | null> {
     return this.articlesService.getById({ articleId: id });
   }
 
   @ApiResponse({
     status: HttpStatus.OK,
     description: 'When we received the article by id',
-    type: GetAllArticlesResponseDto,
+    type: GetAllArticlesPresenter,
   })
   @Get('/')
   @ApiQueriesFromDto(GetAllQueryArticlesDto, ArticleOrderByEnum)
   findAll(
     @Query() query: GetAllQueryArticlesDto,
-  ): Promise<GetAllArticlesResponseDto> {
+  ): Promise<GetAllArticlesPresenter> {
     return this.articlesService.findAll(query);
   }
 
@@ -125,30 +115,25 @@ export class ArticlesController {
   @ApiResponse({
     status: HttpStatus.OK,
     description: 'When article successfully updated',
-    type: PatchArticleResponseDto,
+    type: ArticlePresenter,
   })
   @Patch('/:id')
-  async patch(
+  patch(
     @Req() request: ICustomRequest,
     @Body() patchArticleDto: PatchArticleDto,
     @Param('id') id: string,
-  ): Promise<PatchArticleResponseDto> {
-    const updatedArticle = await this.articlesService.patch({
+  ): Promise<ArticlePresenter> {
+    return this.articlesService.patch({
       articleId: id,
       userId: request.user.id,
       patchArticleDto,
     });
-
-    return {
-      article: updatedArticle,
-      message: `Article "${updatedArticle?.title}" updated successfully`,
-    };
   }
 
   @ApiResponse({
     status: HttpStatus.OK,
     description: 'User successfully logged in.',
-    type: DeletedArticleResponseDto,
+    type: DeletedArticleDto,
   })
   @ApiNotFoundResponse({
     example: {
@@ -178,7 +163,7 @@ export class ArticlesController {
   delete(
     @Req() request: ICustomRequest,
     @Param('id') id: string,
-  ): ISimpleMessageResponse {
+  ): DeletedArticleDto {
     this.articlesService.delete({
       articleId: id,
       userId: request.user.id,
