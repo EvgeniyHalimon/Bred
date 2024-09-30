@@ -3,8 +3,9 @@ import { ApiProperty } from '@nestjs/swagger';
 
 // dto
 import { UserPresenter } from 'src/users/dto';
+import Comment from '../comment.schema';
 
-export class CommentDto {
+export class CommentPresenter {
   @ApiProperty({
     example: '7770ec1a-cdbf-47c1-85db-35fbfc55d6a3',
     type: String,
@@ -46,9 +47,18 @@ export class CommentDto {
     description: 'Represents the last update date of the comment',
   })
   updatedAt: Date;
+
+  constructor(comment: Comment) {
+    this.id = comment.id;
+    this.authorId = comment.authorId;
+    this.articleId = comment.articleId;
+    this.text = comment.text;
+    this.createdAt = comment.createdAt;
+    this.updatedAt = comment.updatedAt;
+  }
 }
 
-export class CommentWithAuthor extends CommentDto {
+export class CommentWithAuthorPresenter extends CommentPresenter {
   @ApiProperty({ type: UserPresenter })
   author: UserPresenter;
 }

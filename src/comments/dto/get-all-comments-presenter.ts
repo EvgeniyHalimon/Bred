@@ -4,9 +4,10 @@ import { ApiProperty } from '@nestjs/swagger';
 // dtos
 import { ReactionDtoWithUser } from 'src/reactions/dto';
 import { UserPresenter } from 'src/users/dto';
-import { CommentDto } from './comment.dto';
+import { CommentPresenter } from './comment-presenter';
+import Comment from '../comment.schema';
 
-export class DetailedCommentsDto extends CommentDto {
+export class DetailedCommentsDto extends CommentPresenter {
   @ApiProperty({ type: UserPresenter })
   author: UserPresenter;
 
@@ -14,7 +15,7 @@ export class DetailedCommentsDto extends CommentDto {
   reactions: ReactionDtoWithUser[];
 }
 
-export class GetAllCommentsResponseDto {
+export class GetAllCommentsPresenter {
   @ApiProperty({ type: [DetailedCommentsDto] })
   comments: DetailedCommentsDto[];
 
@@ -24,4 +25,9 @@ export class GetAllCommentsResponseDto {
     description: 'Represents count of comments',
   })
   count: number;
+
+  constructor(comments: Comment[], count: number) {
+    this.comments = comments.map(comment => new DetailedCommentsDto(comment));
+    this.count = count;
+  }
 }

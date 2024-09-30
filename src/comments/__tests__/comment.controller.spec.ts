@@ -2,7 +2,7 @@ import { Test } from '@nestjs/testing';
 import { CommentController } from '../comment.controller';
 import { CommentsService } from '../comment.service';
 import { ICustomRequest, vocabulary } from 'src/shared';
-import { GetAllCommentsResponseDto, PatchCommentResponseDto } from '../dto';
+import { GetAllCommentsResponseDto, PatchCommentPresenter } from '../dto';
 
 const {
   comments: { SUCCESSFUL_DELETE_OF_COMMENT },
@@ -74,7 +74,7 @@ describe('CommentController', () => {
   describe('Patch method', () => {
     const updateCommentDto = { text: 'new text' };
     it('Method patch should returned instance of response dto', async () => {
-      const mockResult = new PatchCommentResponseDto();
+      const mockResult = new PatchCommentPresenter();
 
       jest.spyOn(mockCommentsService, 'patch').mockResolvedValue(mockResult);
 
@@ -83,7 +83,7 @@ describe('CommentController', () => {
         commentId,
         updateCommentDto,
       );
-      expect(result).toBeInstanceOf(PatchCommentResponseDto);
+      expect(result).toBeInstanceOf(PatchCommentPresenter);
     });
 
     it('Method patch must be called with correct parameters', async () => {

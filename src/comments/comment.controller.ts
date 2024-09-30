@@ -23,14 +23,14 @@ import { CommentsService } from './comment.service';
 
 // dto's
 import {
-  CommentDto,
+  CommentPresenter,
   CreateCommentDto,
   DeletedCommentResponseDto,
-  GetAllCommentsResponseDto,
   GetAllQueryCommentsDto,
-  PatchCommentResponseDto,
-  PostCommentResponseDto,
+  PatchCommentPresenter,
+  PostCommentPresenter,
   PatchCommentDto,
+  GetAllCommentsPresenter,
 } from './dto';
 
 // types
@@ -56,13 +56,13 @@ export class CommentController {
   @ApiResponse({
     status: HttpStatus.CREATED,
     description: 'When comment created',
-    type: PostCommentResponseDto,
+    type: PostCommentPresenter,
   })
   @Post('/')
   create(
     @Req() request: ICustomRequest,
     @Body() createCommentDto: CreateCommentDto,
-  ): Promise<CommentDto> {
+  ): Promise<CommentPresenter> {
     return this.commentService.create({
       userId: request.user.id,
       createCommentDto,
@@ -102,7 +102,7 @@ export class CommentController {
   delete(
     @Req() request: ICustomRequest,
     @Param('id') id: string,
-  ): { message: string } {
+  ): DeletedCommentResponseDto {
     this.commentService.delete({ userId: request.user.id, commentId: id });
     return { message: SUCCESSFUL_DELETE_OF_COMMENT };
   }
@@ -126,14 +126,14 @@ export class CommentController {
   @ApiResponse({
     status: HttpStatus.OK,
     description: 'When comment updated',
-    type: PatchCommentResponseDto,
+    type: PatchCommentPresenter,
   })
   @Patch('/:id')
   patch(
     @Req() request: ICustomRequest,
     @Param('id') id: string,
     @Body() updateCommentDto: PatchCommentDto,
-  ): Promise<PatchCommentResponseDto> {
+  ): Promise<PatchCommentPresenter> {
     return this.commentService.patch({
       userId: request.user.id,
       commentId: id,
@@ -144,13 +144,13 @@ export class CommentController {
   @ApiResponse({
     status: HttpStatus.OK,
     description: 'Represents array of comments',
-    type: GetAllCommentsResponseDto,
+    type: GetAllCommentsPresenter,
   })
   @Get('/')
   @ApiQueriesFromDto(GetAllQueryCommentsDto, CommentOrderByEnum)
   findAll(
     @Query() query: GetAllQueryCommentsDto,
-  ): Promise<GetAllCommentsResponseDto> {
+  ): Promise<GetAllCommentsPresenter> {
     return this.commentService.findAll(query);
   }
 }

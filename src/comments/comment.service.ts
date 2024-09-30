@@ -8,13 +8,12 @@ import User from 'src/users/user.schema';
 
 // dto
 import {
-  CommentDto,
+  CommentPresenter,
   CreateCommentDto,
-  DetailedCommentsDto,
-  GetAllCommentsResponseDto,
   GetAllQueryCommentsDto,
-  PatchCommentResponseDto,
+  PatchCommentPresenter,
   PatchCommentDto,
+  GetAllCommentsPresenter,
 } from './dto';
 import Reaction from 'src/reactions/reaction.schema';
 import { IComment } from './comment.types';
@@ -34,7 +33,7 @@ export class CommentsService {
   }: {
     userId: string;
     createCommentDto: CreateCommentDto;
-  }): Promise<CommentDto> {
+  }): Promise<CommentPresenter> {
     const comment = {
       ...createCommentDto,
       authorId: userId,
@@ -51,7 +50,7 @@ export class CommentsService {
     userId: string;
     commentId: string;
     updateCommentDto: PatchCommentDto;
-  }): Promise<PatchCommentResponseDto> {
+  }): Promise<PatchCommentPresenter> {
     const comment = (await this.commentModel.findOne({
       where: { id: commentId },
     })) as Comment;
@@ -91,7 +90,7 @@ export class CommentsService {
     });
   }
 
-  async findOne(whereCondition: Partial<IComment>): Promise<CommentDto> {
+  async findOne(whereCondition: Partial<IComment>): Promise<CommentPresenter> {
     const comment = await this.commentModel.findOne({
       where: whereCondition,
     });
@@ -105,7 +104,7 @@ export class CommentsService {
 
   async findAll(
     query: GetAllQueryCommentsDto,
-  ): Promise<GetAllCommentsResponseDto> {
+  ): Promise<GetAllCommentsPresenter> {
     const comments = await this.commentModel.findAndCountAll({
       where: query.toWhereCondition?.(),
       ...query.toPaginationOptions?.(),
@@ -116,9 +115,6 @@ export class CommentsService {
       distinct: true,
     });
 
-    return {
-      comments: comments.rows as unknown as DetailedCommentsDto[],
-      count: comments.count,
-    };
+    return new GetAllCommentsPresenter(comments.rows, comments.count);
   }
 }

@@ -1,4 +1,4 @@
-import { CommentWithAuthor } from 'src/comments/dto';
+import { CommentWithAuthorPresenter } from 'src/comments/dto';
 import { ReactionDtoWithUser } from 'src/reactions/dto';
 import { UserPresenter } from 'src/users/dto';
 import Article from '../article.schema';
@@ -74,8 +74,8 @@ export class DetailedArticlePresenter extends ArticlePresenter {
   @ApiProperty({ type: [ReactionDtoWithUser] })
   reactions: ReactionDtoWithUser[];
 
-  @ApiProperty({ type: [CommentWithAuthor] })
-  comments: CommentWithAuthor[];
+  @ApiProperty({ type: [CommentWithAuthorPresenter] })
+  comments: CommentWithAuthorPresenter[];
   constructor(article: any) {
     super(article);
     this.author = article.author;
