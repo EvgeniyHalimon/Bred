@@ -1,6 +1,6 @@
 import { CommentWithAuthor } from 'src/comments/dto';
 import { ReactionDtoWithUser } from 'src/reactions/dto';
-import { UserDto } from 'src/users/dto';
+import { UserPresenter } from 'src/users/dto';
 import Article from '../article.schema';
 import { ApiProperty } from '@nestjs/swagger';
 
@@ -68,8 +68,8 @@ export class ArticlePresenter {
 }
 
 export class DetailedArticlePresenter extends ArticlePresenter {
-  @ApiProperty({ type: UserDto })
-  author: UserDto;
+  @ApiProperty({ type: UserPresenter })
+  author: UserPresenter;
 
   @ApiProperty({ type: [ReactionDtoWithUser] })
   reactions: ReactionDtoWithUser[];

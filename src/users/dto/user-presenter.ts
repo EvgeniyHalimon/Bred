@@ -3,9 +3,9 @@ import { ApiProperty } from '@nestjs/swagger';
 
 // schema
 import User from '../user.schema';
-import { UserRolesEnum } from '../user.constants';
+import { UserRole } from '../user.types';
 
-export class UserDto extends User {
+export class UserPresenter {
   @ApiProperty({
     example: 'd0601328-1486-434a-860e-75b843a682db',
     type: String,
@@ -46,7 +46,7 @@ export class UserDto extends User {
     type: String,
     description: 'Represents the role of the author',
   })
-  role: UserRolesEnum;
+  role: UserRole;
 
   @ApiProperty({
     example: null,
@@ -69,4 +69,16 @@ export class UserDto extends User {
     description: 'Represents the last update date of the author',
   })
   updatedAt: Date;
+
+  constructor(user: User) {
+    this.id = user.id;
+    this.firstName = user.firstName;
+    this.lastName = user.lastName;
+    this.email = user.email;
+    this.bio = user.bio;
+    this.role = user.role;
+    this.photo = user.photo;
+    this.createdAt = user.createdAt;
+    this.updatedAt = user.updatedAt;
+  }
 }

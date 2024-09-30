@@ -2,14 +2,14 @@
 import { ApiProperty } from '@nestjs/swagger';
 
 // dto
-import { UserDto } from './user.dto';
+import { UserPresenter } from './user-presenter';
 
 export class GetAllUsersResponseDto {
   @ApiProperty({
-    type: [UserDto],
+    type: [UserPresenter],
     description: 'Represents array of users.',
   })
-  users: UserDto[];
+  users: UserPresenter[];
 
   @ApiProperty({
     type: Number,

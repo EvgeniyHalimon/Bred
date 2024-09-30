@@ -12,13 +12,13 @@ import User from 'src/users/user.schema';
 
 // dto's
 import { CreateUserDto, SignInDto } from 'src/users/dto';
-import { SignUpResponseDto } from './dto';
+import { SignInPresenter, SignUpPresenter } from './dto';
 
 // utils
 import { hashPassword, verifyPassword } from './utils/passwordUtils';
 
 // types
-import { ISingInResponse, ITokens } from './auth.types';
+import { ITokens } from './auth.types';
 import { IUser } from 'src/users/user.types';
 
 // config
@@ -39,9 +39,7 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
-  async signUp(
-    signUpDto: CreateUserDto,
-  ): Promise<SignUpResponseDto | undefined> {
+  async signUp(signUpDto: CreateUserDto): Promise<SignUpPresenter> {
     const user = await this.userModel.scope('withPassword').findOne({
       where: { email: signUpDto.email },
     });
@@ -56,10 +54,14 @@ export class AuthService {
     };
 
     const createdUser = await this.userModel.create(userAttributes);
-    return createdUser;
+
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { password: p, ...userWithoutPassword } = createdUser.dataValues;
+
+    return userWithoutPassword;
   }
 
-  async signIn(signInDto: SignInDto): Promise<ISingInResponse | undefined> {
+  async signIn(signInDto: SignInDto): Promise<SignInPresenter> {
     const { password, email } = signInDto;
 
     const user = await this.userModel.scope('withPassword').findOne({
@@ -71,7 +73,7 @@ export class AuthService {
     }
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { photo, articles, comments, ...userWithoutPhoto } = user.dataValues;
+    const { photo, ...userWithoutPhoto } = user.dataValues;
 
     const match = await verifyPassword(password, user.password);
     if (!match) {
@@ -83,11 +85,7 @@ export class AuthService {
 
     const { accessToken, refreshToken } = this.generateTokens(userWithoutPhoto);
 
-    return {
-      user: userWithoutPassword,
-      accessToken: accessToken,
-      refreshToken: refreshToken,
-    };
+    return new SignInPresenter(userWithoutPassword, accessToken, refreshToken);
   }
 
   async refresh(id: string): Promise<ITokens | void> {
@@ -98,7 +96,7 @@ export class AuthService {
       throw new NotFoundException(NOT_FOUND);
     }
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { photo, articles, comments, ...userWithoutPhoto } = user.dataValues;
+    const { photo, ...userWithoutPhoto } = user.dataValues;
     if (userWithoutPhoto) {
       return this.generateTokens(userWithoutPhoto);
     }

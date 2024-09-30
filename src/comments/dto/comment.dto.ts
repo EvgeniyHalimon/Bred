@@ -2,7 +2,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 
 // dto
-import { UserDto } from 'src/users/dto';
+import { UserPresenter } from 'src/users/dto';
 
 export class CommentDto {
   @ApiProperty({
@@ -49,6 +49,6 @@ export class CommentDto {
 }
 
 export class CommentWithAuthor extends CommentDto {
-  @ApiProperty({ type: UserDto })
-  author: UserDto;
+  @ApiProperty({ type: UserPresenter })
+  author: UserPresenter;
 }

@@ -2,7 +2,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 
 // dto
-import { UserDto } from 'src/users/dto';
+import { UserPresenter } from 'src/users/dto';
 
 export class ReactionDto {
   @ApiProperty({
@@ -70,6 +70,6 @@ export class ReactionDto {
 }
 
 export class ReactionDtoWithUser extends ReactionDto {
-  @ApiProperty({ type: UserDto })
-  user: UserDto;
+  @ApiProperty({ type: UserPresenter })
+  user: UserPresenter;
 }

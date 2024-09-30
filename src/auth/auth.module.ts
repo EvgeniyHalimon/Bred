@@ -4,9 +4,6 @@ import { SequelizeModule } from '@nestjs/sequelize';
 import { JwtModule } from '@nestjs/jwt';
 import { APP_GUARD } from '@nestjs/core';
 
-// config
-import { config } from 'src/config';
-
 // module
 import { UsersModule } from 'src/users/user.module';
 

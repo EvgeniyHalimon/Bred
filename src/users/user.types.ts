@@ -1,7 +1,3 @@
-// types
-import { IArticle } from 'src/articles/article.types';
-import { IComment } from 'src/comments/comment.types';
-
 // constants
 import { UserRolesEnum } from './user.constants';
 
@@ -13,12 +9,10 @@ export interface IUser {
   firstName: string;
   lastName: string;
   email: string;
-  password: string;
+  password?: string;
   bio: string;
   role: UserRole;
   photo: string | null;
-  articles?: IArticle[];
-  comments?: IComment[];
   createdAt: Date;
   updatedAt: Date;
 }

@@ -23,11 +23,11 @@ import { Public } from 'src/shared/public.decorator';
 
 // dto's
 import { SignInDto, CreateUserDto } from 'src/users/dto';
-import { SignInResponseDto, SignUpResponseDto } from './dto';
+import { SignInPresenter, SignUpPresenter } from './dto';
 
 // types
-import { ISingInResponse } from './auth.types';
 import { ICustomRequest, vocabulary } from 'src/shared';
+import { ITokens } from './auth.types';
 
 const {
   auth: { WRONG_PASSWORD },
@@ -45,7 +45,7 @@ export class AuthController {
   @ApiResponse({
     status: HttpStatus.OK,
     description: 'User successfully logged in.',
-    type: SignInResponseDto,
+    type: SignInPresenter,
   })
   @ApiBadRequestResponse({
     example: {
@@ -63,7 +63,7 @@ export class AuthController {
     },
     description: "When user with current email doesn't exist on database",
   })
-  signIn(@Body() signInDTO: SignInDto): Promise<ISingInResponse | undefined> {
+  signIn(@Body() signInDTO: SignInDto): Promise<SignInPresenter> {
     return this.authService.signIn(signInDTO);
   }
 
@@ -73,7 +73,7 @@ export class AuthController {
   @ApiResponse({
     status: HttpStatus.CREATED,
     description: 'User successfully created account.',
-    type: SignUpResponseDto,
+    type: SignUpPresenter,
   })
   @ApiBadRequestResponse({
     description: 'When user already exists',
@@ -83,14 +83,12 @@ export class AuthController {
       statusCode: HttpStatus.BAD_REQUEST,
     },
   })
-  signUp(
-    @Body() signUpDTO: CreateUserDto,
-  ): Promise<SignUpResponseDto | undefined> {
+  signUp(@Body() signUpDTO: CreateUserDto): Promise<SignUpPresenter> {
     return this.authService.signUp(signUpDTO);
   }
 
   @Get('refresh')
-  refresh(@Req() req: ICustomRequest) {
+  refresh(@Req() req: ICustomRequest): Promise<ITokens | void> {
     return this.authService.refresh(req.user.id);
   }
 }
