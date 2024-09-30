@@ -2,7 +2,8 @@ import { Test } from '@nestjs/testing';
 import { CommentController } from '../comment.controller';
 import { CommentsService } from '../comment.service';
 import { ICustomRequest, vocabulary } from 'src/shared';
-import { GetAllCommentsResponseDto, PatchCommentPresenter } from '../dto';
+import { GetAllCommentsPresenter, PatchCommentPresenter } from '../dto';
+import Comment from '../comment.schema';
 
 const {
   comments: { SUCCESSFUL_DELETE_OF_COMMENT },
@@ -74,7 +75,14 @@ describe('CommentController', () => {
   describe('Patch method', () => {
     const updateCommentDto = { text: 'new text' };
     it('Method patch should returned instance of response dto', async () => {
-      const mockResult = new PatchCommentPresenter();
+      const mockResult = new PatchCommentPresenter({
+        id: '48245dd4-15e0-4060-bdec-539e4598ef6a',
+        authorId: '785e6094-2f33-49a9-b015-25cd12dab20a',
+        articleId: '6660ff57-3c9e-4dd0-b4ca-a5cc098b514f',
+        text: 'erwerwerw',
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      } as Comment);
 
       jest.spyOn(mockCommentsService, 'patch').mockResolvedValue(mockResult);
 
@@ -98,13 +106,13 @@ describe('CommentController', () => {
 
   describe('FindAll method', () => {
     it('Method patch must be called and should return instance of response dto', async () => {
-      const mockResult = new GetAllCommentsResponseDto();
+      const mockResult = new GetAllCommentsPresenter([], 1);
       jest.spyOn(mockCommentsService, 'findAll').mockResolvedValue(mockResult);
 
       const result = await commentController.findAll({
         page: '1',
       });
-      expect(result).toBeInstanceOf(GetAllCommentsResponseDto);
+      expect(result).toBeInstanceOf(GetAllCommentsPresenter);
     });
 
     it('Method findAll must be called with correct parameters', async () => {

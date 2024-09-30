@@ -207,9 +207,7 @@ describe('CommentsService', () => {
         .mockResolvedValue(result);
 
       const comments = await commentsService.findAll({
-        query: {
-          page: '1',
-        },
+        page: '1',
       });
 
       expect(mockCommentsModel.findAndCountAll).toHaveBeenCalledTimes(1);
