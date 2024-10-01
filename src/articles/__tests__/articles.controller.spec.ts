@@ -208,10 +208,8 @@ describe('ArticlesController', () => {
       });
 
       expect(mockArticlesService.findAll).toHaveBeenCalledWith({
-        query: {
-          page: '1',
-          limit: '10',
-        },
+        page: '1',
+        limit: '10',
       });
     });
   });

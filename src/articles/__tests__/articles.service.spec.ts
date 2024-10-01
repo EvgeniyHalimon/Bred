@@ -268,14 +268,14 @@ describe('ArticlesService', () => {
     });
 
     it('should return null if no user is found', async () => {
-      mockArticlesModel.findOne.mockResolvedValue(null);
+      mockArticlesModel.findOne.mockResolvedValue(NotFoundException);
 
       const result = await articlesService.findOne({ id: '2' });
 
       expect(mockArticlesModel.findOne).toHaveBeenCalledWith({
         where: { id: '2' },
       });
-      expect(result).toBeNull();
+      expect(result).toBeInstanceOf(NotFoundException);
     });
   });
 
@@ -314,15 +314,17 @@ describe('ArticlesService', () => {
 
   describe('FindAll method', () => {
     const mockArticles = {
-      rows: articleById,
+      rows: [articleById] as unknown as Article[],
       count: 1,
     };
+
     it('should return articles and count', async () => {
       mockArticlesModel.findAndCountAll.mockResolvedValue(mockArticles);
-      const articles = await articlesService.findAll({
-        page: '1',
-      });
+
+      const articles = await articlesService.findAll({ page: '1' });
+
       expect(mockArticlesModel.findAndCountAll).toHaveBeenCalledTimes(1);
+
       expect(articles).toEqual({
         articles: mockArticles.rows,
         count: mockArticles.count,

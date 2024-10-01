@@ -93,15 +93,13 @@ export class ReactionsService {
     userId: string;
     reactionId: string;
   }): Promise<void> {
-    const reaction = await this.findOne({
-      whereCondition: { id: reactionId },
-    });
+    const reaction = await this.findOne({ id: reactionId });
 
     if (!reaction) {
       throw new NotFoundException(REACTION_NOT_FOUND);
     }
 
-    const reactionAuthor = await this.findOne({ whereCondition: { userId } });
+    const reactionAuthor = await this.findOne({ userId });
 
     if (!reactionAuthor) {
       throw new NotFoundException(NOT_AUTHOR_OF_REACTION);
@@ -123,11 +121,9 @@ export class ReactionsService {
     reactionId: string;
     updateReactionDto: PatchReactionDto;
   }): Promise<PatchReactionPresenter> {
-    const reaction = (await this.findOne({
-      whereCondition: { id: reactionId },
-    })) as Reaction;
+    const reaction = (await this.findOne({ id: reactionId })) as Reaction;
 
-    const reactionAuthor = await this.findOne({ whereCondition: { userId } });
+    const reactionAuthor = await this.findOne({ userId });
 
     if (!reactionAuthor) {
       throw new NotFoundException(NOT_AUTHOR_OF_REACTION);
@@ -175,11 +171,7 @@ export class ReactionsService {
     return new GetAllReactionsPresenter(reactions.rows, reactions.count);
   }
 
-  async findOne({
-    whereCondition,
-  }: {
-    whereCondition: Partial<IReactions>;
-  }): Promise<Reaction | null> {
+  async findOne(whereCondition: Partial<IReactions>): Promise<Reaction | null> {
     return this.reactionModel.findOne({ where: whereCondition });
   }
 
@@ -231,7 +223,8 @@ export class ReactionsService {
     await this.articleService.findOne({ id: articleId });
 
     const reaction = await this.findOne({
-      whereCondition: { userId, articleId },
+      userId,
+      articleId,
     });
     if (reaction) {
       throw new BadRequestException(ALREADY_REACTED_TO_ARTICLE);
@@ -245,7 +238,8 @@ export class ReactionsService {
     await this.commentService.findOne({ id: commentId });
 
     const reaction = await this.findOne({
-      whereCondition: { userId, commentId },
+      userId,
+      commentId,
     });
     if (reaction) {
       throw new BadRequestException(ALREADY_REACTED_TO_COMMENT);

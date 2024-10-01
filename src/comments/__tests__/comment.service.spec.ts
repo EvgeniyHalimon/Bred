@@ -4,6 +4,7 @@ import { CommentsService } from '../comment.service';
 import Comment from '../comment.schema';
 import { BadRequestException, NotFoundException } from '@nestjs/common';
 import { vocabulary } from 'src/shared';
+import { GetAllCommentsPresenter } from '../dto';
 
 const {
   comments: { COMMENT_NOT_FOUND, NOT_AUTHOR_OF_COMMENT },
@@ -114,7 +115,7 @@ describe('CommentsService', () => {
 
     it('should throw NotFoundException if user are not author of this comment', async () => {
       mockCommentsModel.findOne.mockResolvedValueOnce(updateComment);
-      mockCommentsModel.findOne.mockResolvedValueOnce(null);
+      mockCommentsModel.findOne.mockRejectedValueOnce(NotFoundException);
       try {
         await commentsService.patch(updateComment);
       } catch (error) {
@@ -152,7 +153,7 @@ describe('CommentsService', () => {
 
     it('should throw NotFoundException if user are not author of this comment', async () => {
       mockCommentsModel.findOne.mockResolvedValueOnce(comment);
-      mockCommentsModel.findOne.mockResolvedValueOnce(null);
+      mockCommentsModel.findOne.mockResolvedValueOnce(NotFoundException);
       try {
         await deleteComment();
       } catch (error) {
@@ -177,7 +178,7 @@ describe('CommentsService', () => {
 
   describe('CommentsService findAll method', () => {
     it('should return comments and count', async () => {
-      const result = {
+      const res = {
         rows: [
           {
             id: 'd561e01f-fdc4-4a3f-8ea2-af7ff9db6ed9',
@@ -199,23 +200,21 @@ describe('CommentsService', () => {
             },
             reactions: [],
           },
-        ],
+        ] as unknown as Comment[],
         count: 1,
       };
 
-      jest
-        .spyOn(mockCommentsModel, 'findAndCountAll')
-        .mockResolvedValue(result);
+      jest.spyOn(mockCommentsModel, 'findAndCountAll').mockResolvedValue(res);
+
+      const expectedResult = new GetAllCommentsPresenter(res.rows, res.count);
 
       const comments = await commentsService.findAll({
         page: '1',
       });
 
       expect(mockCommentsModel.findAndCountAll).toHaveBeenCalledTimes(1);
-      expect(comments).toEqual({
-        comments: result.rows,
-        count: result.count,
-      });
+
+      expect(comments).toEqual(expectedResult);
     });
   });
 

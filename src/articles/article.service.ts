@@ -107,12 +107,13 @@ export class ArticlesService {
     userId: string;
     patchArticleDto: PatchArticleDto;
   }): Promise<ArticlePresenter> {
-    const article = (await this.articleModel.findOne({
-      where: { id: articleId },
+    const article = (await this.findOne({
+      id: articleId,
     })) as Article;
 
-    const articleAuthor = await this.articleModel.findOne({
-      where: { id: articleId, authorId: userId },
+    const articleAuthor = await this.findOne({
+      id: articleId,
+      authorId: userId,
     });
 
     if (!articleAuthor) {
@@ -133,12 +134,13 @@ export class ArticlesService {
     userId: string;
     articleId: string;
   }): Promise<void> {
-    await this.articleModel.findOne({
-      where: { id: articleId },
+    await this.findOne({
+      id: articleId,
     });
 
-    const articleAuthor = await this.articleModel.findOne({
-      where: { id: articleId, authorId: userId },
+    const articleAuthor = await this.findOne({
+      id: articleId,
+      authorId: userId,
     });
 
     if (!articleAuthor) {

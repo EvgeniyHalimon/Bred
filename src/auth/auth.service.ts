@@ -56,7 +56,7 @@ export class AuthService {
     const createdUser = await this.userModel.create(userAttributes);
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { password: p, ...userWithoutPassword } = createdUser.dataValues;
+    const { password: p, ...userWithoutPassword } = createdUser;
 
     return userWithoutPassword;
   }
