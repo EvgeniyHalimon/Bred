@@ -21,7 +21,7 @@ describe('AuthService', () => {
   };
 
   let mockJwtService: {
-    signAsync: jest.Mock;
+    sign: jest.Mock;
   };
 
   beforeEach(async () => {
@@ -63,7 +63,6 @@ describe('AuthService', () => {
     firstName: 'string',
     lastName: 'string',
     email: 'string',
-    password: 'string',
     bio: 'string',
     role: 'user',
     createdAt: new Date('2024-08-14T08:40:32.000Z'),
@@ -94,7 +93,7 @@ describe('AuthService', () => {
         findOne: jest.fn().mockResolvedValue(signInUser),
       });
       jest.spyOn(passwordUtils, 'verifyPassword').mockResolvedValue(true);
-      mockJwtService.signAsync.mockResolvedValue('token');
+      mockJwtService.sign.mockResolvedValue('token');
       const result = await authService.signIn(signInDto);
       expect(result).toHaveProperty('user');
       expect(result).toHaveProperty('accessToken', 'token');
@@ -129,7 +128,7 @@ describe('AuthService', () => {
   });
 
   describe('SignUp method', () => {
-    it('create new comment user', async () => {
+    it('create new user', async () => {
       mockUserModel.scope.mockReturnValue({
         findOne: jest.fn().mockResolvedValue(null),
       });

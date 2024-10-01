@@ -125,13 +125,11 @@ describe('CommentController', () => {
       });
 
       expect(mockCommentsService.findAll).toHaveBeenCalledWith({
-        query: {
-          page: '1',
-          limit: '10',
-          text: 'Text',
-          order: 'ASC',
-          orderBy: 'createdAt',
-        },
+        page: '1',
+        limit: '10',
+        text: 'Text',
+        order: 'ASC',
+        orderBy: 'createdAt',
       });
     });
   });

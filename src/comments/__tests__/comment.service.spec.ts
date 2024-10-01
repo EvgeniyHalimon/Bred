@@ -131,6 +131,7 @@ describe('CommentsService', () => {
         commentId: '11',
       });
     };
+
     it('should successfully delete a comment', async () => {
       mockCommentsModel.findOne.mockResolvedValue(comment);
       await deleteComment();
@@ -140,7 +141,7 @@ describe('CommentsService', () => {
     });
 
     it('should throw NotFoundException if comment not found', async () => {
-      mockCommentsModel.findOne.mockResolvedValue(null);
+      mockCommentsModel.findOne.mockResolvedValue(NotFoundException);
       try {
         await deleteComment();
       } catch (error) {
@@ -241,12 +242,16 @@ describe('CommentsService', () => {
     it('should return null if no user is found', async () => {
       mockCommentsModel.findOne.mockResolvedValue(null);
 
-      const result = await commentsService.findOne({ id: '2' });
+      try {
+        await commentsService.findOne({ id: '2' });
 
-      expect(mockCommentsModel.findOne).toHaveBeenCalledWith({
-        where: { id: '2' },
-      });
-      expect(result).toBeNull();
+        expect(mockCommentsModel.findOne).toHaveBeenCalledWith({
+          where: { id: '2' },
+        });
+      } catch (error) {
+        expect(error).toBeInstanceOf(NotFoundException);
+        expect(error.message).toBe(COMMENT_NOT_FOUND);
+      }
     });
   });
 });

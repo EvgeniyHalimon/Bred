@@ -133,7 +133,7 @@ export class CommentController {
     @Req() request: ICustomRequest,
     @Param('id') id: string,
     @Body() updateCommentDto: PatchCommentDto,
-  ): Promise<PatchCommentPresenter> {
+  ): Promise<PatchCommentPresenter | void> {
     return this.commentService.patch({
       userId: request.user.id,
       commentId: id,

@@ -81,9 +81,11 @@ describe('UsersController', () => {
 
       await usersController.patch(updateUserDto, file, req);
 
+      const base64 = file?.buffer?.toString('base64');
+
       expect(mockUsersService.patch).toHaveBeenCalledWith({
         updateUserDto,
-        file: file.buffer.toString('base64url'),
+        file: `data:${file.mimetype};base64,${base64}`,
         userId: req.user.id,
       });
     });

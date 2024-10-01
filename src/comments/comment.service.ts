@@ -51,33 +51,35 @@ export class CommentsService {
     userId: string;
     commentId: string;
     updateCommentDto: PatchCommentDto;
-  }): Promise<PatchCommentPresenter> {
-    const comment = (await this.commentModel.findOne({
-      where: { id: commentId },
-    })) as Comment;
-
-    const reactionAuthor = await this.commentModel.findOne({
-      where: { id: commentId, authorId: userId },
+  }): Promise<PatchCommentPresenter | void> {
+    const comment = await this.findOne({
+      id: commentId,
     });
 
-    if (!reactionAuthor) {
+    const commentAuthor = await this.findOne({
+      id: commentId,
+      authorId: userId,
+    });
+
+    if (!commentAuthor) {
       throw new NotFoundException(NOT_AUTHOR_OF_COMMENT);
     }
 
-    comment.set(updateCommentDto);
+    if (comment) {
+      comment.set(updateCommentDto);
 
-    const updatedArticle = await comment.save();
+      const updatedArticle = await comment.save();
 
-    return updatedArticle;
+      return updatedArticle;
+    }
   }
 
   async delete({ userId, commentId }: { userId: string; commentId: string }) {
-    await this.commentModel.findOne({
-      where: { id: commentId },
-    });
+    await this.findOne({ id: commentId });
 
-    const articleAuthor = await this.commentModel.findOne({
-      where: { id: commentId, authorId: userId },
+    const articleAuthor = await this.findOne({
+      id: commentId,
+      authorId: userId,
     });
 
     if (!articleAuthor) {
@@ -91,7 +93,7 @@ export class CommentsService {
     });
   }
 
-  async findOne(whereCondition: Partial<IComment>): Promise<CommentPresenter> {
+  async findOne(whereCondition: Partial<IComment>): Promise<Comment> {
     const comment = await this.commentModel.findOne({
       where: whereCondition,
     });
