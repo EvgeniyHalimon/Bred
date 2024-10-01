@@ -24,13 +24,13 @@ import { ReactionsService } from './reaction.service';
 // dto's
 import {
   CreateReactionDto,
-  DeleteReactionResponseDto,
+  DeleteReactionPresenter,
   GetAllQueryReactionsDto,
-  GetAllReactionsResponseDto,
-  GetByIdReactionResponseDto,
-  PatchReactionResponseDto,
-  PostReactionResponseDto,
-  UpdateReactionDto,
+  GetAllReactionsPresenter,
+  GetByIdReactionPresenter,
+  PatchReactionPresenter,
+  PostReactionPresenter,
+  PatchReactionDto,
 } from './dto';
 
 // types
@@ -57,18 +57,18 @@ const {
 @Controller('reactions')
 @ApiTags('Reactions')
 export class ReactionsController {
-  constructor(private reactionsService: ReactionsService) {}
+  constructor(readonly reactionsService: ReactionsService) {}
 
   @ApiResponse({
     status: HttpStatus.CREATED,
     description: 'When comment created',
-    type: PostReactionResponseDto,
+    type: PostReactionPresenter,
   })
   @Post('/')
   create(
     @Req() request: ICustomRequest,
     @Body() createReactionDto: CreateReactionDto,
-  ) {
+  ): Promise<PostReactionPresenter> {
     return this.reactionsService.create({
       userId: request.user.id,
       createReactionDto,
@@ -78,7 +78,7 @@ export class ReactionsController {
   @ApiResponse({
     status: HttpStatus.OK,
     description: 'User successfully deleted reaction',
-    type: DeleteReactionResponseDto,
+    type: DeleteReactionPresenter,
   })
   @ApiNotFoundResponse({
     example: {
@@ -105,7 +105,10 @@ export class ReactionsController {
     },
   })
   @Delete('/:id')
-  delete(@Req() request: ICustomRequest, @Param('id') id: string) {
+  delete(
+    @Req() request: ICustomRequest,
+    @Param('id') id: string,
+  ): Promise<void> {
     return this.reactionsService.delete({
       userId: request.user.id,
       reactionId: id,
@@ -189,15 +192,15 @@ export class ReactionsController {
   @ApiResponse({
     status: HttpStatus.OK,
     description: 'When reaction updated',
-    type: PatchReactionResponseDto,
+    type: PatchReactionPresenter,
   })
   @Patch('/:id')
-  update(
+  patch(
     @Req() request: ICustomRequest,
     @Param('id') id: string,
-    @Body() updateReactionDto: UpdateReactionDto,
-  ) {
-    return this.reactionsService.update({
+    @Body() updateReactionDto: PatchReactionDto,
+  ): Promise<PatchReactionPresenter> {
+    return this.reactionsService.patch({
       userId: request.user.id,
       reactionId: id,
       updateReactionDto,
@@ -207,18 +210,20 @@ export class ReactionsController {
   @ApiResponse({
     status: HttpStatus.OK,
     description: 'Represents array of reactions',
-    type: GetAllReactionsResponseDto,
+    type: GetAllReactionsPresenter,
   })
   @Get('/')
   @ApiQueriesFromDto(GetAllQueryReactionsDto, ReactionOrderByEnum)
-  getAll(@Query() query: GetAllQueryReactionsDto) {
+  getAll(
+    @Query() query: GetAllQueryReactionsDto,
+  ): Promise<GetAllReactionsPresenter> {
     return this.reactionsService.findAll(query);
   }
 
   @ApiResponse({
     status: HttpStatus.OK,
     description: 'Represents reaction with author of this reaction',
-    type: GetByIdReactionResponseDto,
+    type: GetByIdReactionPresenter,
   })
   @ApiNotFoundResponse({
     example: {
@@ -229,7 +234,7 @@ export class ReactionsController {
     description: 'When reaction is not present in database',
   })
   @Get('/:id')
-  get(@Param('id') id: string) {
+  get(@Param('id') id: string): Promise<GetByIdReactionPresenter> {
     return this.reactionsService.getById({ reactionId: id });
   }
 }

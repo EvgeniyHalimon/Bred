@@ -3,8 +3,9 @@ import { ApiProperty } from '@nestjs/swagger';
 
 // dto
 import { UserPresenter } from 'src/users/dto';
+import Reaction from '../reaction.schema';
 
-export class ReactionDto {
+export class ReactionPresenter {
   @ApiProperty({
     example: '9ee920f3-f3a3-4892-86a8-191f2c303614',
     type: String,
@@ -56,20 +57,31 @@ export class ReactionDto {
 
   @ApiProperty({
     example: '2024-08-19T09:40:15.000Z',
-    type: String,
+    type: Date,
     description: 'Represents the creation date of the reaction',
   })
-  createdAt: string;
+  createdAt: Date;
 
   @ApiProperty({
     example: '2024-08-19T09:40:15.000Z',
-    type: String,
+    type: Date,
     description: 'Represents the last update date of the reaction',
   })
-  updatedAt: string;
+  updatedAt: Date;
+
+  constructor(reaction: Reaction) {
+    this.id = reaction.id;
+    this.userId = reaction.userId;
+    this.sourceType = reaction.sourceType;
+    this.articleId = reaction.articleId;
+    this.commentId = reaction.commentId;
+    this.reactionType = reaction.reactionType;
+    this.createdAt = reaction.createdAt;
+    this.updatedAt = reaction.updatedAt;
+  }
 }
 
-export class ReactionDtoWithUser extends ReactionDto {
+export class ReactionDtoWithUser extends ReactionPresenter {
   @ApiProperty({ type: UserPresenter })
   user: UserPresenter;
 }

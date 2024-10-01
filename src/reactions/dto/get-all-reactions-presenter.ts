@@ -3,8 +3,9 @@ import { ApiProperty } from '@nestjs/swagger';
 
 // dto
 import { ReactionDtoWithUser } from './reaction.dto';
+import Reaction from '../reaction.schema';
 
-export class GetAllReactionsResponseDto {
+export class GetAllReactionsPresenter {
   @ApiProperty({ type: [ReactionDtoWithUser] })
   reactions: ReactionDtoWithUser[];
 
@@ -14,4 +15,11 @@ export class GetAllReactionsResponseDto {
     description: 'Represents count of reactions',
   })
   count: number;
+
+  constructor(reactions: Reaction[], count: number) {
+    this.reactions = reactions.map(
+      reaction => new ReactionDtoWithUser(reaction),
+    );
+    this.count = count;
+  }
 }

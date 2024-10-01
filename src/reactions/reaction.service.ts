@@ -19,7 +19,11 @@ import {
   CreateReactionDto,
   GetAllQueryReactionsDto,
   GetAllReactionsOptions,
-  UpdateReactionDto,
+  GetAllReactionsPresenter,
+  GetByIdReactionPresenter,
+  PatchReactionDto,
+  PatchReactionPresenter,
+  PostReactionPresenter,
 } from './dto';
 
 // types
@@ -45,9 +49,9 @@ const {
 @Injectable()
 export class ReactionsService {
   constructor(
-    @InjectModel(Reaction) private reactionModel: typeof Reaction,
-    private commentService: CommentsService,
-    private articleService: ArticlesService,
+    @InjectModel(Reaction) readonly reactionModel: typeof Reaction,
+    readonly commentService: CommentsService,
+    readonly articleService: ArticlesService,
   ) {}
 
   async create({
@@ -56,7 +60,7 @@ export class ReactionsService {
   }: {
     userId: string;
     createReactionDto: CreateReactionDto;
-  }): Promise<IReactions | undefined> {
+  }): Promise<PostReactionPresenter> {
     const { sourceType, articleId, commentId, reactionType } =
       createReactionDto;
 
@@ -82,7 +86,13 @@ export class ReactionsService {
     return reaction;
   }
 
-  async delete({ userId, reactionId }: { userId: string; reactionId: string }) {
+  async delete({
+    userId,
+    reactionId,
+  }: {
+    userId: string;
+    reactionId: string;
+  }): Promise<void> {
     const reaction = await this.findOne({
       whereCondition: { id: reactionId },
     });
@@ -97,35 +107,25 @@ export class ReactionsService {
       throw new NotFoundException(NOT_AUTHOR_OF_REACTION);
     }
 
-    const deletedReaction = await this.reactionModel.destroy({
+    await this.reactionModel.destroy({
       where: {
         id: reactionId,
       },
     });
-    if (!deletedReaction) {
-      throw new BadRequestException(
-        `Something went wrong while deleting the ${reaction.reactionType}`,
-      );
-    }
-    return deletedReaction;
   }
 
-  async update({
+  async patch({
     userId,
     reactionId,
     updateReactionDto,
   }: {
     userId: string;
     reactionId: string;
-    updateReactionDto: UpdateReactionDto;
-  }) {
-    const reaction = await this.findOne({
+    updateReactionDto: PatchReactionDto;
+  }): Promise<PatchReactionPresenter> {
+    const reaction = (await this.findOne({
       whereCondition: { id: reactionId },
-    });
-
-    if (!reaction) {
-      throw new NotFoundException(REACTION_NOT_FOUND);
-    }
+    })) as Reaction;
 
     const reactionAuthor = await this.findOne({ whereCondition: { userId } });
 
@@ -140,7 +140,11 @@ export class ReactionsService {
     return updatedArticle;
   }
 
-  async getById({ reactionId }: { reactionId: string }) {
+  async getById({
+    reactionId,
+  }: {
+    reactionId: string;
+  }): Promise<GetByIdReactionPresenter> {
     const article = await this.reactionModel.findOne({
       where: { id: reactionId },
       include: [
@@ -158,7 +162,9 @@ export class ReactionsService {
     return article;
   }
 
-  async findAll(query: GetAllQueryReactionsDto) {
+  async findAll(
+    query: GetAllQueryReactionsDto,
+  ): Promise<GetAllReactionsPresenter> {
     const dto = new GetAllReactionsOptions(query);
     const reactions = await this.reactionModel.findAndCountAll({
       where: dto.toWhereCondition(),
@@ -166,13 +172,14 @@ export class ReactionsService {
       include: [{ model: User, as: 'user' }],
       distinct: true,
     });
-    return {
-      reactions: reactions.rows,
-      count: reactions.count,
-    };
+    return new GetAllReactionsPresenter(reactions.rows, reactions.count);
   }
 
-  async findOne({ whereCondition }: { whereCondition: Partial<IReactions> }) {
+  async findOne({
+    whereCondition,
+  }: {
+    whereCondition: Partial<IReactions>;
+  }): Promise<Reaction | null> {
     return this.reactionModel.findOne({ where: whereCondition });
   }
 
@@ -188,7 +195,7 @@ export class ReactionsService {
     userId: string;
     sourceType: SourceTypeEnum;
     reactionType: ReactionTypeEnum;
-  }) {
+  }): Promise<void> {
     if (!commentId && !articleId) {
       throw new BadRequestException(COMMENT_OR_ARTICLE_ID_REQUIRED);
     }
@@ -207,7 +214,7 @@ export class ReactionsService {
     articleId: string,
     sourceType: SourceTypeEnum,
     reactionType: ReactionTypeEnum,
-  ) {
+  ): void {
     if (commentId && this.getCommentCondition({ sourceType, reactionType })) {
       throw new BadRequestException(WRONG_REACTION_TYPE_FOR_COMMENT);
     }
@@ -217,7 +224,10 @@ export class ReactionsService {
     }
   }
 
-  private async validateArticleReaction(articleId: string, userId: string) {
+  private async validateArticleReaction(
+    articleId: string,
+    userId: string,
+  ): Promise<void> {
     await this.articleService.findOne({ id: articleId });
 
     const reaction = await this.findOne({
@@ -228,7 +238,10 @@ export class ReactionsService {
     }
   }
 
-  private async validateCommentReaction(commentId: string, userId: string) {
+  private async validateCommentReaction(
+    commentId: string,
+    userId: string,
+  ): Promise<void> {
     await this.commentService.findOne({ id: commentId });
 
     const reaction = await this.findOne({
@@ -245,7 +258,7 @@ export class ReactionsService {
   }: {
     sourceType: SourceTypeEnum;
     reactionType: ReactionTypeEnum;
-  }) {
+  }): boolean {
     return (
       SourceTypeEnum.COMMENT === sourceType ||
       reactionType === ReactionTypeEnum.LIKE ||
@@ -259,7 +272,7 @@ export class ReactionsService {
   }: {
     sourceType: SourceTypeEnum;
     reactionType: ReactionTypeEnum;
-  }) {
+  }): boolean {
     return (
       SourceTypeEnum.ARTICLE === sourceType ||
       reactionType === ReactionTypeEnum.UPVOTE ||
