@@ -1,5 +1,5 @@
 export * from './create-reaction.dto';
-export * from './getAll-reactions.dto';
+export * from './get-all-reactions.dto';
 export * from './patch-reaction.dto';
 export * from './reaction.dto';
 export * from './patch-reaction-response.dto';

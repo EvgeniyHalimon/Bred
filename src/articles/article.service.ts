@@ -11,9 +11,10 @@ import {
   DetailedArticlePresenter,
   ArticlePresenter,
   CreateArticleDto,
-  GetAllQueryArticlesDto,
+  GetAllArticlesDto,
   PatchArticleDto,
   GetAllArticlesPresenter,
+  GetAllArticlesOptions,
 } from './dto';
 
 // types
@@ -73,12 +74,11 @@ export class ArticlesService {
     return new DetailedArticlePresenter(article);
   }
 
-  async findAll(
-    query: GetAllQueryArticlesDto,
-  ): Promise<GetAllArticlesPresenter> {
+  async findAll(query: GetAllArticlesDto): Promise<GetAllArticlesPresenter> {
+    const dto = new GetAllArticlesOptions(query);
     const result = await this.articleModel.findAndCountAll({
-      where: query.toWhereOption?.(),
-      ...query.toPaginationOptions?.(),
+      where: dto.toWhereOption(),
+      ...dto.toPaginationOptions(),
       include: [
         { model: User, as: 'author' },
         {

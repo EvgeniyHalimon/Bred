@@ -26,7 +26,7 @@ import {
   CommentPresenter,
   CreateCommentDto,
   DeletedCommentResponseDto,
-  GetAllQueryCommentsDto,
+  GetAllCommentsDto,
   PatchCommentPresenter,
   PostCommentPresenter,
   PatchCommentDto,
@@ -147,10 +147,8 @@ export class CommentController {
     type: GetAllCommentsPresenter,
   })
   @Get('/')
-  @ApiQueriesFromDto(GetAllQueryCommentsDto, CommentOrderByEnum)
-  findAll(
-    @Query() query: GetAllQueryCommentsDto,
-  ): Promise<GetAllCommentsPresenter> {
+  @ApiQueriesFromDto(GetAllCommentsDto, CommentOrderByEnum)
+  findAll(@Query() query: GetAllCommentsDto): Promise<GetAllCommentsPresenter> {
     return this.commentService.findAll(query);
   }
 }

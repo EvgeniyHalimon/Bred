@@ -10,10 +10,11 @@ import User from 'src/users/user.schema';
 import {
   CommentPresenter,
   CreateCommentDto,
-  GetAllQueryCommentsDto,
+  GetAllCommentsDto,
   PatchCommentPresenter,
   PatchCommentDto,
   GetAllCommentsPresenter,
+  GetAllCommentsOptions,
 } from './dto';
 import Reaction from 'src/reactions/reaction.schema';
 import { IComment } from './comment.types';
@@ -102,12 +103,11 @@ export class CommentsService {
     return comment;
   }
 
-  async findAll(
-    query: GetAllQueryCommentsDto,
-  ): Promise<GetAllCommentsPresenter> {
+  async findAll(query: GetAllCommentsDto): Promise<GetAllCommentsPresenter> {
+    const dto = new GetAllCommentsOptions(query);
     const comments = await this.commentModel.findAndCountAll({
-      where: query.toWhereCondition?.(),
-      ...query.toPaginationOptions?.(),
+      where: dto.toWhereCondition(),
+      ...dto.toPaginationOptions(),
       include: [
         { model: User, as: 'author' },
         { model: Reaction, as: 'reactions' },

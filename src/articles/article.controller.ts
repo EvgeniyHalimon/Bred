@@ -23,7 +23,7 @@ import { ArticlesService } from './article.service';
 
 // dtos
 import {
-  GetAllQueryArticlesDto,
+  GetAllArticlesDto,
   CreateArticleDto,
   PatchArticleDto,
   DeletedArticleDto,
@@ -89,10 +89,8 @@ export class ArticlesController {
     type: GetAllArticlesPresenter,
   })
   @Get('/')
-  @ApiQueriesFromDto(GetAllQueryArticlesDto, ArticleOrderByEnum)
-  findAll(
-    @Query() query: GetAllQueryArticlesDto,
-  ): Promise<GetAllArticlesPresenter> {
+  @ApiQueriesFromDto(GetAllArticlesDto, ArticleOrderByEnum)
+  findAll(@Query() query: GetAllArticlesDto): Promise<GetAllArticlesPresenter> {
     return this.articlesService.findAll(query);
   }
 

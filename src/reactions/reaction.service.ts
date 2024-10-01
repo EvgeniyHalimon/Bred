@@ -18,6 +18,7 @@ import User from 'src/users/user.schema';
 import {
   CreateReactionDto,
   GetAllQueryReactionsDto,
+  GetAllReactionsOptions,
   UpdateReactionDto,
 } from './dto';
 
@@ -158,9 +159,10 @@ export class ReactionsService {
   }
 
   async findAll(query: GetAllQueryReactionsDto) {
+    const dto = new GetAllReactionsOptions(query);
     const reactions = await this.reactionModel.findAndCountAll({
-      where: query.toWhereCondition(),
-      ...query.toPaginationOptions(),
+      where: dto.toWhereCondition(),
+      ...dto.toPaginationOptions(),
       include: [{ model: User, as: 'user' }],
       distinct: true,
     });
