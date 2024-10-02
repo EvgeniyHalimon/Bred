@@ -254,42 +254,6 @@ describe('ArticlesService', () => {
     });
   });
 
-  describe('ArticlesService findOne method', () => {
-    it('should return a article by id', async () => {
-      const mockArticle = {
-        id: '1',
-        text: 'This is a article',
-      };
-
-      mockArticlesModel.findOne.mockResolvedValueOnce(mockArticle as any);
-
-      const result = await articlesService.findOne({
-        id: mockArticle.id,
-      });
-
-      expect(mockArticlesModel.findOne).toHaveBeenCalledWith({
-        where: { id: mockArticle.id },
-      });
-
-      expect(result).toEqual(mockArticle);
-    });
-
-    it('should throw NotFoundException if no article is found', async () => {
-      mockArticlesModel.findOne.mockResolvedValue(null);
-
-      try {
-        await articlesService.findOne({ id: '2' });
-      } catch (error) {
-        expect(error).toBeInstanceOf(NotFoundException);
-        expect(error.message).toBe(NOT_FOUND);
-      }
-
-      expect(mockArticlesModel.findOne).toHaveBeenCalledWith({
-        where: { id: '2' },
-      });
-    });
-  });
-
   describe('GetById method', () => {
     it('should get article by id', async () => {
       jest
@@ -341,6 +305,42 @@ describe('ArticlesService', () => {
       expect(articles).toEqual({
         articles: mockArticles.rows,
         count: mockArticles.count,
+      });
+    });
+  });
+
+  describe('ArticlesService findOne method', () => {
+    it('should return a article by id', async () => {
+      const mockArticle = {
+        id: '1',
+        text: 'This is a article',
+      };
+
+      mockArticlesModel.findOne.mockResolvedValueOnce(mockArticle as any);
+
+      const result = await articlesService.findOne({
+        id: mockArticle.id,
+      });
+
+      expect(mockArticlesModel.findOne).toHaveBeenCalledWith({
+        where: { id: mockArticle.id },
+      });
+
+      expect(result).toEqual(mockArticle);
+    });
+
+    it('should throw NotFoundException if no article is found', async () => {
+      mockArticlesModel.findOne.mockResolvedValue(null);
+
+      try {
+        await articlesService.findOne({ id: '2' });
+      } catch (error) {
+        expect(error).toBeInstanceOf(NotFoundException);
+        expect(error.message).toBe(NOT_FOUND);
+      }
+
+      expect(mockArticlesModel.findOne).toHaveBeenCalledWith({
+        where: { id: '2' },
       });
     });
   });

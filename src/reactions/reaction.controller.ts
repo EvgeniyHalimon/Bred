@@ -25,7 +25,7 @@ import { ReactionsService } from './reaction.service';
 import {
   CreateReactionDto,
   DeleteReactionPresenter,
-  GetAllQueryReactionsDto,
+  GetAllReactionsDto,
   GetAllReactionsPresenter,
   GetByIdReactionPresenter,
   PatchReactionPresenter,
@@ -213,9 +213,9 @@ export class ReactionsController {
     type: GetAllReactionsPresenter,
   })
   @Get('/')
-  @ApiQueriesFromDto(GetAllQueryReactionsDto, ReactionOrderByEnum)
+  @ApiQueriesFromDto(GetAllReactionsDto, ReactionOrderByEnum)
   getAll(
-    @Query() query: GetAllQueryReactionsDto,
+    @Query() query: GetAllReactionsDto,
   ): Promise<GetAllReactionsPresenter> {
     return this.reactionsService.findAll(query);
   }

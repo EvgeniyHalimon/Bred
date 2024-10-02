@@ -104,7 +104,7 @@ describe('CommentsService', () => {
     });
 
     it('should throw NotFoundException if comment not found', async () => {
-      mockCommentsModel.findOne.mockResolvedValue(null);
+      jest.spyOn(commentsService, 'findOne').mockResolvedValueOnce();
       try {
         await commentsService.patch(updateComment);
       } catch (error) {
@@ -137,7 +137,7 @@ describe('CommentsService', () => {
     };
 
     it('should successfully delete a comment', async () => {
-      mockCommentsModel.findOne.mockResolvedValue(comment);
+      jest.spyOn(commentsService, 'findOne').mockResolvedValue(comment as any);
       await deleteComment();
       expect(mockCommentsModel.destroy).toHaveBeenCalledWith({
         where: { id: '11' },
@@ -145,7 +145,7 @@ describe('CommentsService', () => {
     });
 
     it('should throw NotFoundException if comment not found', async () => {
-      mockCommentsModel.findOne.mockResolvedValue(NotFoundException);
+      jest.spyOn(commentsService, 'findOne').mockResolvedValueOnce();
       try {
         await deleteComment();
       } catch (error) {
@@ -155,8 +155,10 @@ describe('CommentsService', () => {
     });
 
     it('should throw NotFoundException if user are not author of this comment', async () => {
-      mockCommentsModel.findOne.mockResolvedValueOnce(comment);
-      mockCommentsModel.findOne.mockResolvedValueOnce(NotFoundException);
+      jest
+        .spyOn(commentsService, 'findOne')
+        .mockResolvedValueOnce(comment as any);
+      jest.spyOn(commentsService, 'findOne').mockResolvedValueOnce();
       try {
         await deleteComment();
       } catch (error) {
@@ -166,7 +168,7 @@ describe('CommentsService', () => {
     });
 
     it('should throw BadRequestException if comment not found', async () => {
-      mockCommentsModel.findOne.mockResolvedValue(comment);
+      jest.spyOn(commentsService, 'findOne').mockResolvedValue(comment as any);
       try {
         await deleteComment();
         mockCommentsModel.destroy.mockResolvedValue(0);

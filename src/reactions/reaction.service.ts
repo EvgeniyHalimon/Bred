@@ -17,7 +17,7 @@ import User from 'src/users/user.schema';
 //dto's
 import {
   CreateReactionDto,
-  GetAllQueryReactionsDto,
+  GetAllReactionsDto,
   GetAllReactionsOptions,
   GetAllReactionsPresenter,
   GetByIdReactionPresenter,
@@ -158,9 +158,7 @@ export class ReactionsService {
     return article;
   }
 
-  async findAll(
-    query: GetAllQueryReactionsDto,
-  ): Promise<GetAllReactionsPresenter> {
+  async findAll(query: GetAllReactionsDto): Promise<GetAllReactionsPresenter> {
     const dto = new GetAllReactionsOptions(query);
     const reactions = await this.reactionModel.findAndCountAll({
       where: dto.toWhereCondition(),

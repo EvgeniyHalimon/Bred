@@ -8,7 +8,7 @@ import {
   TransformToPagination,
 } from 'src/shared/paginationDto';
 
-export class GetAllQueryReactionsDto extends PaginationQuery<IReactions> {
+export class GetAllReactionsDto extends PaginationQuery<IReactions> {
   @IsUUID(4)
   @IsOptional()
   readonly commentId?: string;
@@ -19,7 +19,7 @@ export class GetAllQueryReactionsDto extends PaginationQuery<IReactions> {
 }
 
 export class GetAllReactionsOptions {
-  constructor(private readonly dto: GetAllQueryReactionsDto) {}
+  constructor(private readonly dto: GetAllReactionsDto) {}
 
   toWhereCondition() {
     const { articleId, commentId } = this.dto;
