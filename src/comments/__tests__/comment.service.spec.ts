@@ -114,10 +114,13 @@ describe('CommentsService', () => {
     });
 
     it('should throw NotFoundException if user are not author of this comment', async () => {
-      mockCommentsModel.findOne.mockResolvedValueOnce(updateComment);
-      mockCommentsModel.findOne.mockRejectedValueOnce(NotFoundException);
+      jest
+        .spyOn(commentsService, 'findOne')
+        .mockResolvedValueOnce(comment as any);
+
+      jest.spyOn(commentsService, 'findOne').mockResolvedValueOnce();
       try {
-        await commentsService.patch(updateComment);
+        await commentsService.patch({ ...updateComment, userId: '1' });
       } catch (error) {
         expect(error).toBeInstanceOf(NotFoundException);
         expect(error.message).toBe(NOT_AUTHOR_OF_COMMENT);

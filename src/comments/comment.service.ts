@@ -93,7 +93,7 @@ export class CommentsService {
     });
   }
 
-  async findOne(whereCondition: Partial<IComment>): Promise<Comment> {
+  async findOne(whereCondition: Partial<IComment>): Promise<Comment | void> {
     const comment = await this.commentModel.findOne({
       where: whereCondition,
     });
