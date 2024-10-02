@@ -138,7 +138,7 @@ describe('ArticlesController', () => {
   });
 
   describe('Delete method', () => {
-    it('Delete must be called', async () => {
+    it('should delete an article and return a success message', async () => {
       const result = await articlesController.delete(req, articleId);
 
       expect(result).toEqual({ message: SUCCESSFUL_DELETE });
@@ -199,6 +199,8 @@ describe('ArticlesController', () => {
         page: '1',
       });
       expect(result).toBeInstanceOf(GetAllArticlesPresenter);
+      expect(result).toHaveProperty('articles');
+      expect(result).toHaveProperty('count');
     });
 
     it('Method findAll must be called with correct parameters', async () => {
