@@ -154,7 +154,7 @@ export class ArticlesService {
     });
   }
 
-  async findOne(whereCondition: Partial<IArticle>): Promise<ArticlePresenter> {
+  async findOne(whereCondition: Partial<IArticle>): Promise<Article | void> {
     const article = await this.articleModel.findOne({
       where: whereCondition,
     });

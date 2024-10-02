@@ -172,8 +172,11 @@ describe('ArticlesService', () => {
     });
 
     it('should throw NotFoundException if user are not author of this article', async () => {
-      mockArticlesModel.findOne.mockResolvedValueOnce(article);
-      mockArticlesModel.findOne.mockResolvedValueOnce(null);
+      jest
+        .spyOn(articlesService, 'findOne')
+        .mockResolvedValueOnce(article as any);
+
+      jest.spyOn(articlesService, 'findOne').mockResolvedValueOnce();
       try {
         await deleteArticle();
       } catch (error) {
@@ -226,7 +229,8 @@ describe('ArticlesService', () => {
     });
 
     it('should throw NotFoundException if article not found', async () => {
-      mockArticlesModel.findOne.mockResolvedValue(null);
+      jest.spyOn(articlesService, 'findOne').mockResolvedValueOnce();
+
       try {
         await articlesService.patch(patchArticle);
       } catch (error) {
@@ -236,8 +240,11 @@ describe('ArticlesService', () => {
     });
 
     it('should throw NotFoundException if user are not author of this article', async () => {
-      mockArticlesModel.findOne.mockResolvedValueOnce(patchArticle);
-      mockArticlesModel.findOne.mockResolvedValueOnce(null);
+      jest
+        .spyOn(articlesService, 'findOne')
+        .mockResolvedValueOnce(patchArticle as any);
+
+      jest.spyOn(articlesService, 'findOne').mockResolvedValueOnce();
       try {
         await articlesService.patch(patchArticle);
       } catch (error) {
@@ -254,7 +261,7 @@ describe('ArticlesService', () => {
         text: 'This is a article',
       };
 
-      mockArticlesModel.findOne.mockResolvedValue(mockArticle);
+      mockArticlesModel.findOne.mockResolvedValueOnce(mockArticle as any);
 
       const result = await articlesService.findOne({
         id: mockArticle.id,
@@ -267,21 +274,27 @@ describe('ArticlesService', () => {
       expect(result).toEqual(mockArticle);
     });
 
-    it('should return null if no user is found', async () => {
-      mockArticlesModel.findOne.mockResolvedValue(NotFoundException);
+    it('should throw NotFoundException if no article is found', async () => {
+      mockArticlesModel.findOne.mockResolvedValue(null);
 
-      const result = await articlesService.findOne({ id: '2' });
+      try {
+        await articlesService.findOne({ id: '2' });
+      } catch (error) {
+        expect(error).toBeInstanceOf(NotFoundException);
+        expect(error.message).toBe(NOT_FOUND);
+      }
 
       expect(mockArticlesModel.findOne).toHaveBeenCalledWith({
         where: { id: '2' },
       });
-      expect(result).toBeInstanceOf(NotFoundException);
     });
   });
 
   describe('GetById method', () => {
     it('should get article by id', async () => {
-      mockArticlesModel.findOne.mockResolvedValue(articleById);
+      jest
+        .spyOn(articlesService, 'findOne')
+        .mockResolvedValue(articleById as any);
       await articlesService.getById({ articleId: '11' });
       expect(mockArticlesModel.findOne).toHaveBeenCalledWith({
         where: { id: '11' },
@@ -302,7 +315,7 @@ describe('ArticlesService', () => {
     });
 
     it('should throw NotFoundException if comment not found', async () => {
-      mockArticlesModel.findOne.mockResolvedValue(null);
+      jest.spyOn(articlesService, 'findOne').mockResolvedValueOnce();
       try {
         await articlesService.getById({ articleId: '11' });
       } catch (error) {
