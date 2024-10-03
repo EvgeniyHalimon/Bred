@@ -56,6 +56,7 @@ import { HttpExceptionFilter } from './filters';
     ReactionsModule,
     AuthModule,
   ],
+  //remove before deploy
   providers: [
     {
       provide: APP_FILTER,

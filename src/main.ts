@@ -19,6 +19,7 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule, { bufferLogs: true });
   app.enableCors({ origin: '*' });
   app.useLogger(app.get(Logger));
+  //remove before deploy
   app.useGlobalFilters(new HttpExceptionFilter());
   app.useGlobalPipes(
     new CustomValidationPipe({
