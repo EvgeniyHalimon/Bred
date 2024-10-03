@@ -20,8 +20,8 @@ import { IS_PUBLIC_KEY } from 'src/shared/public.decorator';
 @Injectable()
 export class AuthGuard implements CanActivate {
   constructor(
-    private jwtService: JwtService,
-    private reflector: Reflector,
+    readonly jwtService: JwtService,
+    readonly reflector: Reflector,
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
@@ -32,19 +32,26 @@ export class AuthGuard implements CanActivate {
     if (isPublic) {
       return true;
     }
+
     const request = context.switchToHttp().getRequest();
     const token = this.extractTokenFromHeader(request);
+
     if (!token) {
       throw new UnauthorizedException();
     }
+
     try {
-      const payload = await this.jwtService.verifyAsync(token, {
-        secret: config.SECRET,
-      });
+      const isRefreshRoute = request.url === '/auth/refresh';
+      const secret = isRefreshRoute
+        ? config.SECRET_REFRESH
+        : config.SECRET_ACCESS;
+
+      const payload = await this.jwtService.verify(token, { secret });
       request['user'] = payload;
     } catch {
       throw new UnauthorizedException();
     }
+
     return true;
   }
 

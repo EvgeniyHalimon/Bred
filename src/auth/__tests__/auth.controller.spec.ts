@@ -1,7 +1,9 @@
 import { Test } from '@nestjs/testing';
 import { AuthController } from '../auth.controller';
 import { AuthService } from '../auth.service';
-import { SignInResponseDto, SignUpResponseDto } from '../dto';
+import { SignInPresenter, SignUpPresenter } from '../dto';
+import { UserRolesEnum } from 'src/users/user.constants';
+import User from 'src/users/user.schema';
 
 describe('AuthController', () => {
   let authController: AuthController;
@@ -44,10 +46,20 @@ describe('AuthController', () => {
     });
 
     it('should return instance of response dto', async () => {
-      const mockResult = new SignUpResponseDto();
+      const mockResult = new SignUpPresenter({
+        id: 'd0601328-1486-434a-860e-75b843a682db',
+        firstName: 'string',
+        lastName: 'string',
+        email: 'q@email.com',
+        bio: 'Hello my name is Monti',
+        role: UserRolesEnum.USER,
+        photo: null,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      } as User);
       mockAuthService.signUp.mockResolvedValue(mockResult);
       const result = await authController.signUp(signUpDto);
-      expect(result).toBeInstanceOf(SignUpResponseDto);
+      expect(result).toBeInstanceOf(SignUpPresenter);
     });
   });
 
@@ -58,10 +70,24 @@ describe('AuthController', () => {
     });
 
     it('should return instance of response dto', async () => {
-      const mockResult = new SignInResponseDto();
+      const mockResult = new SignInPresenter(
+        {
+          id: 'd0601328-1486-434a-860e-75b843a682db',
+          firstName: 'string',
+          lastName: 'string',
+          email: 'q@email.com',
+          bio: 'Hello my name is Monti',
+          role: UserRolesEnum.USER,
+          photo: null,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+        'token',
+        'token',
+      );
       mockAuthService.signIn.mockResolvedValue(mockResult);
       const result = await authController.signIn(singInDto);
-      expect(result).toBeInstanceOf(SignInResponseDto);
+      expect(result).toBeInstanceOf(SignInPresenter);
     });
   });
 });

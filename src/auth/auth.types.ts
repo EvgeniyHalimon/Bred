@@ -1,7 +1,4 @@
-import { SignUpResponseDto } from './dto';
-
-export interface ISingInResponse {
-  user: SignUpResponseDto;
+export interface ITokens {
   accessToken: string;
   refreshToken: string;
 }
