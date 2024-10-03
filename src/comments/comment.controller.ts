@@ -76,19 +76,12 @@ export class CommentController {
   })
   @ApiNotFoundResponse({
     example: {
-      message: COMMENT_NOT_FOUND,
+      message: [COMMENT_NOT_FOUND, NOT_AUTHOR_OF_COMMENT],
       error: 'Not Found',
       statusCode: HttpStatus.NOT_FOUND,
     },
-    description: 'When comment is not present in database',
-  })
-  @ApiNotFoundResponse({
-    example: {
-      message: NOT_AUTHOR_OF_COMMENT,
-      error: 'Not Found',
-      statusCode: HttpStatus.NOT_FOUND,
-    },
-    description: 'When user is not author of comment',
+    description:
+      'When comment is not present in database <br/>  When user is not author of comment',
   })
   @ApiBadRequestResponse({
     description: 'When delete was not successful',
@@ -109,19 +102,12 @@ export class CommentController {
 
   @ApiNotFoundResponse({
     example: {
-      message: COMMENT_NOT_FOUND,
+      message: [COMMENT_NOT_FOUND, NOT_AUTHOR_OF_COMMENT],
       error: 'Not Found',
       statusCode: HttpStatus.NOT_FOUND,
     },
-    description: 'When comment is not found',
-  })
-  @ApiNotFoundResponse({
-    description: 'When user is not author of comment',
-    example: {
-      message: NOT_AUTHOR_OF_COMMENT,
-      error: 'Bad Request',
-      statusCode: HttpStatus.BAD_REQUEST,
-    },
+    description:
+      'When comment is not present in database <br/>  When user is not author of comment',
   })
   @ApiResponse({
     status: HttpStatus.OK,

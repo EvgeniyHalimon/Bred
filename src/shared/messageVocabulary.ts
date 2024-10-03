@@ -23,5 +23,9 @@ export const vocabulary = {
     COMMENT_OR_ARTICLE_ID_REQUIRED:
       'Either commentId or articleId must be provided',
   },
-  users: { NOT_FOUND: 'User not found', ALREADY_EXISTS: 'User already exists' },
+  users: {
+    USER_NOT_FOUND: 'User not found',
+    ALREADY_EXISTS: 'User already exists',
+    EMAIL_IS_TAKEN: 'This email is taken',
+  },
 };

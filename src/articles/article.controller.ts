@@ -96,19 +96,12 @@ export class ArticlesController {
 
   @ApiNotFoundResponse({
     example: {
-      message: NOT_FOUND,
+      message: [NOT_FOUND, NOT_AUTHOR],
       error: 'Not Found',
       statusCode: HttpStatus.NOT_FOUND,
     },
-    description: 'When article is not present in database',
-  })
-  @ApiNotFoundResponse({
-    example: {
-      message: NOT_AUTHOR,
-      error: 'Not Found',
-      statusCode: HttpStatus.NOT_FOUND,
-    },
-    description: 'When user is not author of article',
+    description:
+      'When article is not present in database <br/>  When user is not author of article',
   })
   @ApiResponse({
     status: HttpStatus.OK,
@@ -135,19 +128,12 @@ export class ArticlesController {
   })
   @ApiNotFoundResponse({
     example: {
-      message: NOT_FOUND,
+      message: [NOT_FOUND, NOT_AUTHOR],
       error: 'Not Found',
       statusCode: HttpStatus.NOT_FOUND,
     },
-    description: 'When article is not present in database',
-  })
-  @ApiNotFoundResponse({
-    example: {
-      message: NOT_AUTHOR,
-      error: 'Not Found',
-      statusCode: HttpStatus.NOT_FOUND,
-    },
-    description: 'When user is not author of article',
+    description:
+      'When article is not present in database <br/>  When user is not author of article',
   })
   @ApiBadRequestResponse({
     description: 'When delete was not successful',

@@ -31,7 +31,7 @@ import { ITokens } from './auth.types';
 
 const {
   auth: { WRONG_PASSWORD },
-  users: { NOT_FOUND, ALREADY_EXISTS },
+  users: { USER_NOT_FOUND: NOT_FOUND, ALREADY_EXISTS },
 } = vocabulary;
 
 @Controller('auth')

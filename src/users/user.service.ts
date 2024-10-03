@@ -18,6 +18,13 @@ import { hashPassword } from 'src/auth/utils/passwordUtils';
 // types
 import { IUser, UpdateUserWithFile } from './user.types';
 
+// constants
+import { vocabulary } from 'src/shared';
+
+const {
+  users: { USER_NOT_FOUND, EMAIL_IS_TAKEN },
+} = vocabulary;
+
 @Injectable()
 export class UsersService {
   constructor(@InjectModel(User) private userModel: typeof User) {}
@@ -40,13 +47,13 @@ export class UsersService {
     const user = await this.findOne({ id: userId });
 
     if (!user) {
-      throw new NotFoundException('User not found');
+      throw new NotFoundException(USER_NOT_FOUND);
     }
 
     if (updateUserDto.email) {
       const searchedUser = await this.findOne({ email: updateUserDto.email });
       if (searchedUser) {
-        throw new BadRequestException('This email is taken');
+        throw new BadRequestException(EMAIL_IS_TAKEN);
       }
     }
 
