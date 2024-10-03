@@ -136,11 +136,7 @@ export class ReactionsService {
     return updatedArticle;
   }
 
-  async getById({
-    reactionId,
-  }: {
-    reactionId: string;
-  }): Promise<GetByIdReactionPresenter> {
+  async getById(reactionId: string): Promise<GetByIdReactionPresenter> {
     const article = await this.reactionModel.findOne({
       where: { id: reactionId },
       include: [

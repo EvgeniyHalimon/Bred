@@ -47,11 +47,7 @@ export class ArticlesService {
     return this.articleModel.create(article);
   }
 
-  async getById({
-    articleId,
-  }: {
-    articleId: string;
-  }): Promise<DetailedArticlePresenter | null> {
+  async getById(articleId: string): Promise<DetailedArticlePresenter | null> {
     const article = await this.articleModel.findOne({
       where: { id: articleId },
       include: [

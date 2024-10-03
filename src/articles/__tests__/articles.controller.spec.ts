@@ -175,7 +175,7 @@ describe('ArticlesController', () => {
   describe('GetById method', () => {
     it('Method get must be call with correct parameters', async () => {
       await articlesController.getById(articleId);
-      expect(mockArticlesService.getById).toHaveBeenCalledWith({ articleId });
+      expect(mockArticlesService.getById).toHaveBeenCalledWith(articleId);
     });
   });
 

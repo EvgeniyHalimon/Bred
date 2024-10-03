@@ -182,6 +182,6 @@ export class ReactionsController {
   })
   @Get('/:id')
   get(@Param('id') id: string): Promise<GetByIdReactionPresenter> {
-    return this.reactionsService.getById({ reactionId: id });
+    return this.reactionsService.getById(id);
   }
 }

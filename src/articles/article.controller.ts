@@ -80,7 +80,7 @@ export class ArticlesController {
   })
   @Get('/:id')
   getById(@Param('id') id: string): Promise<DetailedArticlePresenter | null> {
-    return this.articlesService.getById({ articleId: id });
+    return this.articlesService.getById(id);
   }
 
   @ApiResponse({

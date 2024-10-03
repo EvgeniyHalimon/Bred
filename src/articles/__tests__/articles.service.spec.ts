@@ -248,7 +248,7 @@ describe('ArticlesService', () => {
       jest
         .spyOn(articlesService, 'findOne')
         .mockResolvedValue(articleById as any);
-      await articlesService.getById({ articleId: '11' });
+      await articlesService.getById('11');
       expect(mockArticlesModel.findOne).toHaveBeenCalledWith({
         where: { id: '11' },
         include: [
@@ -270,7 +270,7 @@ describe('ArticlesService', () => {
     it('should throw NotFoundException if comment not found', async () => {
       jest.spyOn(articlesService, 'findOne').mockResolvedValueOnce();
       try {
-        await articlesService.getById({ articleId: '11' });
+        await articlesService.getById('11');
       } catch (error) {
         expect(error).toBeInstanceOf(NotFoundException);
         expect(error.message).toEqual(NOT_FOUND);
