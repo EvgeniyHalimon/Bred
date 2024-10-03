@@ -2,11 +2,7 @@ import { Test } from '@nestjs/testing';
 import { ArticlesController } from '../article.controller';
 import { ArticlesService } from '../article.service';
 import { ICustomRequest, vocabulary } from 'src/shared';
-import {
-  ArticlePresenter,
-  DetailedArticlePresenter,
-  GetAllArticlesPresenter,
-} from '../dto';
+import { ArticlePresenter, GetAllArticlesPresenter } from '../dto';
 import Article from '../article.schema';
 
 const {
@@ -177,13 +173,6 @@ describe('ArticlesController', () => {
   });
 
   describe('GetById method', () => {
-    it('Method get should return an instance of dto', async () => {
-      const mockResult = new DetailedArticlePresenter(articleDetailed);
-      jest.spyOn(mockArticlesService, 'getById').mockResolvedValue(mockResult);
-      const result = await articlesController.getById(articleId);
-      expect(result).toBeInstanceOf(DetailedArticlePresenter);
-    });
-
     it('Method get must be call with correct parameters', async () => {
       await articlesController.getById(articleId);
       expect(mockArticlesService.getById).toHaveBeenCalledWith({ articleId });

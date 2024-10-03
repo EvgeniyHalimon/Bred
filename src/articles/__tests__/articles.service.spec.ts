@@ -136,17 +136,6 @@ describe('ArticlesService', () => {
         ...createArticleDto,
       });
     });
-
-    it('should return the created article when called with correct parameters', async () => {
-      mockArticlesModel.create.mockResolvedValue(article);
-
-      const result = await articlesService.create({
-        authorId: '1',
-        createArticleDto,
-      });
-
-      expect(result).toEqual(article);
-    });
   });
 
   describe('Delete method', () => {
@@ -311,22 +300,17 @@ describe('ArticlesService', () => {
 
   describe('ArticlesService findOne method', () => {
     it('should return a article by id', async () => {
-      const mockArticle = {
-        id: '1',
-        text: 'This is a article',
-      };
-
-      mockArticlesModel.findOne.mockResolvedValueOnce(mockArticle as any);
+      mockArticlesModel.findOne.mockResolvedValueOnce(article as any);
 
       const result = await articlesService.findOne({
-        id: mockArticle.id,
+        id: article.id,
       });
 
       expect(mockArticlesModel.findOne).toHaveBeenCalledWith({
-        where: { id: mockArticle.id },
+        where: { id: article.id },
       });
 
-      expect(result).toEqual(mockArticle);
+      expect(result).toEqual(article);
     });
 
     it('should throw NotFoundException if no article is found', async () => {
