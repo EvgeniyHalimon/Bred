@@ -9,7 +9,9 @@ export const config = {
   DB_USERNAME: process.env.DB_USERNAME ?? '',
   PASSWORD: process.env.PASSWORD ?? '',
   DATABASE: process.env.DATABASE ?? '',
-  SECRET: process.env.SECRET ?? '',
-  EXPIRES_IN: process.env.EXPIRES_IN ?? '1h',
+  SECRET_ACCESS: process.env.SECRET_ACCESS,
+  SECRET_REFRESH: process.env.SECRET_REFRESH,
+  EXPIRES_IN: process.env.EXPIRES_IN ?? '',
+  EXPIRES_IN_REFRESH: process.env.EXPIRES_IN_REFRESH ?? '',
   DIALECT: process.env.DIALECT,
 };

@@ -1,10 +1,18 @@
 import { Test } from '@nestjs/testing';
 import { AuthService } from '../auth.service';
 import { getModelToken } from '@nestjs/sequelize';
-import User from 'src/user/user.schema';
+import User from 'src/users/user.schema';
 import { JwtService } from '@nestjs/jwt';
 import * as passwordUtils from 'src/auth/utils/passwordUtils';
 import { BadRequestException, NotFoundException } from '@nestjs/common';
+import { vocabulary } from 'src/shared';
+import { config } from 'src/config';
+import { IUser } from 'src/users/user.types';
+
+const {
+  auth: { WRONG_PASSWORD },
+  users: { USER_NOT_FOUND: NOT_FOUND, ALREADY_EXISTS },
+} = vocabulary;
 
 describe('AuthService', () => {
   let authService: AuthService;
@@ -15,7 +23,7 @@ describe('AuthService', () => {
   };
 
   let mockJwtService: {
-    signAsync: jest.Mock;
+    sign: jest.Mock;
   };
 
   beforeEach(async () => {
@@ -33,7 +41,7 @@ describe('AuthService', () => {
         {
           provide: JwtService,
           useValue: {
-            signAsync: jest.fn(),
+            sign: jest.fn(),
           },
         },
       ],
@@ -57,7 +65,6 @@ describe('AuthService', () => {
     firstName: 'string',
     lastName: 'string',
     email: 'string',
-    password: 'string',
     bio: 'string',
     role: 'user',
     createdAt: new Date('2024-08-14T08:40:32.000Z'),
@@ -83,13 +90,26 @@ describe('AuthService', () => {
   };
 
   describe('SignIn method', () => {
-    it('666', async () => {
+    it('should have successful login', async () => {
+      const mockFindOne = jest.fn().mockResolvedValue(signInUser);
       mockUserModel.scope.mockReturnValue({
-        findOne: jest.fn().mockResolvedValue(signInUser),
+        findOne: mockFindOne,
       });
+
       jest.spyOn(passwordUtils, 'verifyPassword').mockResolvedValue(true);
-      mockJwtService.signAsync.mockResolvedValue('token');
+
+      jest.spyOn(authService, 'generateTokens').mockReturnValue({
+        accessToken: 'token',
+        refreshToken: 'token',
+      });
+
       const result = await authService.signIn(signInDto);
+
+      expect(mockUserModel.scope).toHaveBeenCalledWith('withPassword');
+      expect(mockFindOne).toHaveBeenCalledWith({
+        where: { email: signInDto.email },
+      });
+
       expect(result).toHaveProperty('user');
       expect(result).toHaveProperty('accessToken', 'token');
       expect(result).toHaveProperty('refreshToken', 'token');
@@ -104,7 +124,7 @@ describe('AuthService', () => {
         await authService.signIn(signInDto);
       } catch (error) {
         expect(error).toBeInstanceOf(NotFoundException);
-        expect(error.message).toBe('User not found');
+        expect(error.message).toBe(NOT_FOUND);
       }
     });
 
@@ -117,17 +137,17 @@ describe('AuthService', () => {
         await authService.signIn(signUpDto);
       } catch (error) {
         expect(error).toBeInstanceOf(BadRequestException);
-        expect(error.message).toBe('Wrong password');
+        expect(error.message).toBe(WRONG_PASSWORD);
       }
     });
   });
 
   describe('SignUp method', () => {
-    it('create new comment user', async () => {
+    it('create new user', async () => {
       mockUserModel.scope.mockReturnValue({
         findOne: jest.fn().mockResolvedValue(null),
       });
-      mockUserModel.create.mockResolvedValue(user);
+      mockUserModel.create.mockResolvedValue({ ...user, password: '1234' });
       jest
         .spyOn(passwordUtils, 'hashPassword')
         .mockResolvedValue('hashed-password');
@@ -147,8 +167,41 @@ describe('AuthService', () => {
         await authService.signUp(signUpDto);
       } catch (error) {
         expect(error).toBeInstanceOf(BadRequestException);
-        expect(error.message).toBe('User already exists');
+        expect(error.message).toBe(ALREADY_EXISTS);
       }
+    });
+  });
+
+  describe('GenerateTokens method', () => {
+    it('should generate access token and refresh token with correct payload and options', () => {
+      const mockUser: Partial<IUser> = {
+        id: '1',
+        email: 'test@example.com',
+      };
+
+      const mockAccessToken = 'mockAccessToken';
+      const mockRefreshToken = 'mockRefreshToken';
+
+      mockJwtService.sign
+        .mockReturnValueOnce(mockAccessToken)
+        .mockReturnValueOnce(mockRefreshToken);
+
+      const tokens = authService.generateTokens(mockUser);
+
+      expect(mockJwtService.sign).toHaveBeenCalledWith(mockUser, {
+        secret: config.SECRET_ACCESS,
+        expiresIn: config.EXPIRES_IN,
+      });
+
+      expect(mockJwtService.sign).toHaveBeenCalledWith(mockUser, {
+        secret: config.SECRET_REFRESH,
+        expiresIn: config.EXPIRES_IN_REFRESH,
+      });
+
+      expect(tokens).toEqual({
+        accessToken: mockAccessToken,
+        refreshToken: mockRefreshToken,
+      });
     });
   });
 });

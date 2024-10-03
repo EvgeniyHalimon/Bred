@@ -8,32 +8,44 @@ import { JwtService } from '@nestjs/jwt';
 import { InjectModel } from '@nestjs/sequelize';
 
 // schema
-import User from 'src/user/user.schema';
+import User from 'src/users/user.schema';
 
 // dto's
-import { CreateUserDto, SignInDto } from 'src/user/dto';
+import { CreateUserDto, SignInDto } from 'src/users/dto';
+import { SignInPresenter, SignUpPresenter } from './dto';
 
 // utils
 import { hashPassword, verifyPassword } from './utils/passwordUtils';
-import { SignUpResponseDto } from './dto';
-import { ISingInResponse } from './auth.types';
+
+// types
+import { ITokens } from './auth.types';
+import { IUser } from 'src/users/user.types';
+
+// config
+import { config } from '../config';
+
+// constants
+import { vocabulary } from 'src/shared';
+
+const {
+  auth: { WRONG_PASSWORD },
+  users: { USER_NOT_FOUND: NOT_FOUND, ALREADY_EXISTS },
+} = vocabulary;
 
 @Injectable()
 export class AuthService {
   constructor(
-    @InjectModel(User) private userModel: typeof User,
-    private jwtService: JwtService,
+    @InjectModel(User) readonly userModel: typeof User,
+    readonly jwtService: JwtService,
   ) {}
 
-  async signUp(
-    signUpDto: CreateUserDto,
-  ): Promise<SignUpResponseDto | undefined> {
+  async signUp(signUpDto: CreateUserDto): Promise<SignUpPresenter> {
     const user = await this.userModel.scope('withPassword').findOne({
       where: { email: signUpDto.email },
     });
 
     if (user) {
-      throw new BadRequestException('User already exists');
+      throw new BadRequestException(ALREADY_EXISTS);
     }
 
     const userAttributes = {
@@ -42,10 +54,14 @@ export class AuthService {
     };
 
     const createdUser = await this.userModel.create(userAttributes);
-    return createdUser;
+
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { password: p, ...userWithoutPassword } = createdUser;
+
+    return userWithoutPassword;
   }
 
-  async signIn(signInDto: SignInDto): Promise<ISingInResponse | undefined> {
+  async signIn(signInDto: SignInDto): Promise<SignInPresenter> {
     const { password, email } = signInDto;
 
     const user = await this.userModel.scope('withPassword').findOne({
@@ -53,7 +69,7 @@ export class AuthService {
     });
 
     if (!user) {
-      throw new NotFoundException('User not found');
+      throw new NotFoundException(NOT_FOUND);
     }
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -61,13 +77,40 @@ export class AuthService {
 
     const match = await verifyPassword(password, user.password);
     if (!match) {
-      throw new BadRequestException('Wrong password');
+      throw new BadRequestException(WRONG_PASSWORD);
     }
 
-    return {
-      user,
-      accessToken: await this.jwtService.signAsync(userWithoutPhoto),
-      refreshToken: await this.jwtService.signAsync(userWithoutPhoto),
-    };
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { password: p, ...userWithoutPassword } = user.dataValues;
+
+    const { accessToken, refreshToken } = this.generateTokens(userWithoutPhoto);
+
+    return new SignInPresenter(userWithoutPassword, accessToken, refreshToken);
+  }
+
+  async refresh(id: string): Promise<ITokens | void> {
+    const user = await this.userModel.scope('withPassword').findOne({
+      where: { id },
+    });
+    if (!user) {
+      throw new NotFoundException(NOT_FOUND);
+    }
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { photo, ...userWithoutPhoto } = user.dataValues;
+    if (userWithoutPhoto) {
+      return this.generateTokens(userWithoutPhoto);
+    }
+  }
+
+  generateTokens(user: Partial<IUser>): ITokens {
+    const accessToken = this.jwtService.sign(user, {
+      secret: config.SECRET_ACCESS,
+      expiresIn: config.EXPIRES_IN,
+    });
+    const refreshToken = this.jwtService.sign(user, {
+      secret: config.SECRET_REFRESH,
+      expiresIn: config.EXPIRES_IN_REFRESH,
+    });
+    return { accessToken, refreshToken };
   }
 }

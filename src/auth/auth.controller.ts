@@ -1,5 +1,13 @@
 // nest
-import { Body, Controller, Post, HttpCode, HttpStatus } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Post,
+  HttpCode,
+  HttpStatus,
+  Get,
+  Req,
+} from '@nestjs/common';
 import {
   ApiBadRequestResponse,
   ApiNotFoundResponse,
@@ -14,16 +22,22 @@ import { AuthService } from './auth.service';
 import { Public } from 'src/shared/public.decorator';
 
 // dto's
-import { SignInDto, CreateUserDto } from 'src/user/dto';
-import { SignInResponseDto, SignUpResponseDto } from './dto';
+import { SignInDto, CreateUserDto } from 'src/users/dto';
+import { SignInPresenter, SignUpPresenter } from './dto';
 
 // types
-import { ISingInResponse } from './auth.types';
+import { ICustomRequest, vocabulary } from 'src/shared';
+import { ITokens } from './auth.types';
+
+const {
+  auth: { WRONG_PASSWORD },
+  users: { USER_NOT_FOUND: NOT_FOUND, ALREADY_EXISTS },
+} = vocabulary;
 
 @Controller('auth')
 @ApiTags('Auth')
 export class AuthController {
-  constructor(private authService: AuthService) {}
+  constructor(readonly authService: AuthService) {}
 
   @HttpCode(HttpStatus.OK)
   @Post('login')
@@ -31,11 +45,11 @@ export class AuthController {
   @ApiResponse({
     status: HttpStatus.OK,
     description: 'User successfully logged in.',
-    type: SignInResponseDto,
+    type: SignInPresenter,
   })
   @ApiBadRequestResponse({
     example: {
-      message: 'Wrong password',
+      message: WRONG_PASSWORD,
       error: 'Bad Request',
       statusCode: HttpStatus.BAD_REQUEST,
     },
@@ -43,13 +57,13 @@ export class AuthController {
   })
   @ApiNotFoundResponse({
     example: {
-      message: 'User not found',
+      message: NOT_FOUND,
       error: 'Not Found',
       statusCode: HttpStatus.NOT_FOUND,
     },
     description: "When user with current email doesn't exist on database",
   })
-  signIn(@Body() signInDTO: SignInDto): Promise<ISingInResponse | undefined> {
+  signIn(@Body() signInDTO: SignInDto): Promise<SignInPresenter> {
     return this.authService.signIn(signInDTO);
   }
 
@@ -59,19 +73,22 @@ export class AuthController {
   @ApiResponse({
     status: HttpStatus.CREATED,
     description: 'User successfully created account.',
-    type: SignUpResponseDto,
+    type: SignUpPresenter,
   })
   @ApiBadRequestResponse({
     description: 'When user already exists',
     example: {
-      message: 'User already exists',
+      message: ALREADY_EXISTS,
       error: 'Bad Request',
       statusCode: HttpStatus.BAD_REQUEST,
     },
   })
-  signUp(
-    @Body() signUpDTO: CreateUserDto,
-  ): Promise<SignUpResponseDto | undefined> {
+  signUp(@Body() signUpDTO: CreateUserDto): Promise<SignUpPresenter> {
     return this.authService.signUp(signUpDTO);
+  }
+
+  @Get('refresh')
+  refresh(@Req() req: ICustomRequest): Promise<ITokens | void> {
+    return this.authService.refresh(req.user.id);
   }
 }
