@@ -47,7 +47,7 @@ const {
 @Controller('articles')
 @ApiTags('Articles')
 export class ArticlesController {
-  constructor(private articlesService: ArticlesService) {}
+  constructor(readonly articlesService: ArticlesService) {}
 
   @ApiResponse({
     status: HttpStatus.CREATED,

@@ -37,7 +37,7 @@ const {
 @Controller('auth')
 @ApiTags('Auth')
 export class AuthController {
-  constructor(private authService: AuthService) {}
+  constructor(readonly authService: AuthService) {}
 
   @HttpCode(HttpStatus.OK)
   @Post('login')

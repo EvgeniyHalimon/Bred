@@ -27,7 +27,7 @@ const {
 
 @Injectable()
 export class UsersService {
-  constructor(@InjectModel(User) private userModel: typeof User) {}
+  constructor(@InjectModel(User) readonly userModel: typeof User) {}
 
   async findAll(): Promise<GetAllUserPresenter> {
     const users = await this.userModel.findAndCountAll();

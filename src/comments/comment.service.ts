@@ -26,7 +26,7 @@ const {
 
 @Injectable()
 export class CommentsService {
-  constructor(@InjectModel(Comment) private commentModel: typeof Comment) {}
+  constructor(@InjectModel(Comment) readonly commentModel: typeof Comment) {}
 
   async create({
     userId,

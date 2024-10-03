@@ -20,8 +20,8 @@ import { IS_PUBLIC_KEY } from 'src/shared/public.decorator';
 @Injectable()
 export class AuthGuard implements CanActivate {
   constructor(
-    private jwtService: JwtService,
-    private reflector: Reflector,
+    readonly jwtService: JwtService,
+    readonly reflector: Reflector,
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {

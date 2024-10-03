@@ -35,8 +35,8 @@ const {
 @Injectable()
 export class AuthService {
   constructor(
-    @InjectModel(User) private userModel: typeof User,
-    private jwtService: JwtService,
+    @InjectModel(User) readonly userModel: typeof User,
+    readonly jwtService: JwtService,
   ) {}
 
   async signUp(signUpDto: CreateUserDto): Promise<SignUpPresenter> {

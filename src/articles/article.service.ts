@@ -31,7 +31,7 @@ const {
 
 @Injectable()
 export class ArticlesService {
-  constructor(@InjectModel(Article) private articleModel: typeof Article) {}
+  constructor(@InjectModel(Article) readonly articleModel: typeof Article) {}
 
   create({
     authorId,

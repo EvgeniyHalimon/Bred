@@ -51,7 +51,7 @@ const {
 @Controller('comments')
 @ApiTags('Comments')
 export class CommentController {
-  constructor(private commentService: CommentsService) {}
+  constructor(readonly commentService: CommentsService) {}
 
   @ApiResponse({
     status: HttpStatus.CREATED,

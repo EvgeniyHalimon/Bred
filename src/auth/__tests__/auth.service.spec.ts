@@ -172,7 +172,7 @@ describe('AuthService', () => {
     });
   });
 
-  describe('', () => {
+  describe('GenerateTokens method', () => {
     it('should generate access token and refresh token with correct payload and options', () => {
       const mockUser: Partial<IUser> = {
         id: '1',

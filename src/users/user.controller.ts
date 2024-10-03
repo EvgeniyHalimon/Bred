@@ -37,7 +37,7 @@ const {
 @ApiTags('Users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
-  /* MADE RESPONSES */
+
   @ApiResponse({
     status: HttpStatus.OK,
     description: 'Represents array of users',
