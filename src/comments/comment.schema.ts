@@ -1,7 +1,6 @@
 // libraries
 import {
   BelongsTo,
-  BelongsToMany,
   Column,
   CreatedAt,
   DataType,
@@ -28,7 +27,11 @@ export default class Comment extends Model<
   IComment,
   PartialExcept<IComment, 'id'>
 > {
-  @Column({ defaultValue: uuidv4(), primaryKey: true, type: DataType.UUID })
+  @Column({
+    defaultValue: () => uuidv4(),
+    primaryKey: true,
+    type: DataType.UUIDV4,
+  })
   id: string;
 
   @ForeignKey(() => User)
@@ -38,12 +41,6 @@ export default class Comment extends Model<
   @ForeignKey(() => Article)
   @Column(DataType.UUIDV4)
   articleId: string;
-
-  @BelongsToMany(() => User, () => Reaction)
-  likes: User[];
-
-  @BelongsToMany(() => User, () => Reaction)
-  dislikes: User[];
 
   @Column(DataType.TEXT)
   text: string;

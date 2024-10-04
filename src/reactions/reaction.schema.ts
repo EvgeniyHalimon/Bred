@@ -27,7 +27,7 @@ import { SourceTypeEnum, ReactionTypeEnum } from './reaction.constants';
 export default class Reaction extends Model<
   PartialExcept<IReactions, 'id' | 'createdAt' | 'updatedAt'>
 > {
-  @Column({ defaultValue: uuidv4(), primaryKey: true, type: DataType.UUIDV4 })
+  @Column({ defaultValue: () => uuidv4(),, primaryKey: true, type: DataType.UUIDV4 })
   id: string;
 
   @ForeignKey(() => User)
