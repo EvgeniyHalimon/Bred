@@ -37,7 +37,11 @@ export default class User extends Model<
   IUser,
   PartialExcept<IUser, 'id' | 'role' | 'createdAt' | 'updatedAt'>
 > {
-  @Column({ defaultValue: () => uuidv4(),, primaryKey: true, type: DataType.UUIDV4 })
+  @Column({
+    defaultValue: () => uuidv4(),
+    primaryKey: true,
+    type: DataType.UUIDV4,
+  })
   id: string;
 
   @Column
