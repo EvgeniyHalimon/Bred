@@ -76,12 +76,12 @@ export default class User extends Model<
   @Column
   updatedAt: Date;
 
-  @HasMany(() => Article)
+  @HasMany(() => Article, { onDelete: 'CASCADE' })
   articles: Article[];
 
-  @HasMany(() => Comment)
+  @HasMany(() => Comment, { onDelete: 'CASCADE' })
   comments: Comment[];
 
-  @HasMany(() => Reaction)
+  @HasMany(() => Reaction, { onDelete: 'CASCADE' })
   reactions: Reaction[];
 }

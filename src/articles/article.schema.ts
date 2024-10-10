@@ -71,12 +71,14 @@ export default class Article extends Model<
     foreignKey: 'articleId',
     constraints: false,
     scope: { sourceType: SourceTypeEnum.ARTICLE },
+    onDelete: 'CASCADE',
   })
   reactions: Reaction[];
 
   @HasMany(() => Comment, {
     foreignKey: 'articleId',
     constraints: false,
+    onDelete: 'CASCADE',
   })
   comments: Comment[];
 }

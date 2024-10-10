@@ -57,6 +57,7 @@ export default class Comment extends Model<
     foreignKey: 'commentId',
     constraints: false,
     scope: { sourceType: SourceTypeEnum.COMMENT },
+    onDelete: 'CASCADE',
   })
   reactions: Reaction[];
 
