@@ -15,4 +15,5 @@ export const config = {
   EXPIRES_IN_REFRESH: process.env.EXPIRES_IN_REFRESH ?? '',
   DIALECT: process.env.DIALECT,
   URI: process.env.URI,
+  MYSQL_SSL_CERT: process.env.MYSQL_SSL_CERT,
 };
