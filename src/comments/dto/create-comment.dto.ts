@@ -21,8 +21,8 @@ export class CreateCommentDto {
   readonly articleId: string;
 
   @IsString()
-  @MinLengthWithMessage({ min: commentFieldLengths.text.min, property: 'Text' })
-  @MaxLengthWithMessage({ max: commentFieldLengths.text.max, property: 'Text' })
+  @MinLengthWithMessage({ min: commentFieldLengths.text.min, property: 'text' })
+  @MaxLengthWithMessage({ max: commentFieldLengths.text.max, property: 'text' })
   @ApiProperty({
     description: 'Text of comment',
     minLength: commentFieldLengths.text.min,

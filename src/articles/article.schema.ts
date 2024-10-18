@@ -30,7 +30,11 @@ export default class Article extends Model<
   IArticle,
   PartialExcept<IArticle, 'id' | 'rating' | 'createdAt' | 'updatedAt'>
 > {
-  @Column({ defaultValue: uuidv4(), primaryKey: true, type: DataType.UUIDV4 })
+  @Column({
+    defaultValue: () => uuidv4(),
+    primaryKey: true,
+    type: DataType.UUIDV4,
+  })
   id: string;
 
   @Column
@@ -67,12 +71,14 @@ export default class Article extends Model<
     foreignKey: 'articleId',
     constraints: false,
     scope: { sourceType: SourceTypeEnum.ARTICLE },
+    onDelete: 'CASCADE',
   })
   reactions: Reaction[];
 
   @HasMany(() => Comment, {
     foreignKey: 'articleId',
     constraints: false,
+    onDelete: 'CASCADE',
   })
   comments: Comment[];
 }

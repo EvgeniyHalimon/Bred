@@ -1,10 +1,10 @@
 export const articlesFieldLengths = {
   title: {
-    min: 2,
+    min: 1,
     max: 200,
   },
   text: {
-    min: 2,
+    min: 1,
     max: 50000,
   },
 };
