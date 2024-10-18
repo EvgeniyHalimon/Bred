@@ -83,7 +83,12 @@ export class ReactionsService {
       );
     }
 
-    return reaction;
+    const reactionsWithRelations = (await this.reactionModel.findOne({
+      where: { id: reaction.id },
+      include: [{ model: User, as: 'user' }],
+    })) as PostReactionPresenter;
+
+    return reactionsWithRelations;
   }
 
   async delete({
@@ -99,7 +104,7 @@ export class ReactionsService {
       throw new NotFoundException(REACTION_NOT_FOUND);
     }
 
-    const reactionAuthor = await this.findOne({ userId });
+    const reactionAuthor = await this.findOne({ userId, id: reactionId });
 
     if (!reactionAuthor) {
       throw new NotFoundException(NOT_AUTHOR_OF_REACTION);

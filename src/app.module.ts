@@ -33,6 +33,7 @@ import { HttpExceptionFilter } from './filters';
       autoLoadModels: true,
       synchronize: true,
       models: [join(__dirname, '**', '*.schema.{ts,js}')],
+      uri: config.URI,
     }),
     LoggerModule.forRoot({
       pinoHttp: {

@@ -37,7 +37,11 @@ export default class User extends Model<
   IUser,
   PartialExcept<IUser, 'id' | 'role' | 'createdAt' | 'updatedAt'>
 > {
-  @Column({ defaultValue: uuidv4(), primaryKey: true, type: DataType.UUIDV4 })
+  @Column({
+    defaultValue: () => uuidv4(),
+    primaryKey: true,
+    type: DataType.UUIDV4,
+  })
   id: string;
 
   @Column
@@ -72,12 +76,12 @@ export default class User extends Model<
   @Column
   updatedAt: Date;
 
-  @HasMany(() => Article)
+  @HasMany(() => Article, { onDelete: 'CASCADE' })
   articles: Article[];
 
-  @HasMany(() => Comment)
+  @HasMany(() => Comment, { onDelete: 'CASCADE' })
   comments: Comment[];
 
-  @HasMany(() => Reaction)
+  @HasMany(() => Reaction, { onDelete: 'CASCADE' })
   reactions: Reaction[];
 }

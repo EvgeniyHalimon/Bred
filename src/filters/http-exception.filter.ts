@@ -23,10 +23,6 @@ export class HttpExceptionFilter implements ExceptionFilter {
     const logMessage = `🕔 Date: [${new Date().toISOString()}]\n🎫 Method: ${method}\n🔗Link: ${url}\n📃 Status: ${status}\n🛑 Error: ${res.error}\n💬 Message: ${res.message}\n\n`;
 
     const logDir = join(process.cwd(), 'logs');
-    console.log(
-      '🚀 ~ file: http-exception.filter.ts:26 ~ HttpExceptionFilter ~ process.cwd():',
-      process.cwd(),
-    );
     const logFilePath = join(logDir, 'error.log');
 
     if (!existsSync(logDir)) {

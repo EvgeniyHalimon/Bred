@@ -19,6 +19,7 @@ import {
 import Reaction from 'src/reactions/reaction.schema';
 import { IComment } from './comment.types';
 import { vocabulary } from 'src/shared';
+/* import { v4 as uuidv4 } from 'uuid'; */
 
 const {
   comments: { COMMENT_NOT_FOUND, NOT_AUTHOR_OF_COMMENT },
@@ -40,7 +41,13 @@ export class CommentsService {
       authorId: userId,
     };
     const createdComment = await this.commentModel.create(comment);
-    return createdComment;
+
+    const commentWithRelations = (await this.commentModel.findOne({
+      where: { id: createdComment.id },
+      include: [{ model: User, as: 'author' }],
+    })) as CommentPresenter;
+
+    return commentWithRelations;
   }
 
   async patch({
