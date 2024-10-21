@@ -1,73 +1,153 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
-
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
-
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+# Bred Project
 
 ## Description
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+Bred is a API built using the [NestJS](https://nestjs.com/) framework. It uses
+MySQL as the database, managed via the ORM [Sequelize](https://sequelize.org/),
+and implements user authentication using JWT.
+
+The project includes API documentation with [Swagger](https://swagger.io/).
+
+## Features
+
+### 1. **JWT Authentication**
+
+The project uses [JWT (JSON Web Tokens)](https://jwt.io/) for secure user
+authentication and authorization. This ensures that users can safely log in, and
+access control is enforced for protected routes.
+
+### 2. **Database Management with Sequelize**
+
+[Sequelize](https://sequelize.org/) is used as the ORM (Object-Relational
+Mapping) tool to manage database interactions. It provides:
+
+- **Model-based database interactions**: Easily map database tables to
+  JavaScript/TypeScript models.
+- **Database migrations**: Track and apply changes to the database schema.
+- **Query building**: Simplifies complex database queries.
+
+### 3. **API Documentation with Swagger**
+
+The project automatically generates API documentation using
+[Swagger](https://swagger.io/). With Swagger UI, developers can:
+
+- Explore available endpoints.
+- Test API calls directly from the browser.
+- View request and response structures.
+
+### 4. **TypeScript Support**
+
+The project is fully written in [TypeScript](https://www.typescriptlang.org/),
+which provides:
+
+- Strong type-checking for catching errors at compile time.
+- Improved code quality with enhanced IDE support.
+- Compatibility with modern JavaScript features.
+
+---
+
+## Technologies
+
+The project uses the following technologies:
+
+- [NestJS](https://nestjs.com/) — A modular framework for building server-side
+  applications on Node.js.
+- [Sequelize](https://sequelize.org/) — An ORM for working with databases.
+- [JWT](https://jwt.io/) — JSON Web Token for authentication.
+- [MySQL](https://www.mysql.com/) — A relational database.
+- [Swagger](https://swagger.io/) — API documentation generation.
+- [Jest](https://jestjs.io/) — Application testing.
+- [TypeScript](https://www.typescriptlang.org/) — A statically typed programming
+  language.
+
+---
 
 ## Installation
 
-```bash
-$ npm install
-```
-
-## Running the app
+#### 1. Clone the repository:
 
 ```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
+git clone https://github.com/your-username/bred.git
 ```
 
-## Test
+#### 2. Install Dependencies
+
+After cloning the project, navigate into the project folder and install the
+necessary dependencies:
 
 ```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
+cd bred
+npm install
 ```
 
-## Support
+#### 3. Environment Variables
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+Set up environment variables by creating a .env file in the root directory. Add
+necessary configuration details such as database connection credentials, JWT
+secret, etc.
 
-## Stay in touch
+Example .env file with variables for development:
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+```bash
+SERVER_PORT=
+SECRET=
+EXPIRES_IN=
+DIALECT=
+REFRESH_KEY=
+HOST_DEV=
+DB_PORT_DEV=
+DB_USERNAME_DEV=
+PASSWORD_DEV=
+DATABASE_DEV=
+FE_URL=
+```
+
+#### 4. Database Setup
+
+Run migrations to set up the database schema:
+
+```bash
+npx sequelize-cli db:migrate
+```
+
+#### 5. Run the Application To start the project in development mode, use the
+
+following command:
+
+```bash
+
+npm run start:dev
+```
+
+#### 6. Access the API Documentation
+
+Once the application is running, access the Swagger UI documentation at:
+
+`http://localhost:SERVER_PORT/api`
+
+---
+
+## Scripts
+
+The project includes various npm scripts for common tasks:
+
+```bash
+npm run build - Compiles the TypeScript code into JavaScript in the ./dist folder.
+npm run start - Starts the compiled application using Node.js (production mode).
+npm run start:dev - Starts the application in development mode with auto-reloading.
+npm run start:debug - Starts the application in debug mode with auto-reloading.
+npm run start:prod - Starts the application in production mode.
+npm run format - Formats the code using Prettier.
+npm run lint - Runs ESLint to check and fix code style issues.
+npm run test - Runs all tests using Jest.
+npm run test:watch - Runs tests in watch mode.
+npm run test:cov - Runs tests with code coverage report.
+npm run test:debug - Runs tests in debug mode with Node.js inspector.
+```
+
+---
 
 ## License
 
-Nest is [MIT licensed](LICENSE).
+This project is licensed under the **UNLICENSED** license. This means that the
+project is private and not open for public use or distribution.
