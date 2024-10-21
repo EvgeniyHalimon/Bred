@@ -1,7 +1,7 @@
 // nest
 import { Module } from '@nestjs/common';
 import { SequelizeModule } from '@nestjs/sequelize';
-import { APP_FILTER } from '@nestjs/core';
+//import { APP_FILTER } from '@nestjs/core';
 
 // config
 import { config } from './config';
@@ -19,27 +19,31 @@ import { ReactionsModule } from './reactions/reaction.module';
 import { AuthModule } from './auth/auth.module';
 
 // exception filter
-import { HttpExceptionFilter } from './filters';
+//import { HttpExceptionFilter } from './filters';
+
+const dialectOptions = process.env.PROD && {
+  dialectOptions: {
+    ssl: {
+      require: true,
+      rejectUnauthorized: false,
+      ca: config.MYSQL_SSL_CERT,
+    },
+  },
+};
 
 @Module({
   imports: [
     SequelizeModule.forRoot({
       dialect: config.DIALECT as Dialect,
       host: config.HOST,
-      port: config.DB_PORT as number,
+      port: config.DB_PORT,
       username: config.DB_USERNAME,
       password: config.PASSWORD,
       database: config.DATABASE,
       autoLoadModels: true,
       synchronize: true,
       models: [join(__dirname, '**', '*.schema.{ts,js}')],
-      dialectOptions: {
-        ssl: {
-          require: true,
-          rejectUnauthorized: false,
-          ca: config.MYSQL_SSL_CERT,
-        },
-      },
+      ...dialectOptions,
     }),
     LoggerModule.forRoot({
       pinoHttp: {
@@ -64,11 +68,11 @@ import { HttpExceptionFilter } from './filters';
     AuthModule,
   ],
   //remove before deploy
-  providers: [
-    {
-      provide: APP_FILTER,
-      useClass: HttpExceptionFilter,
-    },
-  ],
+  //providers: [
+  //  {
+  //    provide: APP_FILTER,
+  //    useClass: HttpExceptionFilter,
+  //  },
+  //],
 })
 export class AppModule {}

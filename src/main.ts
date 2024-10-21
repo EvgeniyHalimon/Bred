@@ -1,7 +1,7 @@
 // libraries
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import { Logger } from 'nestjs-pino';
+//import { Logger } from 'nestjs-pino';
 
 // module
 import { AppModule } from './app.module';
@@ -13,14 +13,14 @@ import { config } from './config';
 import { CustomValidationPipe } from './shared/CustomValidationPipe';
 
 // exception filter
-import { HttpExceptionFilter } from './filters/http-exception.filter';
+//import { HttpExceptionFilter } from './filters/http-exception.filter';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, { bufferLogs: true });
-  app.enableCors({ origin: ['*', 'http://localhost:5173/'] });
-  app.useLogger(app.get(Logger));
+  app.enableCors({ origin: ['*', config.FE_URL] });
   //remove before deploy
-  app.useGlobalFilters(new HttpExceptionFilter());
+  //app.useLogger(app.get(Logger));
+  //app.useGlobalFilters(new HttpExceptionFilter());
   app.useGlobalPipes(
     new CustomValidationPipe({
       whitelist: true,
