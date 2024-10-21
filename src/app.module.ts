@@ -21,7 +21,7 @@ import { AuthModule } from './auth/auth.module';
 // exception filter
 //import { HttpExceptionFilter } from './filters';
 
-const dialectOptions = process.env.PROD && {
+const dialectOptions = process.env.NODE_ENV === 'production' && {
   dialectOptions: {
     ssl: {
       require: true,
