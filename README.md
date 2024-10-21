@@ -1,4 +1,4 @@
-# Bred Project
+# Bred
 
 ## Description
 
