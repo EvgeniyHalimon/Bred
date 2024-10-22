@@ -6,7 +6,7 @@
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
-    "build": "npm ci --only=production && nest build",
+    "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "NODE_ENV=production node dist/main",
     "start:dev": "NODE_ENV=development nest start --watch",
