@@ -1,5 +1,5 @@
 // nest
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, RequestMethod } from '@nestjs/common';
 import { SequelizeModule } from '@nestjs/sequelize';
 //import { APP_FILTER } from '@nestjs/core';
 
@@ -9,7 +9,7 @@ import { config } from './config';
 // library
 import { Dialect } from 'sequelize';
 import { join } from 'path';
-import { LoggerModule } from 'nestjs-pino';
+//import { LoggerModule } from 'nestjs-pino';
 
 // modules
 import { UsersModule } from './users/user.module';
@@ -17,6 +17,9 @@ import { CommentsModule } from './comments/comment.module';
 import { ArticlesModule } from './articles/article.module';
 import { ReactionsModule } from './reactions/reaction.module';
 import { AuthModule } from './auth/auth.module';
+
+// middleware
+import { CorsMiddleware } from './shared/cors.middleware';
 
 // exception filter
 //import { HttpExceptionFilter } from './filters';
@@ -45,7 +48,7 @@ const dialectOptions = process.env.NODE_ENV === 'production' && {
       models: [join(__dirname, '**', '*.schema.{ts,js}')],
       ...dialectOptions,
     }),
-    LoggerModule.forRoot({
+    /* LoggerModule.forRoot({
       pinoHttp: {
         level: 'debug',
         transport: {
@@ -60,7 +63,7 @@ const dialectOptions = process.env.NODE_ENV === 'production' && {
           },
         },
       },
-    }),
+    }), */
     UsersModule,
     CommentsModule,
     ArticlesModule,
@@ -75,4 +78,11 @@ const dialectOptions = process.env.NODE_ENV === 'production' && {
   //  },
   //],
 })
-export class AppModule {}
+
+export class AppModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer
+      .apply(CorsMiddleware)
+      .forRoutes({ path: '*', method: RequestMethod.ALL });
+  }
+}
