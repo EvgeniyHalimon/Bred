@@ -17,7 +17,7 @@ import { CustomValidationPipe } from './shared/CustomValidationPipe';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, { bufferLogs: true });
-  app.enableCors({ origin: ['*', config.FE_URL] });
+  app.enableCors();
   //remove before deploy
   //app.useLogger(app.get(Logger));
   //app.useGlobalFilters(new HttpExceptionFilter());
