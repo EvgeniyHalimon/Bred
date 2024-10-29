@@ -36,8 +36,8 @@ export const confirmationMail = (token: string, firstName: string): string => {
       margin: 20px 0;
     }
     .button {
-      background-color: #3498DB;
-      color: #ffffff;
+      background-color: #000000;
+      color: #65a30d;
       padding: 10px 20px;
       border-radius: 5px;
       text-decoration: none;
@@ -46,7 +46,8 @@ export const confirmationMail = (token: string, firstName: string): string => {
       transition: 0.7s;
     }
     .button:hover {
-      background-color: #2C3E50;
+      background-color: #65a30d;
+      color: #000000;
     }
     .footer {
       font-size: 12px;
