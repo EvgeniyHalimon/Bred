@@ -11,7 +11,7 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-export async function sendMail(to: string[], subject: string, html: string) {
+export const sendMail = async (to: string[], subject: string, html: string) => {
   try {
     const info = await transporter.sendMail({
       from: {
@@ -22,9 +22,10 @@ export async function sendMail(to: string[], subject: string, html: string) {
       subject: subject,
       html: html,
     });
+    console.log('🚀 ~ file: sendMail.ts:25 ~ sendMail ~ info:', info);
 
     console.log('Message sent: %s', info.messageId);
   } catch (error) {
     console.error('Error:', error);
   }
-}
+};

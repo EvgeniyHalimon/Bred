@@ -25,7 +25,7 @@ import { IUser } from 'src/users/user.types';
 import { config } from '../config';
 
 // constants
-import { vocabulary } from 'src/shared';
+import { confirmationMail, sendMail, vocabulary } from 'src/shared';
 
 const {
   auth: { WRONG_PASSWORD },
@@ -56,7 +56,20 @@ export class AuthService {
     const createdUser = await this.userModel.create(userAttributes);
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { password: p, ...userWithoutPassword } = createdUser;
+    const { password: p, ...userWithoutPassword } = createdUser.dataValues;
+
+    const token = this.jwtService.sign(userWithoutPassword, {
+      secret: config.SECRET_CONFIRM,
+      expiresIn: config.EXPIRES_IN_CONFIRM,
+    });
+    console.log(
+      '🚀 ~ file: auth.service.ts:65 ~ AuthService ~ signUp ~ token:',
+      token,
+    );
+
+    const message = confirmationMail(token, userWithoutPassword.firstName);
+
+    await sendMail([userWithoutPassword.email], 'Confirm your email', message);
 
     return userWithoutPassword;
   }
@@ -100,6 +113,20 @@ export class AuthService {
     if (userWithoutPhoto) {
       return this.generateTokens(userWithoutPhoto);
     }
+  }
+
+  async confirmUser(token: string): Promise<boolean> {
+    const { email } = this.jwtService.verify(token, {
+      secret: config.SECRET_CONFIRM,
+    });
+    const user = await this.userModel.scope('withPassword').findOne({
+      where: { email },
+    });
+    if (!user) {
+      throw new NotFoundException(NOT_FOUND);
+    }
+
+    return true;
   }
 
   generateTokens(user: Partial<IUser>): ITokens {
