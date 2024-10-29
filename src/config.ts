@@ -35,4 +35,8 @@ export const config = {
     process.env.NODE_ENV === 'production'
       ? String(process.env.FE_URL)
       : 'http://localhost:5173/',
+  MAIL_API_KEY: process.env.MAIL_API_KEY ?? '',
+  GMAIL_USER: process.env.GMAIL_USER ?? '',
+  GMAIL_PASS: process.env.GMAIL_PASS ?? '',
+  EMAIL_HOST: process.env.EMAIL_HOST ?? '',
 };
