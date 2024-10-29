@@ -6,6 +6,7 @@ export const vocabulary = {
   },
   auth: {
     WRONG_PASSWORD: 'Wrong password',
+    USER_IS_NOT_ACTIVE: 'User is not active. Check your email for activation!',
   },
   comments: {
     COMMENT_NOT_FOUND: 'Comment not found',

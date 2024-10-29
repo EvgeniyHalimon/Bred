@@ -11,6 +11,7 @@ export class SignUpPresenter extends UserPresenter {
     this.bio = user.bio;
     this.role = user.role;
     this.photo = user.photo;
+    this.active = user.active;
     this.createdAt = user.createdAt;
     this.updatedAt = user.updatedAt;
   }

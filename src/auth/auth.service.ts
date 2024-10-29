@@ -28,7 +28,7 @@ import { config } from '../config';
 import { confirmationMail, sendMail, vocabulary } from 'src/shared';
 
 const {
-  auth: { WRONG_PASSWORD },
+  auth: { WRONG_PASSWORD, USER_IS_NOT_ACTIVE },
   users: { USER_NOT_FOUND: NOT_FOUND, ALREADY_EXISTS },
 } = vocabulary;
 
@@ -62,10 +62,6 @@ export class AuthService {
       secret: config.SECRET_CONFIRM,
       expiresIn: config.EXPIRES_IN_CONFIRM,
     });
-    console.log(
-      '🚀 ~ file: auth.service.ts:65 ~ AuthService ~ signUp ~ token:',
-      token,
-    );
 
     const message = confirmationMail(token, userWithoutPassword.firstName);
 
@@ -83,6 +79,10 @@ export class AuthService {
 
     if (!user) {
       throw new NotFoundException(NOT_FOUND);
+    }
+
+    if (!user.active) {
+      throw new BadRequestException(USER_IS_NOT_ACTIVE);
     }
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
