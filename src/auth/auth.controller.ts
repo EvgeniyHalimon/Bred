@@ -7,6 +7,7 @@ import {
   HttpStatus,
   Get,
   Req,
+  Param,
 } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
@@ -90,5 +91,10 @@ export class AuthController {
   @Get('refresh')
   refresh(@Req() req: ICustomRequest): Promise<ITokens | void> {
     return this.authService.refresh(req.user.id);
+  }
+
+  @Get('confirm/:token')
+  confirm(@Param('token') token: string) {
+    return this.authService.confirmUser(token);
   }
 }

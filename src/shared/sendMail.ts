@@ -22,7 +22,6 @@ export const sendMail = async (to: string[], subject: string, html: string) => {
       subject: subject,
       html: html,
     });
-    console.log('🚀 ~ file: sendMail.ts:25 ~ sendMail ~ info:', info);
 
     console.log('Message sent: %s', info.messageId);
   } catch (error) {
