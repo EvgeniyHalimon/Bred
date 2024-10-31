@@ -25,10 +25,17 @@ import { IUser } from 'src/users/user.types';
 import { config } from '../config';
 
 // constants
-import { vocabulary } from 'src/shared';
+import { confirmationMail, sendMail, vocabulary } from 'src/shared';
 
 const {
-  auth: { WRONG_PASSWORD },
+  auth: {
+    WRONG_PASSWORD,
+    USER_IS_NOT_ACTIVE,
+    USER_IS_ACTIVATED,
+    USER_ALREADY_ACTIVATED,
+    LINK_EXPIRED,
+    INVALID_TOKEN,
+  },
   users: { USER_NOT_FOUND: NOT_FOUND, ALREADY_EXISTS },
 } = vocabulary;
 
@@ -56,7 +63,16 @@ export class AuthService {
     const createdUser = await this.userModel.create(userAttributes);
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { password: p, ...userWithoutPassword } = createdUser;
+    const { password: p, ...userWithoutPassword } = createdUser.dataValues;
+
+    const token = this.jwtService.sign(userWithoutPassword, {
+      secret: config.SECRET_CONFIRM,
+      expiresIn: config.EXPIRES_IN_CONFIRM,
+    });
+
+    const message = confirmationMail(token, userWithoutPassword.firstName);
+
+    await sendMail([userWithoutPassword.email], 'Confirm your email', message);
 
     return userWithoutPassword;
   }
@@ -70,6 +86,10 @@ export class AuthService {
 
     if (!user) {
       throw new NotFoundException(NOT_FOUND);
+    }
+
+    if (!user.active) {
+      throw new BadRequestException(USER_IS_NOT_ACTIVE);
     }
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -100,6 +120,37 @@ export class AuthService {
     if (userWithoutPhoto) {
       return this.generateTokens(userWithoutPhoto);
     }
+  }
+
+  async confirmUser(token: string): Promise<{ message: string }> {
+    let email: string;
+
+    try {
+      ({ email } = this.jwtService.verify(token, {
+        secret: config.SECRET_CONFIRM,
+      }));
+    } catch (error) {
+      if (error.name === 'TokenExpiredError') {
+        throw new BadRequestException(LINK_EXPIRED);
+      }
+      throw new BadRequestException(INVALID_TOKEN);
+    }
+
+    const user = await this.userModel.scope('withPassword').findOne({
+      where: { email },
+    });
+
+    if (!user) {
+      throw new NotFoundException(NOT_FOUND);
+    }
+
+    if (user.active) {
+      throw new BadRequestException(USER_ALREADY_ACTIVATED);
+    }
+
+    await this.userModel.update({ active: true }, { where: { id: user.id } });
+
+    return { message: USER_IS_ACTIVATED };
   }
 
   generateTokens(user: Partial<IUser>): ITokens {

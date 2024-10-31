@@ -13,6 +13,7 @@ export interface IUser {
   bio: string;
   role: UserRole;
   photo: string | null;
+  active: boolean;
   createdAt: Date;
   updatedAt: Date;
 }
