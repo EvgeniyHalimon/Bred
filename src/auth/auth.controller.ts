@@ -94,6 +94,7 @@ export class AuthController {
   }
 
   @Get('confirm/:token')
+  @Public()
   confirm(@Param('token') token: string) {
     return this.authService.confirmUser(token);
   }

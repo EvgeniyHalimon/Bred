@@ -64,7 +64,7 @@ export const confirmationMail = (token: string, firstName: string): string => {
       <p>Welcome to Bred! We're thrilled to have you with us.</p>
       <p>To complete your registration, please confirm your email address by clicking the button below:</p>
       <div class="button-container">
-        <a href="${config.FE_URL}/confirm/${token}" class="button">Confirm Your Email</a>
+        <a href="${config.FE_URL}confirm/${token}" class="button">Confirm Your Email</a>
       </div>
       <p>If you didn’t create an account with us, please disregard this message.</p>
       <p>Best regards,</p>

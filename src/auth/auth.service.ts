@@ -28,7 +28,14 @@ import { config } from '../config';
 import { confirmationMail, sendMail, vocabulary } from 'src/shared';
 
 const {
-  auth: { WRONG_PASSWORD, USER_IS_NOT_ACTIVE },
+  auth: {
+    WRONG_PASSWORD,
+    USER_IS_NOT_ACTIVE,
+    USER_IS_ACTIVATED,
+    USER_ALREADY_ACTIVATED,
+    LINK_EXPIRED,
+    INVALID_TOKEN,
+  },
   users: { USER_NOT_FOUND: NOT_FOUND, ALREADY_EXISTS },
 } = vocabulary;
 
@@ -115,18 +122,35 @@ export class AuthService {
     }
   }
 
-  async confirmUser(token: string): Promise<boolean> {
-    const { email } = this.jwtService.verify(token, {
-      secret: config.SECRET_CONFIRM,
-    });
+  async confirmUser(token: string): Promise<{ message: string }> {
+    let email: string;
+
+    try {
+      ({ email } = this.jwtService.verify(token, {
+        secret: config.SECRET_CONFIRM,
+      }));
+    } catch (error) {
+      if (error.name === 'TokenExpiredError') {
+        throw new BadRequestException(LINK_EXPIRED);
+      }
+      throw new BadRequestException(INVALID_TOKEN);
+    }
+
     const user = await this.userModel.scope('withPassword').findOne({
       where: { email },
     });
+
     if (!user) {
       throw new NotFoundException(NOT_FOUND);
     }
 
-    return true;
+    if (user.active) {
+      throw new BadRequestException(USER_ALREADY_ACTIVATED);
+    }
+
+    await this.userModel.update({ active: true }, { where: { id: user.id } });
+
+    return { message: USER_IS_ACTIVATED };
   }
 
   generateTokens(user: Partial<IUser>): ITokens {
