@@ -19,17 +19,19 @@ export const confirmationMail = (token: string, firstName: string): string => {
     .content {
       padding: 30px;
       background-color: #ffffff;
-      color: #333333;
+      color: #000000;
       border-radius: 8px;
       box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     }
     h2 {
-      color: #333333;
+      color: #000000;
       font-weight: bold;
+      font-family: monospace;
     }
     p {
       line-height: 1.6;
-      color: #555555;
+      color: #000000;
+      font-family: monospace;
     }
     .button-container {
       text-align: center;
@@ -37,13 +39,14 @@ export const confirmationMail = (token: string, firstName: string): string => {
     }
     .button {
       background-color: #000000;
-      color: #65a30d;
+      color: #65a30d !important;
       padding: 10px 20px;
       border-radius: 5px;
       text-decoration: none;
       font-size: 16px;
       display: inline-block;
       transition: 0.7s;
+      font-family: monospace;
     }
     .button:hover {
       background-color: #65a30d;
@@ -51,7 +54,7 @@ export const confirmationMail = (token: string, firstName: string): string => {
     }
     .footer {
       font-size: 12px;
-      color: #999999;
+      color: #000000;
       margin-top: 30px;
       text-align: center;
     }
