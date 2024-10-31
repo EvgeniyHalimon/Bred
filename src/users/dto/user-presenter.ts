@@ -57,6 +57,14 @@ export class UserPresenter {
   photo: string | null;
 
   @ApiProperty({
+    example: true,
+    type: Boolean,
+    nullable: true,
+    description: 'Represents whether the user is activated or not',
+  })
+  active: boolean;
+
+  @ApiProperty({
     example: '2024-08-14T08:40:32.000Z',
     type: String,
     description: 'Represents the creation date of the author',
@@ -78,6 +86,7 @@ export class UserPresenter {
     this.bio = user.bio;
     this.role = user.role;
     this.photo = user.photo;
+    this.active = user.active;
     this.createdAt = user.createdAt;
     this.updatedAt = user.updatedAt;
   }

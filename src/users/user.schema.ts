@@ -35,7 +35,7 @@ import { UserRolesEnum } from './user.constants';
 @Table({ tableName: 'users' })
 export default class User extends Model<
   IUser,
-  PartialExcept<IUser, 'id' | 'role' | 'createdAt' | 'updatedAt'>
+  PartialExcept<IUser, 'id' | 'role' | 'active' | 'createdAt' | 'updatedAt'>
 > {
   @Column({
     defaultValue: () => uuidv4(),
@@ -75,6 +75,9 @@ export default class User extends Model<
   @UpdatedAt
   @Column
   updatedAt: Date;
+
+  @Column({ type: DataType.BOOLEAN, defaultValue: false })
+  active: boolean;
 
   @HasMany(() => Article, { onDelete: 'CASCADE' })
   articles: Article[];

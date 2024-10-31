@@ -26,8 +26,10 @@ export const config = {
       : process.env.DATABASE_DEV,
   SECRET_ACCESS: process.env.SECRET_ACCESS,
   SECRET_REFRESH: process.env.SECRET_REFRESH,
+  SECRET_CONFIRM: process.env.SECRET_CONFIRM,
   EXPIRES_IN: process.env.EXPIRES_IN ?? '',
   EXPIRES_IN_REFRESH: process.env.EXPIRES_IN_REFRESH ?? '',
+  EXPIRES_IN_CONFIRM: process.env.EXPIRES_IN_CONFIRM ?? '',
   DIALECT: process.env.DIALECT,
   URI: process.env.URI,
   MYSQL_SSL_CERT: process.env.MYSQL_SSL_CERT,
@@ -35,4 +37,8 @@ export const config = {
     process.env.NODE_ENV === 'production'
       ? String(process.env.FE_URL)
       : 'http://localhost:5173/',
+  MAIL_API_KEY: process.env.MAIL_API_KEY ?? '',
+  GMAIL_USER: process.env.GMAIL_USER ?? '',
+  GMAIL_PASS: process.env.GMAIL_PASS ?? '',
+  EMAIL_HOST: process.env.EMAIL_HOST ?? '',
 };
